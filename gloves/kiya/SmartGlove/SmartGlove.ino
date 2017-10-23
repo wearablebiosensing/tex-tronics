@@ -12,6 +12,7 @@ uint8_t setup_successful;
 // List of Services Available, used in Advertising Data to display Services
 static const uint16_t uuid16_list[] = {
   UUID_IMU_SERVICE, 
+  UUID_FLEX_SERVICE,
   UUID_SMART_SERVICE
 };
 
@@ -45,6 +46,22 @@ GattCharacteristic gyro_char(UUID_GYRO_CHAR, gyro_data, sizeof(gyro_data), sizeo
 GattCharacteristic mag_char(UUID_MAG_CHAR, mag_data, sizeof(mag_data), sizeof(mag_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
 GattCharacteristic *imu_chars[] = {&acc_char, &gyro_char, &mag_char, };
 GattService        imu_service(UUID_IMU_SERVICE, imu_chars, sizeof(imu_chars) / sizeof(GattCharacteristic *));
+
+// Create Flex Service and Characteristics
+uint8_t thumb_flex, index_flex, middle_flex, ring_flex, pinky_flex;
+static uint8_t thumb_data[2] = {0x00, thumb_flex};
+static uint8_t index_data[2] = {0x00, index_flex};
+static uint8_t middle_data[2] = {0x00, middle_flex};
+static uint8_t ring_data[2] = {0x00, ring_flex};
+static uint8_t pinky_data[2] = {0x00, pinky_flex};
+
+GattCharacteristic thumb_char(UUID_THUMB_CHAR, thumb_data, sizeof(thumb_data), sizeof(thumb_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
+GattCharacteristic index_char(UUID_INDEX_CHAR, index_data, sizeof(index_data), sizeof(index_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
+GattCharacteristic middle_char(UUID_MIDDLE_CHAR, middle_data, sizeof(middle_data), sizeof(middle_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
+GattCharacteristic ring_char(UUID_RING_CHAR, ring_data, sizeof(ring_data), sizeof(ring_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
+GattCharacteristic pinky_char(UUID_PINKY_CHAR, pinky_data, sizeof(pinky_data), sizeof(pinky_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
+GattCharacteristic *flex_chars[] = {&thumb_char, &index_char, &middle_char, &ring_char, &pinky_char, };
+GattService        flex_service(UUID_FLEX_SERVICE, flex_chars, sizeof(flex_chars) / sizeof(GattCharacteristic *));
 
 // Create Smart Service and Characteristics
 uint8_t cnt;
@@ -85,9 +102,16 @@ void periodicCallback() {
      *  of updating the characteristic, so it would be good to optimize this
      *  at some point.
      */
+
+     // Read IMU Data
     imu.readAccel();
     imu.readGyro();
     imu.readMag();
+
+    // Read Flex Sensor Values
+    thumb_flex = analogRead(14);
+    index_flex = analogRead(12);
+    // TODO: Add rest of fingers
     
     acc_x_data.f = imu.ax;
     acc_y_data.f = imu.ay;
@@ -136,10 +160,16 @@ void periodicCallback() {
       mag_z_data.b[3], mag_z_data.b[2], mag_z_data.b[1], mag_z_data.b[0]
     };
 
-    // Update Characteristic values
+    // Update IMU Characteristic values
     ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(temp_acc_data));
     ble.updateCharacteristicValue(gyro_char.getValueAttribute().getHandle(), temp_gyro_data, sizeof(temp_gyro_data));
     ble.updateCharacteristicValue(mag_char.getValueAttribute().getHandle(), temp_mag_data, sizeof(temp_mag_data));
+
+    // Update Flex Characteristic values
+    thumb_data[1] = thumb_flex;
+    index_data[1] = index_flex;
+    ble.updateCharacteristicValue(thumb_char.getValueAttribute().getHandle(), thumb_data, sizeof(thumb_data));
+    ble.updateCharacteristicValue(index_char.getValueAttribute().getHandle(), index_data, sizeof(index_data));
 
     // This Characteristic is used to notify the Client that all the data is
     //  ready to be read. This is safer than each data characteristic notifying
