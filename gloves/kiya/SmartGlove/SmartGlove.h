@@ -17,11 +17,13 @@
 #define UUID_SMART_SERVICE    0x400A        // This Service holds misc. data related to the SmartGlove
 #define UUID_DATA_READY_CHAR  0x400B        // This is used as an indicator when all of the data has been updated and is ready to be read
 
-typedef union imu_data {
+typedef union _imu_data {
   float f;
   uint8_t b[4];  // (Float is 4 Bytes)
-} imu_data_t;                               // Use this for Float data that is to be sent via BLE
+} imu_data_t;                               // Use this for Float data that is to be sent via BLE                            // Container for Magnetometer data
 
+#define LSM9DS0_XM            0x1D          // SDO_XM Address
+#define LSM9DS0_G             0x6B          // SDO_G Address
 #define IMU_CHECK_KEY         0x49D4        // Used to ensure 9DoF is connected properly
 
 #endif

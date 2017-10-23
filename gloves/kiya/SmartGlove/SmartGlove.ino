@@ -1,8 +1,10 @@
 #include <BLE_API.h>
 #include "SmartGlove.h"
+#include "SFE_LSM9DS0_SG.h"
 
-BLE ble;              // BLE Module
-Ticker ticker_task1;  // Timer for Periodic Callback (used instead of delay in loop)
+BLE ble;                                                // BLE Module
+LSM9DS0 dof(MODE_I2C, LSM9DS0_G, LSM9DS0_XM);           // IMU Module
+Ticker ticker_task1;                                    // Timer for Periodic Callback (used instead of delay in loop)
 
 // List of Services Available, used in Advertising Data to display Services
 static const uint16_t uuid16_list[] = {
@@ -80,20 +82,34 @@ void periodicCallback() {
      *  of updating the characteristic, so it would be good to optimize this
      *  at some point.
      */
-    acc_x_data.f = 100;
-    acc_y_data.f = 101;
-    acc_z_data.f = 102;
+    acc_x_data.f = dof.ax;
+    acc_y_data.f = dof.ay;
+    acc_z_data.f = dof.az;
 
-    gyro_x_data.f = 200;
-    gyro_y_data.f = 201;
-    gyro_z_data.f = 202;
+    gyro_x_data.f = dof.gx;
+    gyro_y_data.f = dof.gy;
+    gyro_z_data.f = dof.gz;
 
-    mag_x_data.f = 300;
-    mag_y_data.f = 301;
-    mag_z_data.f = 302;
+    mag_x_data.f = dof.mx;
+    mag_y_data.f = dof.my;
+    mag_z_data.f = dof.mz;
 
     // These arrays are created solely to pass to the updateCharacteristicValue
     //  function. This could probably be optimized somehow.
+    /*acc_data[0] = 0x00;
+    acc_data[1] = acc_x_data.b[3];
+    acc_data[2] = acc_x_data.b[2];
+    acc_data[3] = acc_x_data.b[1];
+    acc_data[4] = acc_x_data.b[0];
+    acc_data[5] = acc_y_data.b[3];
+    acc_data[6] = acc_y_data.b[2];
+    acc_data[7] = acc_y_data.b[1];
+    acc_data[8] = acc_y_data.b[0];
+    acc_data[9] = acc_z_data.b[3];
+    acc_data[10] = acc_z_data.b[2];
+    acc_data[11] = acc_z_data.b[1];
+    acc_data[12] = acc_z_data.b[0];*/
+    
     uint8_t temp_acc_data[13] = {
       0x00, 
       acc_x_data.b[3], acc_x_data.b[2], acc_x_data.b[1], acc_x_data.b[0], 
@@ -114,7 +130,7 @@ void periodicCallback() {
     };
 
     // Update Characteristic values
-    ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(temp_acc_data));
+    ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(acc_data));
     ble.updateCharacteristicValue(gyro_char.getValueAttribute().getHandle(), temp_gyro_data, sizeof(temp_gyro_data));
     ble.updateCharacteristicValue(mag_char.getValueAttribute().getHandle(), temp_mag_data, sizeof(temp_mag_data));
 
@@ -122,6 +138,7 @@ void periodicCallback() {
     //  ready to be read. This is safer than each data characteristic notifying
     //  the Client individually since the Client could mismatch some data points.
     cnt++;
+    counter[1] = cnt;
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
   }
 }
@@ -157,6 +174,16 @@ void init_ble() {
   ble.startAdvertising();
 }
 
+void init_imu() {
+  if(dof.begin() != IMU_CHECK_KEY) {
+    // IMU Module not wired properly!
+    // TODO: Handle this error somehow
+    //digitalWrite(P0_19, LOW);
+  } else {
+    //digitalWrite(P0_19, HIGH);
+  }
+}
+
 /**
  * The setup function initializes the timer to allow
  * for the periodic callback function to be invoked.
@@ -166,8 +193,10 @@ void init_ble() {
 void setup() {
   Serial.begin(9600);
   Serial.println("Initializing SmartGlove...");
+  //pinMode(P0_19, OUTPUT);
   ticker_task1.attach(periodicCallback, 1);       // Initialize Timer
   init_ble();                                     // Initialize BLE Module
+  init_imu();                                     // Initialize IMU Module
 }
 
 void loop() {
