@@ -5,6 +5,7 @@
 BLE ble;                                                // BLE Module
 LSM9DS0 dof(MODE_I2C, LSM9DS0_G, LSM9DS0_XM);           // IMU Module
 Ticker ticker_task1;                                    // Timer for Periodic Callback (used instead of delay in loop)
+uint8_t setup_successful;
 
 // List of Services Available, used in Advertising Data to display Services
 static const uint16_t uuid16_list[] = {
@@ -73,7 +74,7 @@ void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
  * resolution when using sleep_on_idle).
  */
 void periodicCallback() {
-  if (ble.getGapState().connected) {
+  if (ble.getGapState().connected && setup_successful) {
     /*
      * TODO:
      *  Currently, IMU data is just dummy data. We need to retreive the data
@@ -82,14 +83,18 @@ void periodicCallback() {
      *  of updating the characteristic, so it would be good to optimize this
      *  at some point.
      */
+    dof.readAccel();
+    dof.readGyro();
+    dof.readMag();
+    
     acc_x_data.f = dof.ax;
     acc_y_data.f = dof.ay;
     acc_z_data.f = dof.az;
-
+    
     gyro_x_data.f = dof.gx;
     gyro_y_data.f = dof.gy;
     gyro_z_data.f = dof.gz;
-
+    
     mag_x_data.f = dof.mx;
     mag_y_data.f = dof.my;
     mag_z_data.f = dof.mz;
@@ -130,14 +135,17 @@ void periodicCallback() {
     };
 
     // Update Characteristic values
-    ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(acc_data));
+    ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(temp_acc_data));
     ble.updateCharacteristicValue(gyro_char.getValueAttribute().getHandle(), temp_gyro_data, sizeof(temp_gyro_data));
     ble.updateCharacteristicValue(mag_char.getValueAttribute().getHandle(), temp_mag_data, sizeof(temp_mag_data));
 
     // This Characteristic is used to notify the Client that all the data is
     //  ready to be read. This is safer than each data characteristic notifying
     //  the Client individually since the Client could mismatch some data points.
-    cnt++;
+    counter[1] = ++cnt;
+    ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
+  } else {
+    // If the IMU is not connected properly, data ready will always have a value of 0 (no increment)
     counter[1] = cnt;
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
   }
@@ -175,13 +183,17 @@ void init_ble() {
 }
 
 void init_imu() {
-  if(dof.begin() != IMU_CHECK_KEY) {
+  uint16_t status;
+  if( (status = dof.begin()) != IMU_CHECK_KEY) {
     // IMU Module not wired properly!
     // TODO: Handle this error somehow
-    //digitalWrite(P0_19, LOW);
+    setup_successful = 0;
   } else {
-    //digitalWrite(P0_19, HIGH);
+    setup_successful = 1;
   }
+
+  Serial.print("IMU Status: ");
+  Serial.println(status);
 }
 
 /**
@@ -193,7 +205,6 @@ void init_imu() {
 void setup() {
   Serial.begin(9600);
   Serial.println("Initializing SmartGlove...");
-  //pinMode(P0_19, OUTPUT);
   ticker_task1.attach(periodicCallback, 1);       // Initialize Timer
   init_ble();                                     // Initialize BLE Module
   init_imu();                                     // Initialize IMU Module
