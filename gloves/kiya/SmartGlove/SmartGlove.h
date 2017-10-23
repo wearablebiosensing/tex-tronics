@@ -1,6 +1,13 @@
 #ifndef _H__SMARTGLOVE_
 #define _H__SMARTGLOVE_
 
+#ifndef TRUE
+#define TRUE 1==1
+#endif
+#ifndef FALSE
+#define FALSE 1==0
+#endif
+
 #define BLE_DEVICE_NAME       "SmartGlove"  // Local Device Name
 #define DATA_REFRESH_RATE_MS  500           // Delay between data collection (milliseconds)
 
@@ -22,8 +29,7 @@ typedef union _imu_data {
   uint8_t b[4];  // (Float is 4 Bytes)
 } imu_data_t;                               // Use this for Float data that is to be sent via BLE                            // Container for Magnetometer data
 
-#define LSM9DS0_XM            0x1D          // SDO_XM Address
-#define LSM9DS0_G             0x6B          // SDO_G Address
-#define IMU_CHECK_KEY         0x49D4        // Used to ensure 9DoF is connected properly
+#define LSM9DS1_M             0x1E          // SDO_XM Address
+#define LSM9DS1_AG            0x6B          // SDO_G Address
 
 #endif

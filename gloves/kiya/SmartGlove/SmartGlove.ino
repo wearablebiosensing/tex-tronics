@@ -1,10 +1,12 @@
 #include <BLE_API.h>
+#include "Wire_SG.h"
+#include <SPI.h>
+#include "SparkFunLSM9DS1_SG.h"
 #include "SmartGlove.h"
-#include "SFE_LSM9DS0_SG.h"
 
-BLE ble;                                                // BLE Module
-LSM9DS0 dof(MODE_I2C, LSM9DS0_G, LSM9DS0_XM);           // IMU Module
-Ticker ticker_task1;                                    // Timer for Periodic Callback (used instead of delay in loop)
+BLE ble;                      // BLE Module
+LSM9DS1 imu;                  // IMU Module
+Ticker ticker_task1;          // Timer for Periodic Callback (used instead of delay in loop)
 uint8_t setup_successful;
 
 // List of Services Available, used in Advertising Data to display Services
@@ -58,8 +60,8 @@ GattService        smart_service(UUID_SMART_SERVICE, smart_chars, sizeof(smart_c
  * advertising again.
  */
 void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
-  Serial.println("Disconnected!");
-  Serial.println("Restarting the advertising process");
+  //Serial.println("Disconnected!");
+  //Serial.println("Restarting the advertising process");
   ble.startAdvertising();
 }
 
@@ -83,21 +85,21 @@ void periodicCallback() {
      *  of updating the characteristic, so it would be good to optimize this
      *  at some point.
      */
-    dof.readAccel();
-    dof.readGyro();
-    dof.readMag();
+    imu.readAccel();
+    imu.readGyro();
+    imu.readMag();
     
-    acc_x_data.f = dof.ax;
-    acc_y_data.f = dof.ay;
-    acc_z_data.f = dof.az;
+    acc_x_data.f = imu.ax;
+    acc_y_data.f = imu.ay;
+    acc_z_data.f = imu.az;
     
-    gyro_x_data.f = dof.gx;
-    gyro_y_data.f = dof.gy;
-    gyro_z_data.f = dof.gz;
+    gyro_x_data.f = imu.gx;
+    gyro_y_data.f = imu.gy;
+    gyro_z_data.f = imu.gz;
     
-    mag_x_data.f = dof.mx;
-    mag_y_data.f = dof.my;
-    mag_z_data.f = dof.mz;
+    mag_x_data.f = imu.mx;
+    mag_y_data.f = imu.my;
+    mag_z_data.f = imu.mz;
 
     // These arrays are created solely to pass to the updateCharacteristicValue
     //  function. This could probably be optimized somehow.
@@ -183,17 +185,17 @@ void init_ble() {
 }
 
 void init_imu() {
-  uint16_t status;
-  if( (status = dof.begin()) != IMU_CHECK_KEY) {
-    // IMU Module not wired properly!
-    // TODO: Handle this error somehow
-    setup_successful = 0;
-  } else {
-    setup_successful = 1;
-  }
+  imu.settings.device.commInterface = IMU_MODE_I2C;
+  imu.settings.device.mAddress = LSM9DS1_M;
+  imu.settings.device.agAddress = LSM9DS1_AG;
 
-  Serial.print("IMU Status: ");
-  Serial.println(status);
+  if(!imu.begin()) {
+    // IMU Module not wired properly!
+    // TODO: Handle this Error Somehow
+    setup_successful = FALSE;
+  } else {
+    setup_successful = TRUE;
+  }
 }
 
 /**
@@ -203,10 +205,13 @@ void init_imu() {
  * advertising.
  */
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Initializing SmartGlove...");
-  ticker_task1.attach(periodicCallback, 1);       // Initialize Timer
+  //Serial1.begin(9600);
+  //Serial.println("Initializing SmartGlove...");
+  //pinMode(13, OUTPUT);
+  //digitalWrite(13, LOW);
+  ticker_task1.attach_us(periodicCallback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer
   init_ble();                                     // Initialize BLE Module
+  //digitalWrite(13, HIGH);
   init_imu();                                     // Initialize IMU Module
 }
 
