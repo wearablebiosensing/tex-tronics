@@ -103,7 +103,7 @@ void periodicCallback() {
      *  at some point.
      */
 
-     // Read IMU Data
+     // Read IMU Data (16 Bit ADC Resolution)
     imu.readAccel();
     imu.readGyro();
     imu.readMag();
