@@ -1,0 +1,168 @@
+%Copyright 2014 Jean-Philippe Eisenbarth
+%This program is free software: you can 
+%redistribute it and/or modify it under the terms of the GNU General Public 
+%License as published by the Free Software Foundation, either version 3 of the 
+%License, or (at your option) any later version.
+%This program is distributed in the hope that it will be useful,but WITHOUT ANY 
+%WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+%PARTICULAR PURPOSE. See the GNU General Public License for more details.
+%You should have received a copy of the GNU General Public License along with 
+%this program.  If not, see <http://www.gnu.org/licenses/>.
+
+%Based on the code of Yiannis Lazarides
+%http://tex.stackexchange.com/questions/42602/software-requirements-specification-with-latex
+%http://tex.stackexchange.com/users/963/yiannis-lazarides
+%Also based on the template of Karl E. Wiegers
+%http://www.se.rit.edu/~emad/teaching/slides/srs_template_sep14.pdf
+%http://karlwiegers.com
+\documentclass{scrreprt}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\hypersetup{
+    bookmarks=false,    % show bookmarks bar?
+    pdftitle={SmartGlove Application User's Guide},    % title
+    pdfauthor={Matthew Constant},                     % author
+    pdfsubject={SmartGlove Application Development},                        % subject of the document
+    pdfkeywords={SmartGlove, API, Android}, % list of keywords
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,       % color of internal links
+    citecolor=black,       % color of links to bibliography
+    filecolor=black,        % color of file links
+    urlcolor=purple,        % color of external links
+    linktoc=page            % only page is linked
+}%
+\def\myversion{1.0 }
+\date{}
+%\title{%
+
+%}
+\usepackage{hyperref}
+\begin{document}
+
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{User's Guide}\\
+        \vspace{1.9cm}
+        for\\
+        \vspace{1.9cm}
+        SmartGlove Android Application\\
+        \vspace{1.9cm}
+        \LARGE{Version \myversion}\\
+        \vspace{1.9cm}
+        Prepared by Matthew Constant\\
+        \vspace{1.9cm}
+       Wearable Biosensing Lab\\
+        \vspace{1.9cm}
+        \today\\
+    \end{bfseries}
+\end{flushright}
+
+\tableofcontents
+
+
+%\chapter*{Revision History}
+
+%\begin{center}
+    %\begin{tabular}{|c|c|c|c|}
+        %\hline
+	 %   Name & Date & Reason For Changes & Version\\
+        %\hline
+	 %   21 & 22 & 23 & 24\\
+%        \hline
+%	    31 & 32 & 33 & 34\\
+    %    \hline
+   % \end{tabular}
+%\end{center}
+
+\chapter{Introduction}
+
+\section{Purpose}
+This application is being developed in order to act as a gateway between the SmartGlove
+e-Textile device and the secure server on which the data collected is to be stored and
+viewed from. By collecting this data from the SmartGlove device in real-time, the application
+has the ability to both guide the participant through his/her exercise as well as securely store
+this data in a server to be accessed at a later time by either the doctor or patient. In 
+addition, this application will allow users to easily visualize the data that is stored on the 
+server in a simple and intuitive way.
+
+\section{Application Requirements}
+This application must connect to the SmartGlove device with as little user interaction
+as possible. This includes filtering devices out when scanning for nearby BLE devices,
+as well as automatically reconnecting to previously connected devices. This application
+must also be able to send the collected data to a server via MQTT. Lastly, the application
+needs to be able to connect to the remote server in order to retreive and visualize 
+a patient's data in the application.
+
+\section{Implementation}
+This application has implemented these requirements using the native Android BLE API
+and the open source MPAndroid Charts library. (The MQTT portion of this application
+is still under development). Developers can interact with the SmartGlove using the 
+BleConnectionService class. This class allows users the ability to connect to,
+disconnect from, discover services, read, write, and be notified. The data retrieved
+is then broadcast using the BleUpdateReceiver. This means that any class listening 
+via a BleUpdateReceiver can collect information from the BleConnectionService. 
+This approach allows for the highest level of abstraction as well as the least impactful
+on the User's program. All actions supported by the BleConnectionService are made 
+available by static methods in the BleConnectionService. Another layer of abstraction
+is made by using the BluetoothLeModel class to represent the BLE device to the user.
+The user will create a BluetoothLeModel and use this to send and receive data from the
+BleConnectionService.
+
+\section{Resources}
+
+
+
+\chapter{Overview}
+
+\section{BluetoothLeModel}
+Rather than interact directly with the BluetoothGatt class, the user will only need to
+use the BluetoothLeModel. This is a much more simplified class that still allows the 
+User to take full advantage of the SmartGlove device. The BluetoothLeModel
+contains the BLE Device address, as well as all of its services and characteristics.
+For example, in order to connect to a nearby BLE device the user can simpy
+create a BluetoothLeModel with its Bluetooth Address using the following 
+method: BluetoothLeModel.CREATE(String BT_ADDR). The BluetoothLeModel
+can allows be created with all of its services and characteristics by first discovering the
+devices services and adding this list to the create method. For example:\\
+$BleConnectionService.DISCOVER_SERVICES(Context, BluetoothLeModel)\\
+...\\
+BluetoothLeModel.CREATE(String BT_ADDR, List<BluetoothGattServices>);$\\
+
+\section{Sending Commands to BleConnectionService}
+Users can interact with the SmartGlove by sending \''Actions\'' to the
+BleConnectionService. These actions are made available with static methods.
+For example, in order to connect to a nearby BLE device, the user can simply
+call BleConnectionService(Context, BluetoothLeModel). The following commands
+are currently implemented by the BleConnectionService:\\
+CONNECT\\
+DISCONNECT\\
+DISCOVER_SERVICES\\
+REQUEST_READ\\
+
+\section{Receiving Updates and Data from BleConnectionService}
+In order to retrieve information from the BleConnectionService, the user must implement
+the BleUpdateReceiver. All data and updates from the BleConnectionService are transmitted
+through this Receiver. Updates includes when a device is connected to or disconnected from,
+the services of a device are discovered, and when the device is read from or written to.
+Each update will include the corresponding BluetoothLeModel, providing the user
+with the Device address and the most current values for each characteristic.
+
+\section{Adding Features to BleConnectionService}
+Implementing new features to the BleConnectionService is a very straight-forward process.
+First, the action must be defined in the BleActions enum. Next, a static method must be implemented
+in the BleConnectionService to provide an interface for users to use this feature (Please follow the 
+pattern of all other features, meaning the static method should simply generate the intent needed and
+send that intent to the service). Third, add the action into the switch statement in the onStartCommand
+method in BleConnectionService. This should do some preliminary error checking and then call the corresponding
+method related to this action. The last step is to implement this method that is related to the action. If this
+feature must also send data or updates back, it must be sent using the BleUpdate Broadcast Receiver.
+
+\section{Areas to Improve}
+
+
+
+\end{document}

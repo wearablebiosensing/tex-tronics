@@ -85,62 +85,36 @@ void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
 /**
  * This callback is invoked every DATA_REFRESH_MS
  * milliseconds. This value can be changed in
- * SmartGlove.h. Currently, we use a Ticker to
- * invoke this callback, however the Ticker class
- * does not support microseconds. We may change to
- * using the TaskScheduler class in the future
- * as this is much more precise (millisecond
- * resolution when using sleep_on_idle).
+ * SmartGlove.h.
  */
 void periodicCallback() {
   if (ble.getGapState().connected && setup_successful) {
-    /*
-     * TODO:
-     *  Currently, IMU data is just dummy data. We need to retreive the data
-     *  from the IMU here and update the corresponding fields according to 
-     *  the data retreived. Also, this is probably a very inefficient way
-     *  of updating the characteristic, so it would be good to optimize this
-     *  at some point.
-     */
-
-     // Read IMU Data (16 Bit ADC Resolution)
-    imu.readAccel();
+    imu.readAccel();                  // Read IMU Data (16 Bit ADC Resolution)
     imu.readGyro();
     imu.readMag();
 
-    // Read Flex Sensor Values
-    thumb_flex = analogRead(14);
+    thumb_flex = analogRead(14);      // Read Flex Sensor Values
     index_flex = analogRead(12);
     // TODO: Add rest of fingers
     
-    acc_x_data.f = imu.ax;
+    acc_x_data.f = imu.ax;            // Update Accelerometer Data
     acc_y_data.f = imu.ay;
     acc_z_data.f = imu.az;
     
-    gyro_x_data.f = imu.gx;
+    gyro_x_data.f = imu.gx;           // Update Gyroscope Data
     gyro_y_data.f = imu.gy;
     gyro_z_data.f = imu.gz;
     
-    mag_x_data.f = imu.mx;
+    mag_x_data.f = imu.mx;            // Update Magnetometer Data
     mag_y_data.f = imu.my;
     mag_z_data.f = imu.mz;
 
-    // These arrays are created solely to pass to the updateCharacteristicValue
-    //  function. This could probably be optimized somehow.
-    /*acc_data[0] = 0x00;
-    acc_data[1] = acc_x_data.b[3];
-    acc_data[2] = acc_x_data.b[2];
-    acc_data[3] = acc_x_data.b[1];
-    acc_data[4] = acc_x_data.b[0];
-    acc_data[5] = acc_y_data.b[3];
-    acc_data[6] = acc_y_data.b[2];
-    acc_data[7] = acc_y_data.b[1];
-    acc_data[8] = acc_y_data.b[0];
-    acc_data[9] = acc_z_data.b[3];
-    acc_data[10] = acc_z_data.b[2];
-    acc_data[11] = acc_z_data.b[1];
-    acc_data[12] = acc_z_data.b[0];*/
-    
+    /**
+     * TODO:
+     *  This is probably a very inefficient way
+     *  of updating the characteristic, so it would be 
+     *  good to optimize this at some point.
+     */
     uint8_t temp_acc_data[13] = {
       0x00, 
       acc_x_data.b[3], acc_x_data.b[2], acc_x_data.b[1], acc_x_data.b[0], 
@@ -175,10 +149,14 @@ void periodicCallback() {
     //  ready to be read. This is safer than each data characteristic notifying
     //  the Client individually since the Client could mismatch some data points.
     counter[1] = ++cnt;
+    if(cnt == 0) {
+      // Make sure Data Ready is never 0 when working properly
+      counter[1] = ++cnt;
+    }
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
   } else {
     // If the IMU is not connected properly, data ready will always have a value of 0 (no increment)
-    counter[1] = cnt;
+    counter[1] = (cnt = 0);
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
   }
 }

@@ -1,0 +1,12 @@
+\select@language {english}
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Purpose}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Application Requirements}{3}{section.1.2}
+\contentsline {section}{\numberline {1.3}Implementation}{3}{section.1.3}
+\contentsline {section}{\numberline {1.4}Resources}{3}{section.1.4}
+\contentsline {chapter}{\numberline {2}Overview}{4}{chapter.2}
+\contentsline {section}{\numberline {2.1}BluetoothLeModel}{4}{section.2.1}
+\contentsline {section}{\numberline {2.2}Sending Commands to BleConnectionService}{4}{section.2.2}
+\contentsline {section}{\numberline {2.3}Receiving Updates and Data from BleConnectionService}{4}{section.2.3}
+\contentsline {section}{\numberline {2.4}Adding Features to BleConnectionService}{5}{section.2.4}
+\contentsline {section}{\numberline {2.5}Areas to Improve}{5}{section.2.5}
