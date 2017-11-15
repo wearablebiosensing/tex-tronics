@@ -25,8 +25,8 @@
 #define UUID_DATA_READY_CHAR  0x400B        // This is used as an indicator when all of the data has been updated and is ready to be read
 
 typedef union _imu_data {
-  float f;
-  uint8_t b[4];  // (Float is 4 Bytes)
+  uint16_t f;
+  uint8_t b[2];  // (int16 is 2 Bytes)
 } imu_data_t;                               // Use this for Float data that is to be sent via BLE                            // Container for Magnetometer data
 
 #define LSM9DS1_M             0x1E          // SDO_XM Address

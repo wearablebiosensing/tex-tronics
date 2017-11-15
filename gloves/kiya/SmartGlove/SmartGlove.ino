@@ -18,27 +18,27 @@ static const uint16_t uuid16_list[] = {
 
 // Create IMU Service and Characteristics
 static imu_data_t acc_x_data, acc_y_data, acc_z_data;
-static uint8_t acc_data[13] = {
+static uint8_t acc_data[7] = {
   0x00, 
-  acc_x_data.b[3], acc_x_data.b[2], acc_x_data.b[1], acc_x_data.b[0], 
-  acc_y_data.b[3], acc_y_data.b[2], acc_y_data.b[1], acc_y_data.b[0], 
-  acc_z_data.b[3], acc_z_data.b[2], acc_z_data.b[1], acc_z_data.b[0]
+  acc_x_data.b[1], acc_x_data.b[0], 
+  acc_y_data.b[1], acc_y_data.b[0], 
+  acc_z_data.b[1], acc_z_data.b[0]
 };
 
 static imu_data_t gyro_x_data, gyro_y_data, gyro_z_data;
-static uint8_t gyro_data[13] = {
+static uint8_t gyro_data[7] = {
   0x00, 
-  gyro_x_data.b[3], gyro_x_data.b[2], gyro_x_data.b[1], gyro_x_data.b[0], 
-  gyro_y_data.b[3], gyro_y_data.b[2], gyro_y_data.b[1], gyro_y_data.b[0], 
-  gyro_z_data.b[3], gyro_z_data.b[2], gyro_z_data.b[1], gyro_z_data.b[0]
+  gyro_x_data.b[1], gyro_x_data.b[0], 
+  gyro_y_data.b[1], gyro_y_data.b[0], 
+  gyro_z_data.b[1], gyro_z_data.b[0]
 };
 
 static imu_data_t mag_x_data, mag_y_data, mag_z_data;
-static uint8_t mag_data[13] = {
+static uint8_t mag_data[7] = {
   0x00, 
-  mag_x_data.b[3], mag_x_data.b[2], mag_x_data.b[1], mag_x_data.b[0], 
-  mag_y_data.b[3], mag_y_data.b[2], mag_y_data.b[1], mag_y_data.b[0], 
-  mag_z_data.b[3], mag_z_data.b[2], mag_z_data.b[1], mag_z_data.b[0]
+  mag_x_data.b[1], mag_x_data.b[0], 
+  mag_y_data.b[1], mag_y_data.b[0], 
+  mag_z_data.b[1], mag_z_data.b[0]
 };
 
 GattCharacteristic acc_char(UUID_ACCEL_CHAR, acc_data, sizeof(acc_data), sizeof(acc_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
@@ -97,17 +97,37 @@ void periodicCallback() {
     index_flex = analogRead(12);
     // TODO: Add rest of fingers
     
-    acc_x_data.f = imu.ax;            // Update Accelerometer Data
-    acc_y_data.f = imu.ay;
-    acc_z_data.f = imu.az;
+    acc_x_data.f = imu.ax + 32767;            // Update Accelerometer Data
+    acc_x_data.b[0] = (uint8_t)(acc_x_data.f & 0xff);
+    acc_x_data.b[1] = (uint8_t)(acc_x_data.f >> 8);
+    Serial.println(imu.ax);
+    Serial.println((int16_t)((((uint16_t)acc_x_data.b[1] << 8) | acc_x_data.b[0])-32767));  //this is the undo process
+    acc_y_data.f = imu.ay + 32767;
+    acc_y_data.b[0] = (uint8_t)(acc_y_data.f & 0xff);
+    acc_y_data.b[1] = (uint8_t)(acc_y_data.f >> 8);
+    acc_z_data.f = imu.az + 32767;
+    acc_z_data.b[0] = (uint8_t)(acc_z_data.f & 0xff);
+    acc_z_data.b[1] = (uint8_t)(acc_z_data.f >> 8);
     
-    gyro_x_data.f = imu.gx;           // Update Gyroscope Data
-    gyro_y_data.f = imu.gy;
-    gyro_z_data.f = imu.gz;
+    gyro_x_data.f = imu.gx + 32767;           // Update Gyroscope Data
+    gyro_x_data.b[0] = (uint8_t)(gyro_x_data.f & 0xff);
+    gyro_x_data.b[1] = (uint8_t)(gyro_x_data.f >> 8);
+    gyro_y_data.f = imu.gy + 32767;
+    gyro_y_data.b[0] = (uint8_t)(gyro_y_data.f & 0xff);
+    gyro_y_data.b[1] = (uint8_t)(gyro_y_data.f >> 8);
+    gyro_z_data.f = imu.gz + 32767;
+    gyro_z_data.b[0] = (uint8_t)(gyro_z_data.f & 0xff);
+    gyro_z_data.b[1] = (uint8_t)(gyro_z_data.f >> 8);
     
-    mag_x_data.f = imu.mx;            // Update Magnetometer Data
-    mag_y_data.f = imu.my;
-    mag_z_data.f = imu.mz;
+    mag_x_data.f = imu.mx + 32767;            // Update Magnetometer Data
+    mag_x_data.b[0] = (uint8_t)(mag_x_data.f & 0xff);
+    mag_x_data.b[1] = (uint8_t)(mag_x_data.f >> 8);
+    mag_y_data.f = imu.my + 32767;
+    mag_y_data.b[0] = (uint8_t)(mag_y_data.f & 0xff);
+    mag_y_data.b[1] = (uint8_t)(mag_y_data.f >> 8);
+    mag_z_data.f = imu.mz + 32767;
+    mag_z_data.b[0] = (uint8_t)(mag_z_data.f & 0xff);
+    mag_z_data.b[1] = (uint8_t)(mag_z_data.f >> 8);
 
     /**
      * TODO:
@@ -115,23 +135,23 @@ void periodicCallback() {
      *  of updating the characteristic, so it would be 
      *  good to optimize this at some point.
      */
-    uint8_t temp_acc_data[13] = {
+    uint8_t temp_acc_data[7] = {
       0x00, 
-      acc_x_data.b[3], acc_x_data.b[2], acc_x_data.b[1], acc_x_data.b[0], 
-      acc_y_data.b[3], acc_y_data.b[2], acc_y_data.b[1], acc_y_data.b[0], 
-      acc_z_data.b[3], acc_z_data.b[2], acc_z_data.b[1], acc_z_data.b[0]
+      acc_x_data.b[1], acc_x_data.b[0], 
+      acc_y_data.b[1], acc_y_data.b[0], 
+      acc_z_data.b[1], acc_z_data.b[0]
     };
-    uint8_t temp_gyro_data[13] = {
+    uint8_t temp_gyro_data[7] = {
       0x00, 
-      gyro_x_data.b[3], gyro_x_data.b[2], gyro_x_data.b[1], gyro_x_data.b[0], 
-      gyro_y_data.b[3], gyro_y_data.b[2], gyro_y_data.b[1], gyro_y_data.b[0], 
-      gyro_z_data.b[3], gyro_z_data.b[2], gyro_z_data.b[1], gyro_z_data.b[0]
+      gyro_x_data.b[1], gyro_x_data.b[0], 
+      gyro_y_data.b[1], gyro_y_data.b[0], 
+      gyro_z_data.b[1], gyro_z_data.b[0]
     };
-    uint8_t temp_mag_data[13] = {
+    uint8_t temp_mag_data[7] = {
       0x00, 
-      mag_x_data.b[3], mag_x_data.b[2], mag_x_data.b[1], mag_x_data.b[0], 
-      mag_y_data.b[3], mag_y_data.b[2], mag_y_data.b[1], mag_y_data.b[0], 
-      mag_z_data.b[3], mag_z_data.b[2], mag_z_data.b[1], mag_z_data.b[0]
+      mag_x_data.b[1], mag_x_data.b[0], 
+      mag_y_data.b[1], mag_y_data.b[0], 
+      mag_z_data.b[1], mag_z_data.b[0]
     };
 
     // Update IMU Characteristic values
@@ -213,13 +233,13 @@ void init_imu() {
  * advertising.
  */
 void setup() {
-  //Serial1.begin(9600);
-  //Serial.println("Initializing SmartGlove...");
-  //pinMode(13, OUTPUT);
-  //digitalWrite(13, LOW);
+  Serial.begin(9600);
+  Serial.println("Initializing SmartGlove...");
+  pinMode(13, OUTPUT);
+  digitalWrite(13, LOW);
   ticker_task1.attach_us(periodicCallback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer
   init_ble();                                     // Initialize BLE Module
-  //digitalWrite(13, HIGH);
+  digitalWrite(13, HIGH);
   init_imu();                                     // Initialize IMU Module
 }
 
