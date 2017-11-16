@@ -14,16 +14,14 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.LocaleDisplayNames;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
-import edu.uri.wbl.smartglove.ble.enums.BleActions;
+import edu.uri.wbl.smartglove.ble.enums.BleAction;
 import edu.uri.wbl.smartglove.ble.enums.BleStatus;
 import edu.uri.wbl.smartglove.ble.models.BluetoothCharacteristicModel;
 import edu.uri.wbl.smartglove.ble.models.BluetoothLeModel;
@@ -35,47 +33,47 @@ import edu.uri.wbl.smartglove.ble.receivers.BleUpdateReceiver;
  */
 
 public class BleConnectionService extends Service {
-    private static String EXTRA_ACTION = "wbl.tex_tronics.extra_action";
+    /*private static String EXTRA_ACTION = "wbl.tex_tronics.extra_action";
     private static String EXTRA_DEVICE = "wbl.tex_tronics.extra_device";
     private static String EXTRA_SERVICE = "wbl.tex_tronics.extra_service";
     private static String EXTRA_CHARACTERISTIC = "wbl.tex_tronics.extra_characteristic";
 
     public static void START(Context context) {
         Intent intent = new Intent(context, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.START.getAction());
+        intent.putExtra(EXTRA_ACTION, BleAction.START.getAction());
         context.startService(intent);
     }
 
     public static void STOP(Context context) {
         Intent intent = new Intent(context, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.STOP.getAction());
+        intent.putExtra(EXTRA_ACTION, BleAction.STOP.getAction());
         context.startService(intent);
     }
 
     public static void CONNECT(Context context, BluetoothLeModel bluetoothLeModel) {
         Intent intent = new Intent(context, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.CONNECT.getAction());
+        intent.putExtra(EXTRA_ACTION, BleAction.CONNECT.getAction());
         intent.putExtra(EXTRA_DEVICE, bluetoothLeModel.getBluetoothDeviceAddress());
         context.startService(intent);
     }
 
     public static void DISCONNECT(Context context, BluetoothLeModel bluetoothLeModel) {
         Intent intent = new Intent(context, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.DISCONNECT.getAction());
+        intent.putExtra(EXTRA_ACTION, BleAction.DISCONNECT.getAction());
         intent.putExtra(EXTRA_DEVICE, bluetoothLeModel.getBluetoothDeviceAddress());
         context.startService(intent);
     }
 
     public static void DISCOVER_SERVICES(Context context, BluetoothLeModel bluetoothLeModel) {
         Intent intent = new Intent(context, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.DISCOVER_SERVICES.getAction());
+        intent.putExtra(EXTRA_ACTION, BleAction.DISCOVER_SERVICES.getAction());
         intent.putExtra(EXTRA_DEVICE, bluetoothLeModel.getBluetoothDeviceAddress());
         context.startService(intent);
     }
 
     public static void REQUEST_READ(Context context, BluetoothLeModel bluetoothLeModel, BluetoothServiceModel bluetoothServiceModel, BluetoothCharacteristicModel bluetoothCharacteristicModel) {
         Intent intent = new Intent(context, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.READ_CHARACTERISTIC.getAction());
+        intent.putExtra(EXTRA_ACTION, BleAction.READ_CHARACTERISTIC.getAction());
         intent.putExtra(EXTRA_DEVICE, bluetoothLeModel.getBluetoothDeviceAddress());
         intent.putExtra(EXTRA_SERVICE, bluetoothServiceModel.getUUID().toString());
         intent.putExtra(EXTRA_CHARACTERISTIC, bluetoothCharacteristicModel.getUUID().toString());
@@ -87,11 +85,11 @@ public class BleConnectionService extends Service {
     private Context mContext;
     private HashMap<String, BluetoothGatt> mConnectedDevices;
     private BluetoothAdapter mBluetoothAdapter;
-
+*/
     @Override
     public void onCreate() {
         super.onCreate();
-
+/*
         mContext = this;
         mConnectedDevices = new HashMap<>();
 
@@ -103,17 +101,17 @@ public class BleConnectionService extends Service {
             stopSelf();
         }
 
-        startForeground(NOTIFICATION_ID, getNotification(BleStatus.INITIALIZING.getStatus()));
+        startForeground(NOTIFICATION_ID, getNotification(BleStatus.INITIALIZING.getStatus()));*/
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-
+/*
         if(intent == null || !intent.hasExtra(EXTRA_ACTION))
             return START_NOT_STICKY;
 
-        BleActions action = BleActions.GET(intent.getStringExtra(EXTRA_ACTION));
+        BleAction action = BleAction.GET(intent.getStringExtra(EXTRA_ACTION));
         if(action == null)
             return START_NOT_STICKY;
 
@@ -136,6 +134,10 @@ public class BleConnectionService extends Service {
                     return START_NOT_STICKY;
                 }
                 String address = intent.getStringExtra(EXTRA_DEVICE);
+                if(address == null) {
+                    Log.d(this.getClass().getSimpleName(), "Invalid Device Address");
+                    return START_NOT_STICKY;
+                }
                 Log.d(this.getClass().getSimpleName(), "\tDEVICE: " + address);
                 connect(address);
                 break;
@@ -168,7 +170,7 @@ public class BleConnectionService extends Service {
                 requestRead(intent.getStringExtra(EXTRA_DEVICE), UUID.fromString(intent.getStringExtra(EXTRA_SERVICE)), UUID.fromString(intent.getStringExtra(EXTRA_CHARACTERISTIC)));
                 break;
         }
-
+*/
         return START_NOT_STICKY;
     }
 
@@ -176,7 +178,7 @@ public class BleConnectionService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
+/*
     @Override
     public void onDestroy() {
 
@@ -186,7 +188,7 @@ public class BleConnectionService extends Service {
         BluetoothDevice bluetoothDevice = mBluetoothAdapter.getRemoteDevice(bluetoothDeviceAddress);
         BluetoothGatt bluetoothGatt = bluetoothDevice.connectGatt(mContext, false, mBluetoothGattCallback);
         if(bluetoothGatt != null) {
-            Log.d(this.getClass().getSimpleName(), "Connecting to " + bluetoothGatt.getDevice().getName() + "...");
+            Log.d(this.getClass().getSimpleName(), "Connecting to " + bluetoothDevice.getName() + "...");
         }
     }
 
@@ -242,7 +244,7 @@ public class BleConnectionService extends Service {
         notificationBuilder.setOngoing(true);
 
         Intent intent = new Intent(mContext, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.STOP);
+        intent.putExtra(EXTRA_ACTION, BleAction.STOP);
         PendingIntent pendingIntent = PendingIntent.getService(mContext, 347, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationBuilder.setContentIntent(pendingIntent);
@@ -260,7 +262,7 @@ public class BleConnectionService extends Service {
         notificationBuilder.setOngoing(true);
 
         Intent intent = new Intent(mContext, BleConnectionService.class);
-        intent.putExtra(EXTRA_ACTION, BleActions.STOP);
+        intent.putExtra(EXTRA_ACTION, BleAction.STOP);
         PendingIntent pendingIntent = PendingIntent.getService(mContext, 347, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationBuilder.setContentIntent(pendingIntent);
@@ -309,6 +311,7 @@ public class BleConnectionService extends Service {
                     sendBroadcast(BleUpdateReceiver.UPDATE_DISCONNECTED, null);
                     break;
                 default:
+                    Log.d(this.getClass().getSimpleName(), "State = " + newState);
                     break;
             }
         }
@@ -317,16 +320,6 @@ public class BleConnectionService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if(status != BluetoothGatt.GATT_SUCCESS) {
                 Log.d(this.getClass().getSimpleName(), "Bluetooth GATT Error!");
-                return;
-            }
-
-            if(gatt.getServices() == null) {
-                Log.d(this.getClass().getSimpleName(), "Services returned NULL");
-                return;
-            }
-
-            if(gatt.getDevice().getAddress() == null) {
-                Log.d(this.getClass().getSimpleName(), "Device Address return NULL");
                 return;
             }
 
@@ -348,8 +341,7 @@ public class BleConnectionService extends Service {
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            BluetoothLeModel bluetoothLeModel = BluetoothLeModel.CREATE(gatt.getDevice().getAddress(), gatt.getServices());
-            bluetoothLeModel.getCharacteristic(characteristic.getUuid()).setValue(characteristic.getValue());
+            BluetoothLeModel bluetoothLeModel = BluetoothLeModel.CREATE(gatt.getDevice().getAddress(), gatt.getServices()); // Updated values are set by BluetoothLeModel
             sendBroadcast(BleUpdateReceiver.UPDATE_CHARACTERISTIC_READ, bluetoothLeModel);
         }
 
@@ -388,4 +380,5 @@ public class BleConnectionService extends Service {
             super.onMtuChanged(gatt, mtu, status);
         }
     };
+    */
 }

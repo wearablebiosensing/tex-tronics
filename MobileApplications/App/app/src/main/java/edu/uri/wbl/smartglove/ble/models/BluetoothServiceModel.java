@@ -27,8 +27,7 @@ public class BluetoothServiceModel {
         mDeviceAddress = deviceAddress;
         mUUID = uuid;
         for(BluetoothGattCharacteristic model : characteristics) {
-            Log.d(this.getClass().getSimpleName(), "UUID: " + model.getUuid().toString());
-            BluetoothCharacteristicModel characteristicModel = BluetoothCharacteristicModel.CREATE(model.getUuid());
+            BluetoothCharacteristicModel characteristicModel = BluetoothCharacteristicModel.CREATE(model.getUuid(), model.getValue());
             if(characteristicModel == null) {
                 Log.d(this.getClass().getSimpleName(), "Error Creating Characteristic Model!!");
                 return;
@@ -45,9 +44,5 @@ public class BluetoothServiceModel {
         Collection<BluetoothCharacteristicModel> characteristics = mCharacteristics.values();
         ArrayList<BluetoothCharacteristicModel> characteristicsList = new ArrayList<>(characteristics);
         return characteristicsList.toArray(new BluetoothCharacteristicModel[characteristicsList.size()]);
-    }
-
-    private void putCharacteristic(BluetoothCharacteristicModel characteristic) {
-        mCharacteristics.put(characteristic.getUUID(), characteristic);
     }
 }

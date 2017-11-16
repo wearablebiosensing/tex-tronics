@@ -7,17 +7,16 @@ import java.util.UUID;
  */
 
 public class BluetoothCharacteristicModel {
-    public static BluetoothCharacteristicModel CREATE(UUID uuid) {
-        byte[] initialValue = {0x00};
-        return new BluetoothCharacteristicModel(uuid, initialValue);
+    public static BluetoothCharacteristicModel CREATE(UUID uuid, byte[] value) {
+        return new BluetoothCharacteristicModel(uuid, value);
     }
 
     private UUID mUUID;
     private byte[] mValue;
 
-    private BluetoothCharacteristicModel(UUID uuid, byte[] initialValue) {
+    private BluetoothCharacteristicModel(UUID uuid, byte[] value) {
         mUUID = uuid;
-        mValue = initialValue;
+        mValue = value;
     }
 
     public UUID getUUID() {

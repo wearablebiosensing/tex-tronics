@@ -19,7 +19,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ble.services.BleConnectionService" android:process=":BleConnectionProcess"/>
+        <service
+            android:name=".ble.services.BluetoothLeService"
+            android:process=":BluetoothLeProcess"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>
