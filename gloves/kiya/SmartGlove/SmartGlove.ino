@@ -93,8 +93,8 @@ void periodicCallback() {
     imu.readGyro();
     imu.readMag();
 
-    thumb_flex = analogRead(14);      // Read Flex Sensor Values
-    index_flex = analogRead(12);
+    thumb_flex = analogRead(A3);      // Read Flex Sensor Values
+    index_flex = analogRead(A4);
     // TODO: Add rest of fingers
     
     acc_x_data.f = imu.ax + 32767;            // Update Accelerometer Data
