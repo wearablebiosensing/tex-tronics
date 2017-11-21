@@ -17,12 +17,12 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import edu.uri.wbl.smartglove.ble.enums.BleAction;
 import edu.uri.wbl.smartglove.ble.enums.BleStatus;
 import edu.uri.wbl.smartglove.ble.models.BluetoothCharacteristicModel;
 import edu.uri.wbl.smartglove.ble.models.BluetoothLeModel;
-import edu.uri.wbl.smartglove.ble.models.BluetoothLeModelManager;
 import edu.uri.wbl.smartglove.ble.models.BluetoothServiceModel;
 import edu.uri.wbl.smartglove.ble.receivers.BleUpdateReceiver;
 
@@ -68,6 +68,31 @@ public class BluetoothLeService extends Service {
      * Specifies the Characteristic to be modified or viewed.
      */
     private static String EXTRA_CHARACTERISTIC = "wbl.tex_tronics.extra_characteristic";
+
+    private static ConcurrentHashMap<String, BluetoothLeModel> sConnections;
+
+    public static BluetoothLeModel GET_DEVICE(String address) {
+        if(sConnections == null) {
+            sConnections = new ConcurrentHashMap<>(7);
+            BluetoothLeModel bluetoothLeModel = new BluetoothLeModel(address);
+            sConnections.put(address, bluetoothLeModel);
+            return bluetoothLeModel;
+        } else {
+            if(sConnections.containsKey(address)) {
+                return sConnections.get(address);
+            } else {
+                BluetoothLeModel bluetoothLeModel = new BluetoothLeModel(address);
+                sConnections.put(address, bluetoothLeModel);
+                return bluetoothLeModel;
+            }
+        }
+    }
+
+    public static void REMOVE_DEVICE(String address) {
+        if(sConnections != null && sConnections.containsKey(address)) {
+            sConnections.remove(address);
+        }
+    }
 
     /**
      * The START action starts and initializes the BluetoothLeService. This action can be bypassed
@@ -361,7 +386,7 @@ public class BluetoothLeService extends Service {
                 return;
             }
 
-            BluetoothLeModel bluetoothLeModel = BluetoothLeModelManager.GET(gatt.getDevice().getAddress());
+            BluetoothLeModel bluetoothLeModel = GET_DEVICE(gatt.getDevice().getAddress());
             if(bluetoothLeModel == null) {
                 Log.e(this.getClass().getSimpleName(), "GATT Error: Bluetooth Model not Found");
                 return;
