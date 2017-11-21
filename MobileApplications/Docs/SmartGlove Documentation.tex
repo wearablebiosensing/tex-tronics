@@ -21,9 +21,33 @@
 \usepackage[bookmarks=true]{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{color}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 \hypersetup{
     bookmarks=false,    % show bookmarks bar?
-    pdftitle={SmartGlove Application User's Guide},    % title
+    pdftitle={SmartGlove BLE API User's Guide},    % title
     pdfauthor={Matthew Constant},                     % author
     pdfsubject={SmartGlove Application Development},                        % subject of the document
     pdfkeywords={SmartGlove, API, Android}, % list of keywords
@@ -49,7 +73,7 @@
         \vspace{1.9cm}
         for\\
         \vspace{1.9cm}
-        SmartGlove Android Application\\
+        SmartGlove BLE API\\
         \vspace{1.9cm}
         \LARGE{Version \myversion}\\
         \vspace{1.9cm}
@@ -78,90 +102,177 @@
    % \end{tabular}
 %\end{center}
 
-\chapter{Introduction}
+\chapter{API Overview}
 
-\section{Purpose}
-This application is being developed in order to act as a gateway between the SmartGlove
-e-Textile device and the secure server on which the data collected is to be stored and
-viewed from. By collecting this data from the SmartGlove device in real-time, the application
-has the ability to both guide the participant through his/her exercise as well as securely store
-this data in a server to be accessed at a later time by either the doctor or patient. In 
-addition, this application will allow users to easily visualize the data that is stored on the 
-server in a simple and intuitive way.
+\section{Background}
+The SmartGlove BLE API was developed for Android mobile devices (smartphones, tablets).
+If you are not familar with Android application development, this section will give background 
+on relevent aspects needed in this document. Otherwise, you can skip this section and
+go straight to \textit{SmartGlove Bluetooth Models}.\\
+Android applications consists of three basic components: Activities, Services, and Broadcast Receivers.
+Activities are the graphical part of the application which the User interacts with directly.
+Activities deal with event driven operations such as when a button is clicked or when to 
+display information (for example, to show a picture once is has been downloaded.
+An activity is the only component that the User will interact with. Services run in the
+background and are usually designed to complete a single specific task. The most common
+example to demostrate the difference between an activity and a service is a music streaming
+application. The activity will dislay the song being played and allow the User to pause, play, etc.
+One possible service in this case would be a service to download the song information (another
+would be a service to play the audio). The last component, Broadcast Receivers, are meant to
+allow separate processes, components, or applications to communicate useful information, i.e. battery percentage.
+Usually, data that is boradcast is not specific to any one application but could be useful to many
+different applications serving many different purposes. Services and activities can both send
+and receive broadcasts by implementing or registering a broadcast receiver. Broadcast 
+receivers can also be implemented as a stand-alone component, however this is not relevent
+to the SmartGlove API.\\
+In order for all of these different components to interact, some kind of \''messenger\'' is
+needed. In Android, this messenger is called an Intent. A component (described above)
+will create an Intent and send it to the component it wants to start, stop or communicate with.
+The Intent can also contain extra information called \''Extras\''. These extras can be
+Strings, ints, floats, or (most importantly in this case) serializable objects. Calling applications 
+interact with the SmartGlove by sending Intents filled with specific information. Luckily, BluetoothLeService
+provides static methods to take care of packaging the Intents so the Caller does not need to worry
+about this.
 
-\section{Application Requirements}
-This application must connect to the SmartGlove device with as little user interaction
-as possible. This includes filtering devices out when scanning for nearby BLE devices,
-as well as automatically reconnecting to previously connected devices. This application
-must also be able to send the collected data to a server via MQTT. Lastly, the application
-needs to be able to connect to the remote server in order to retreive and visualize 
-a patient's data in the application.
+\section{SmartGlove Bluetooth Models and the Manager}
+The most fundamental aspect of the SmartGlove BLE API is the BluetoothLeModel. This class is
+used to represent generic BLE devices. It contains the device address, its current connection
+state, and a list of its services (represented by BluetoothServiceModels). BluetoothServiceModels
+contain the service's UUID as well as a list of all of its characteristics (represented by
+BluetoothCharacteristicModels). BluetoothCharacteristicModels contains the characteristic's
+UUID as well as its current value as a byte[]. By using these models, an abstraction layer is created
+between the actual BLE device and the API, simplfying the process of communicating with the 
+BLE device.
+\begin{lstlisting}
+// BluetoothLeModelManager
+BluetoothLeModel CREATE(String BD_ADDR);
+BluetoothLeModel GET(String BD_ADDR);
 
-\section{Implementation}
-This application has implemented these requirements using the native Android BLE API
-and the open source MPAndroid Charts library. (The MQTT portion of this application
-is still under development). Developers can interact with the SmartGlove using the 
-BleConnectionService class. This class allows users the ability to connect to,
-disconnect from, discover services, read, write, and be notified. The data retrieved
-is then broadcast using the BleUpdateReceiver. This means that any class listening 
-via a BleUpdateReceiver can collect information from the BleConnectionService. 
-This approach allows for the highest level of abstraction as well as the least impactful
-on the User's program. All actions supported by the BleConnectionService are made 
-available by static methods in the BleConnectionService. Another layer of abstraction
-is made by using the BluetoothLeModel class to represent the BLE device to the user.
-The user will create a BluetoothLeModel and use this to send and receive data from the
-BleConnectionService.
+// BluetoothLeModel
+BleStatus getStatus();
+void setStatus(BleStatus);
+String getAddress();
+List<BluetoothServiceModel> getServices();
+void setServices(List<BluetoothGattService>);
 
-\section{Resources}
+// BluetoothServiceModel
+UUID getUuid();
+BluetoothCharacteristicModel getCharacteristics();
+
+// BluetoothCharacteristicModel
+UUID getUuid();
+byte[] getValue();
+void setValue(byte[]);
+\end{lstlisting}
+
+\section{BluetoothLeService}
+The BluetoothLeService is the main service provided by the SmartGlove
+BLE API. This service provides actions to allow the caller to interact with
+a BLE device as well as updates to allow the Caller to receive information
+related to a connected BLE device. Every action that is supported by this
+service is made available by a static method. The general syntax for
+an action call is \begin{verbatim}BluetoothLeService.action(Context, BluetoothLeModel)\end{verbatim}
+where the BluetoothLeModel is retrieved from BluetoothLeModelManager.
+If the caller is expecting to receive information back from the action requested,
+it must implement a BleUpdateReceiver, and wait for the appropriate update
+to be broadcast to the receiver (this is covered in more detail in the next section).
+Current actions supported by this service are:\\
+\begin{itemize}
+	\item{START - Start the Service and allow it to run in the background.}
+	\item{STOP - Stop the Service if running. This causes all connected devices
+	to be disconnected.}
+\end{itemize}
 
 
+\section{BleUpdateReceiver}
+The BleUpdateReceiver is a Broadcast Receiver used to transmit \''Update Packets\'' to
+all listening components (activities or services). An update packet consists of
+the BleUpdate, such as UPDATE_CONNECTED, and the BluetoothLeModel which
+represents the BLE device corresponding to the update. In order for a component
+to implement the BleUpdateReceiver and begin listening for updates, it must do two things.
+First, it must create an inner class which extends the BleUpdateReceiver abstract class.
+This is the receiver which will receive the updates. Usually, a switch statement is used inside the
+onReceive() method for each possible update. The second thing that must be done is to register
+this receiver, preferably in the onStart() method, and unregister the receiver, preferably in the
+onStop() method. An example setup is shown below.
+\pagebreak
+\begin{lstlisting}
+@Override
+public void onStart() {
+	super.onStart();
+	this.registerReceiver(mBleUpdateReceiver, BleUpdateReceiver.INTENT_FILTER);
+	...
+}
 
-\chapter{Overview}
+@Override
+public void onStop() {
+	this.unregisterReceiver(mBleUpdateReceiver);
+	...
+	super.onStop();
+}
 
-\section{BluetoothLeModel}
-Rather than interact directly with the BluetoothGatt class, the user will only need to
-use the BluetoothLeModel. This is a much more simplified class that still allows the 
-User to take full advantage of the SmartGlove device. The BluetoothLeModel
-contains the BLE Device address, as well as all of its services and characteristics.
-For example, in order to connect to a nearby BLE device the user can simpy
-create a BluetoothLeModel with its Bluetooth Address using the following 
-method: BluetoothLeModel.CREATE(String BT_ADDR). The BluetoothLeModel
-can allows be created with all of its services and characteristics by first discovering the
-devices services and adding this list to the create method. For example:\\
-$BleConnectionService.DISCOVER_SERVICES(Context, BluetoothLeModel)\\
-...\\
-BluetoothLeModel.CREATE(String BT_ADDR, List<BluetoothGattServices>);$\\
+private BleUpdateReceiver mBleUpdateReceiver = new BleUpdateReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int update = intent.getIntExtra(BleUpdateReceiver.EXTRA_UPDATE, -1);
+            switch(update) {
+                case BleUpdateReceiver.UPDATE_CONNECTED:
+                    // May want to call BleConnectionService.DISCOVER_SERVICES(mContext, mBluetoothLeModel) here
+                    break;
+                case BleUpdateReceiver.UPDATE_DISCONNECTED:
 
-\section{Sending Commands to BleConnectionService}
-Users can interact with the SmartGlove by sending \''Actions\'' to the
-BleConnectionService. These actions are made available with static methods.
-For example, in order to connect to a nearby BLE device, the user can simply
-call BleConnectionService(Context, BluetoothLeModel). The following commands
-are currently implemented by the BleConnectionService:\\
-CONNECT\\
-DISCONNECT\\
-DISCOVER_SERVICES\\
-REQUEST_READ\\
+                    break;
+                case BleUpdateReceiver.UPDATE_SERVICES_DISCOVERED:
+                   
+                    break;
+                 ...
+                default:
 
-\section{Receiving Updates and Data from BleConnectionService}
-In order to retrieve information from the BleConnectionService, the user must implement
-the BleUpdateReceiver. All data and updates from the BleConnectionService are transmitted
-through this Receiver. Updates includes when a device is connected to or disconnected from,
-the services of a device are discovered, and when the device is read from or written to.
-Each update will include the corresponding BluetoothLeModel, providing the user
-with the Device address and the most current values for each characteristic.
+                    break;
+            }
+        }
+};
+\end{lstlisting}
 
-\section{Adding Features to BleConnectionService}
-Implementing new features to the BleConnectionService is a very straight-forward process.
-First, the action must be defined in the BleActions enum. Next, a static method must be implemented
-in the BleConnectionService to provide an interface for users to use this feature (Please follow the 
-pattern of all other features, meaning the static method should simply generate the intent needed and
-send that intent to the service). Third, add the action into the switch statement in the onStartCommand
-method in BleConnectionService. This should do some preliminary error checking and then call the corresponding
-method related to this action. The last step is to implement this method that is related to the action. If this
-feature must also send data or updates back, it must be sent using the BleUpdate Broadcast Receiver.
 
-\section{Areas to Improve}
+\chapter{Interacting with SmartGlove via BluetoothLeService}
+\includegraphics[width=\textwidth]{BluetoothLeServiceOverview}
+
+\section{Action Packets}
+Action packets are sent using Intents. In general, they are composed
+the following way:
+\begin{lstlisting}
+Intent intent = new Intent(context, BluetoothLeService.class);
+intent.putExtra(EXTRA_ACTION, BleAction.<Action>.getAction());	// Set BleAction
+intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);			// Set BluetoothLeModel
+\end{lstlisting}
+This packet is then sent to BluetoothLeService via the following call:
+\begin{verbatim}context.startService(intent);\end{verbatim}
+This packaging is taken care of by the BluetoothLeService itself,
+allowing the caller to simply call a static method to send an action
+to the BluetoothLeService. For example, the following snippet
+sends the START action to BluetoothLeService:
+\begin{verbatim}BluetoothLeService.START(context);\end{verbatim}
+
+\section{Update Packets}
+Update packets are transmitted using Intents, similar to Action packets.
+When a BleUpdateReceiver receives a broadcast, the intent will contain
+an int representing the BleUpdate and a BluetoothLeModel corresponding
+to the relevent BLE device. One thing to note is that when a device is 
+connected to, the BluetoothLeModel's service list is either empty or
+out of date. In order to interact with the device's services and characteristics,
+the caller must first send the DISCOVER_SERVICES actions when an already
+connected BluetoothLeModel. Typically, this is done when the UPDATE_CONNECTED
+update packet is received.
+
+
+\chapter{Contributing to SmartGlove BLE API}
+
+\section{Adding Actions}
+\includegraphics[width=\textwidth]{AddActionFlowchart}
+
+\section{Sending Updates}
+\includegraphics[width=\textwidth]{AddUpdateFlowchart}
 
 
 

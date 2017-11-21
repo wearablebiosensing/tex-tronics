@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.10.22)  12 NOV 2017 17:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.10.22)  21 NOV 2017 10:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -582,31 +582,6 @@ File: switch.def 2017/10/04 3.14 Babel switching mechanism
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 ))
-
-Package hyperref Warning: Option `bookmarks' has already been used,
-(hyperref)                setting the option has no effect on input line 36.
-
-Package hyperref Info: Option `colorlinks' set `true' on input line 36.
-(./SmartGlove Documentation.aux)
-\openout1 = `"SmartGlove Documentation.aux"'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-\c@lstlisting=\count108
-\AtBeginShipoutBox=\box30
-
 (c:/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
 
@@ -617,40 +592,101 @@ Package color Info: Driver file: pdftex.def on input line 147.
 
 (c:/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2017/06/24 v1.0g Graphics/color driver for pdftex
+))
+(c:/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
-(c:/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count109
-\scratchdimen=\dimen112
-\scratchbox=\box31
-\nofMPsegments=\count110
-\nofMParguments=\count111
-\everyMPshowfont=\toks18
-\MPscratchCnt=\count112
-\MPscratchDim=\dimen113
-\MPnumerator=\count113
-\makeMPintoPDFobject=\count114
-\everyMPtoPDFconversion=\toks19
-)))
-Package hyperref Info: Link coloring ON on input line 43.
- (c:/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
+(c:/texlive/2017/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(c:/texlive/2017/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(c:/texlive/2017/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+)
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+(c:/texlive/2017/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+
+Package hyperref Warning: Option `bookmarks' has already been used,
+(hyperref)                setting the option has no effect on input line 60.
+
+Package hyperref Info: Option `colorlinks' set `true' on input line 60.
+(./SmartGlove Documentation.aux)
+\openout1 = `"SmartGlove Documentation.aux"'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+\c@lstlisting=\count108
+\AtBeginShipoutBox=\box30
+Package hyperref Info: Link coloring ON on input line 67.
+
+(c:/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 (c:/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count115
+\c@section@level=\count109
 )
-LaTeX Info: Redefining \ref on input line 43.
-LaTeX Info: Redefining \pageref on input line 43.
-LaTeX Info: Redefining \nameref on input line 43.
+LaTeX Info: Redefining \ref on input line 67.
+LaTeX Info: Redefining \pageref on input line 67.
+LaTeX Info: Redefining \nameref on input line 67.
 
 (./SmartGlove Documentation.out) (./SmartGlove Documentation.out)
 \@outlinefile=\write3
 \openout3 = `"SmartGlove Documentation.out"'.
 
 
-Overfull \hbox (36.98853pt too wide) in paragraph at lines 46--46
+(c:/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count110
+\scratchdimen=\dimen114
+\scratchbox=\box31
+\nofMPsegments=\count111
+\nofMParguments=\count112
+\everyMPshowfont=\toks18
+\MPscratchCnt=\count113
+\MPscratchDim=\dimen115
+\MPnumerator=\count114
+\makeMPintoPDFobject=\count115
+\everyMPtoPDFconversion=\toks19
+) (c:/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(c:/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(c:/texlive/2017/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Overfull \hbox (36.98853pt too wide) in paragraph at lines 70--70
  []
  []
 
@@ -690,48 +726,81 @@ Class scrreprt Warning: \float@addtolists detected!
 [3
 
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 175--180
+
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 181.
+
+(c:/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 181.
+ [4] [5] [6]
 chapter 2.
+<images/BluetoothLeServiceOverview.png, id=148, 538.01pt x 221.82875pt>
+File: images/BluetoothLeServiceOverview.png Graphic file (type png)
+<use images/BluetoothLeServiceOverview.png>
+Package pdftex.def Info: images/BluetoothLeServiceOverview.png  used on input l
+ine 239. on input line 239.
+Package pdftex.def Info: Requested size: 418.25555pt x 172.45367pt on input lin
+e 239.
+[7
 
-Underfull \hbox (badness 10000) in paragraph at lines 122--134
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 136--145
-
- []
-
-[4
+ <./images/BluetoothLeServiceOverview.png>] [8]
+chapter 3.
+<images/AddActionFlowchart.png, id=164, 446.66875pt x 632.3625pt>
+File: images/AddActionFlowchart.png Graphic file (type png)
+<use images/AddActionFlowchart.png>
+Package pdftex.def Info: images/AddActionFlowchart.png  used on input line 272.
+ on input line 272.
+Package pdftex.def Info: Requested size: 418.25555pt x 592.14366pt on input lin
+e 272.
+[9
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 168.
- [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 168.
- (./SmartGlove Documentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 168.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 168.
+Overfull \vbox (64.23856pt too high) has occurred while \output is active []
+
+
+[10 <./images/AddActionFlowchart.png>]
+<images/AddUpdateFlowchart.png, id=174, 315.1775pt x 296.10625pt>
+File: images/AddUpdateFlowchart.png Graphic file (type png)
+<use images/AddUpdateFlowchart.png>
+Package pdftex.def Info: images/AddUpdateFlowchart.png  used on input line 275.
+ on input line 275.
+Package pdftex.def Info: Requested size: 418.25555pt x 392.97145pt on input lin
+e 275.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 279.
+ [11 <./images/AddUpdateFlowchart.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 279.
+
+(./SmartGlove Documentation.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 279.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 279.
 Package rerunfilecheck Info: File `"SmartGlove Documentation".out' has not chan
 ged.
-(rerunfilecheck)             Checksum: 2DE8340101FBFA5BF1489143FDF9D918;723.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 168.
+(rerunfilecheck)             Checksum: 03876814D8BF22DA66D4AC0BF3FFAC5A;716.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 279.
  ) 
 Here is how much of TeX's memory you used:
- 8936 strings out of 492990
- 140356 string characters out of 6136333
- 328543 words of memory out of 5000000
- 12420 multiletter control sequences out of 15000+600000
- 8488 words of font info for 30 fonts, out of 8000000 for 9000
+ 9802 strings out of 492990
+ 151689 string characters out of 6136333
+ 374322 words of memory out of 5000000
+ 13185 multiletter control sequences out of 15000+600000
+ 9170 words of font info for 33 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,7n,66p,8860b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,7n,66p,8860b,1158s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/tex
-live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2017
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2017/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2017/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmssbx10.pfb>
-Output written on "SmartGlove Documentation.pdf" (5 pages, 78301 bytes).
+live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2017/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><c:/texlive/2017/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2017/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2017/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmtt10.pfb>
+Output written on "SmartGlove Documentation.pdf" (11 pages, 188737 bytes).
 PDF statistics:
- 109 PDF objects out of 1000 (max. 8388607)
- 96 compressed objects within 1 object stream
- 18 named destinations out of 1000 (max. 500000)
- 89 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 221 PDF objects out of 1000 (max. 8388607)
+ 194 compressed objects within 2 object streams
+ 84 named destinations out of 1000 (max. 500000)
+ 104 words of extra memory for PDF output out of 10000 (max. 10000000)
 

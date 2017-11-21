@@ -1,11 +1,11 @@
-\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.1.1}{Purpose}{chapter.1}% 2
-\BOOKMARK [1][-]{section.1.2}{Application Requirements}{chapter.1}% 3
-\BOOKMARK [1][-]{section.1.3}{Implementation}{chapter.1}% 4
-\BOOKMARK [1][-]{section.1.4}{Resources}{chapter.1}% 5
-\BOOKMARK [0][-]{chapter.2}{Overview}{}% 6
-\BOOKMARK [1][-]{section.2.1}{BluetoothLeModel}{chapter.2}% 7
-\BOOKMARK [1][-]{section.2.2}{Sending Commands to BleConnectionService}{chapter.2}% 8
-\BOOKMARK [1][-]{section.2.3}{Receiving Updates and Data from BleConnectionService}{chapter.2}% 9
-\BOOKMARK [1][-]{section.2.4}{Adding Features to BleConnectionService}{chapter.2}% 10
-\BOOKMARK [1][-]{section.2.5}{Areas to Improve}{chapter.2}% 11
+\BOOKMARK [0][-]{chapter.1}{API Overview}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Background}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{SmartGlove Bluetooth Models and the Manager}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{BluetoothLeService}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.4}{BleUpdateReceiver}{chapter.1}% 5
+\BOOKMARK [0][-]{chapter.2}{Interacting with SmartGlove via BluetoothLeService}{}% 6
+\BOOKMARK [1][-]{section.2.1}{Action Packets}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.2}{Update Packets}{chapter.2}% 8
+\BOOKMARK [0][-]{chapter.3}{Contributing to SmartGlove BLE API}{}% 9
+\BOOKMARK [1][-]{section.3.1}{Adding Actions}{chapter.3}% 10
+\BOOKMARK [1][-]{section.3.2}{Sending Updates}{chapter.3}% 11
