@@ -1,5 +1,6 @@
 package edu.uri.wbl.smartglove;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -29,171 +30,89 @@ import java.util.ArrayList;
  */
 
 public class MqttActivity extends AppCompatActivity {
-    MqttAndroidClient mqttAndroidClient;
-    Button mPublishButton;
+    private final static String SERVER_URI = "tcp://test.mosquitto.org:1883";
+    private final static String MQTT_TOPIC = "wbl/smartglove/kiya";
+    private final static String MQTT_TEST_MESSAGE = "Hello from Andy P!";
+    private final static String CLIENT_BASE_ID = "smartglove";
 
-        final String serverUri = "tcp://test.mosquitto.org:1883";
+    private Context mContext;
+    private MqttAndroidClient mMqttAndroidClient;
+    private String mClientId;
 
-        String clientId = "SmartGlove";
-        final String publishTopic = "wbl";
-        final String publishMessage = "Hello World!";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mqtt);
 
+        mContext = this;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_mqtt);
+        // Initialize MQTT Client
+        mClientId = CLIENT_BASE_ID + System.currentTimeMillis();    // Client ID must be unique
+        mMqttAndroidClient = new MqttAndroidClient(mContext, SERVER_URI, mClientId);
+        mMqttAndroidClient.setCallback(mMqttCallbackExtended);
 
-            mPublishButton = (Button) findViewById(R.id.publish_btn);
-            mPublishButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    publishMessage();
-                }
-            });
+        // Setup MQTT Connection Options
+        /**
+         * TODO:
+         *      Verify and finalize the MQTT Connection Options
+         */
+        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        mqttConnectOptions.setAutomaticReconnect(true);
+        mqttConnectOptions.setCleanSession(false);
 
-            clientId = clientId + System.currentTimeMillis();
-
-            mqttAndroidClient = new MqttAndroidClient(getApplicationContext(), serverUri, clientId);
-            mqttAndroidClient.setCallback(new MqttCallbackExtended() {
-                @Override
-                public void connectComplete(boolean reconnect, String serverURI) {
-
-                }
-
-                @Override
-                public void connectionLost(Throwable cause) {
-
-                }
-
-                @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-
-                }
-
-                @Override
-                public void deliveryComplete(IMqttDeliveryToken token) {
-
-                }
-            });
-
-            MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-            mqttConnectOptions.setAutomaticReconnect(true);
-            mqttConnectOptions.setCleanSession(false);
-
-
-
-
-
-
-
-            try {
-                //addToHistory("Connecting to " + serverUri);
-                mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken asyncActionToken) {
-                        DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
-                        disconnectedBufferOptions.setBufferEnabled(true);
-                        disconnectedBufferOptions.setBufferSize(100);
-                        disconnectedBufferOptions.setPersistBuffer(false);
-                        disconnectedBufferOptions.setDeleteOldestMessages(false);
-                        mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                        //subscribeToTopic();
-                    }
-
-                    @Override
-                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        Log.e(this.getClass().getSimpleName(), "Failed to Connect");
-                    }
-                });
-
-
-            } catch (MqttException ex){
-                ex.printStackTrace();
-            }
-
+        // Attempt to connect to Broker
+        try {
+            mMqttAndroidClient.connect(mqttConnectOptions, null, mIMqttActionListener);
+        } catch (MqttException e) {
+            Log.w("MQTT Demo", e.getMessage());
         }
+    }
 
-        private void addToHistory(String mainText){
-            Log.d("MQTT","LOG: " + mainText);
+    public void publishMessage(String messageText){
+        try {
+            MqttMessage message = new MqttMessage();
+            message.setPayload(messageText.getBytes());
+            mMqttAndroidClient.publish(MQTT_TOPIC, message);
+            if(!mMqttAndroidClient.isConnected()){
+                Log.w(this.getClass().getSimpleName(), "MQTT Not Connected! Message has been buffered");
+            }
+        } catch (MqttException e) {
+            Log.e(this.getClass().getSimpleName(),"Error Publishing: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private IMqttActionListener mIMqttActionListener = new IMqttActionListener() {
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            Log.d("MQTT Listener", "Action Success");
         }
 
         @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            // Inflate the menu; this adds items to the action bar if it is present.
+        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+            Log.d("MQTT Listener", "Action Failure");
+        }
+    };
 
-            return true;
+    private MqttCallbackExtended mMqttCallbackExtended = new MqttCallbackExtended() {
+        @Override
+        public void connectComplete(boolean reconnect, String serverURI) {
+            Log.d("MQTT Callback", "Connect Complete");
         }
 
         @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
-
-            //noinspection SimplifiableIfStatement
-
-            return super.onOptionsItemSelected(item);
+        public void connectionLost(Throwable cause) {
+            Log.d("MQTT Callback", "Connection Lost");
         }
 
-//        public void subscribeToTopic(){
-//            try {
-//                mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
-//                    @Override
-//                    public void onSuccess(IMqttToken asyncActionToken) {
-//                        addToHistory("Subscribed!");
-//                    }
-//
-//                    @Override
-//                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-//                        addToHistory("Failed to subscribe");
-//                    }
-//                });
-//
-//                // THIS DOES NOT WORK!
-//                mqttAndroidClient.subscribe(subscriptionTopic, 0, new IMqttMessageListener() {
-//                    @Override
-//                    public void messageArrived(String topic, MqttMessage message) throws Exception {
-//                        // message Arrived!
-//                        System.out.println("Message: " + topic + " : " + new String(message.getPayload()));
-//                    }
-//                });
-//
-//            } catch (MqttException ex){
-//                System.err.println("Exception whilst subscribing");
-//                ex.printStackTrace();
-//            }
-//        }
-
-        public void publishMessage(){
-
-            try {
-                MqttMessage message = new MqttMessage();
-                message.setPayload(publishMessage.getBytes());
-                if(mqttAndroidClient == null) {
-                    return;
-                }
-                mqttAndroidClient.publish(publishTopic, message);
-                addToHistory("Message Published");
-                if(!mqttAndroidClient.isConnected()){
-                    addToHistory(mqttAndroidClient.getBufferedMessageCount() + " messages in buffer.");
-                }
-            } catch (MqttException e) {
-                System.err.println("Error Publishing: " + e.getMessage());
-                e.printStackTrace();
-            }
+        @Override
+        public void messageArrived(String topic, MqttMessage message) throws Exception {
+            Log.d("MQTT Callback", "Message Received");
         }
 
-        private IMqttActionListener mIMqttActionListener = new IMqttActionListener() {
-            @Override
-            public void onSuccess(IMqttToken asyncActionToken) {
-
-            }
-
-            @Override
-            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-
-            }
-        };
+        @Override
+        public void deliveryComplete(IMqttDeliveryToken token) {
+            Log.d("MQTT Callback", "Delivery Complete");
+        }
+    };
 }

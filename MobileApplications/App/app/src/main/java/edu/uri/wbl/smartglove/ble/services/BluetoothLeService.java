@@ -148,7 +148,10 @@ public class BluetoothLeService extends Service {
      * @param bluetoothLeModel The BLE Device to disconnect from.
      */
     public static void DISCONNECT(Context context, BluetoothLeModel bluetoothLeModel) {
-
+        Intent intent = new Intent(context, BluetoothLeService.class);
+        intent.putExtra(EXTRA_ACTION, BleAction.DISCONNECT.getAction());
+        intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);
+        context.startService(intent);
     }
 
     /**
@@ -164,26 +167,49 @@ public class BluetoothLeService extends Service {
      * @param bluetoothLeModel The CONNECTED BLE Device to discover services from.
      */
     public static void DISCOVER_SERVICES(Context context, BluetoothLeModel bluetoothLeModel) {
-
+        Intent intent = new Intent(context, BluetoothLeService.class);
+        intent.putExtra(EXTRA_ACTION, BleAction.DISCOVER_SERVICES.getAction());
+        intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);
+        context.startService(intent);
     }
 
     public static void REQUEST_READ(Context context, BluetoothLeModel bluetoothLeModel, BluetoothServiceModel bluetoothServiceModel, BluetoothCharacteristicModel bluetoothCharacteristicModel) {
-
+        Intent intent = new Intent(context, BluetoothLeService.class);
+        intent.putExtra(EXTRA_ACTION, BleAction.REQUEST_READ.getAction());
+        intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);
+        intent.putExtra(EXTRA_SERVICE, bluetoothServiceModel.getUUID().toString());
+        intent.putExtra(EXTRA_CHARACTERISTIC, bluetoothCharacteristicModel.getUUID().toString());
+        context.startService(intent);
     }
 
     public static void REQUEST_WRITE(Context context, BluetoothLeModel bluetoothLeModel, BluetoothServiceModel bluetoothServiceModel, BluetoothCharacteristicModel bluetoothCharacteristicModel) {
-
+        Intent intent = new Intent(context, BluetoothLeService.class);
+        intent.putExtra(EXTRA_ACTION, BleAction.REQUEST_WRITE.getAction());
+        intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);
+        intent.putExtra(EXTRA_SERVICE, bluetoothServiceModel.getUUID().toString());
+        intent.putExtra(EXTRA_CHARACTERISTIC, bluetoothCharacteristicModel.getUUID().toString());
+        context.startService(intent);
     }
 
     public static void ENABLE_NOTIFICATION(Context context, BluetoothLeModel bluetoothLeModel, BluetoothServiceModel bluetoothServiceModel, BluetoothCharacteristicModel bluetoothCharacteristicModel) {
-
+        Intent intent = new Intent(context, BluetoothLeService.class);
+        intent.putExtra(EXTRA_ACTION, BleAction.ENABLE_NOTIFICATION.getAction());
+        intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);
+        intent.putExtra(EXTRA_SERVICE, bluetoothServiceModel.getUUID().toString());
+        intent.putExtra(EXTRA_CHARACTERISTIC, bluetoothCharacteristicModel.getUUID().toString());
+        context.startService(intent);
     }
 
     public static void DISABLE_NOTIFICATION(Context context, BluetoothLeModel bluetoothLeModel, BluetoothServiceModel bluetoothServiceModel, BluetoothCharacteristicModel bluetoothCharacteristicModel) {
-
+        Intent intent = new Intent(context, BluetoothLeService.class);
+        intent.putExtra(EXTRA_ACTION, BleAction.DISABLE_NOTIFICATION.getAction());
+        intent.putExtra(EXTRA_DEVICE, bluetoothLeModel);
+        intent.putExtra(EXTRA_SERVICE, bluetoothServiceModel.getUUID().toString());
+        intent.putExtra(EXTRA_CHARACTERISTIC, bluetoothCharacteristicModel.getUUID().toString());
+        context.startService(intent);
     }
 
-    private final int NOTIFICATION_ID = 69;                 // Nice.
+    private final int NOTIFICATION_ID = 47;
 
     private Context mContext;                               // Used by inner classes to use Service resources
     private BluetoothAdapter mBluetoothAdapter;             // Bluetooth Adapter Reference
@@ -216,6 +242,15 @@ public class BluetoothLeService extends Service {
 
         BleAction action = BleAction.GET(intent.getStringExtra(EXTRA_ACTION));
 
+        if(!intent.hasExtra(EXTRA_DEVICE))
+            return START_NOT_STICKY;
+
+        BluetoothLeModel bluetoothLeModel = (BluetoothLeModel) intent.getSerializableExtra(EXTRA_DEVICE);
+        if(bluetoothLeModel == null)
+            return START_NOT_STICKY;
+        String bluetoothDeviceAddress;
+        UUID serviceUuid, characteristicUuid;
+
         if(action == null)
             return START_NOT_STICKY;
 
@@ -231,16 +266,8 @@ public class BluetoothLeService extends Service {
                 break;
             case CONNECT:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Connect");
-                if(!intent.hasExtra(EXTRA_DEVICE)) {
-                    Log.w(this.getClass().getSimpleName(), "Invalid Action Packet");
-                    break;
-                }
-                BluetoothLeModel bluetoothLeModel = (BluetoothLeModel) intent.getSerializableExtra(EXTRA_DEVICE);
-                if(bluetoothLeModel == null) {
-                    Log.w(this.getClass().getSimpleName(), "NULL BT Model");
-                    break;
-                }
-                String bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
                 if(bluetoothDeviceAddress == null) {
                     Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
                     break;
@@ -249,21 +276,95 @@ public class BluetoothLeService extends Service {
                 break;
             case DISCONNECT:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Disconnect");
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+                if(bluetoothDeviceAddress == null) {
+                    Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
+                    break;
+                }
+                disconnect(bluetoothDeviceAddress);
                 break;
             case DISCOVER_SERVICES:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Discover Services");
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+                if(bluetoothDeviceAddress == null) {
+                    Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
+                    break;
+                }
+                discoverServices(bluetoothDeviceAddress);
                 break;
             case REQUEST_READ:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Request Read");
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+                if(bluetoothDeviceAddress == null) {
+                    Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
+                    break;
+                }
+
+                if(!intent.hasExtra(EXTRA_SERVICE) || !intent.hasExtra(EXTRA_CHARACTERISTIC)) {
+                    Log.w(this.getClass().getSimpleName(), "Invalid Action Packet");
+                }
+
+                serviceUuid = UUID.fromString(intent.getStringExtra(EXTRA_SERVICE));
+                characteristicUuid = UUID.fromString(intent.getStringExtra(EXTRA_CHARACTERISTIC));
+
+                requestRead(bluetoothDeviceAddress, serviceUuid, characteristicUuid);
                 break;
             case REQUEST_WRITE:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Request Write");
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+                if(bluetoothDeviceAddress == null) {
+                    Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
+                    break;
+                }
+
+                if(!intent.hasExtra(EXTRA_SERVICE) || !intent.hasExtra(EXTRA_CHARACTERISTIC)) {
+                    Log.w(this.getClass().getSimpleName(), "Invalid Action Packet");
+                }
+
+                serviceUuid = UUID.fromString(intent.getStringExtra(EXTRA_SERVICE));
+                characteristicUuid = UUID.fromString(intent.getStringExtra(EXTRA_CHARACTERISTIC));
+
+                requestWrite(bluetoothDeviceAddress, serviceUuid, characteristicUuid);
                 break;
             case ENABLE_NOTIFICATION:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Enable Notification");
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+                if(bluetoothDeviceAddress == null) {
+                    Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
+                    break;
+                }
+
+                if(!intent.hasExtra(EXTRA_SERVICE) || !intent.hasExtra(EXTRA_CHARACTERISTIC)) {
+                    Log.w(this.getClass().getSimpleName(), "Invalid Action Packet");
+                }
+
+                serviceUuid = UUID.fromString(intent.getStringExtra(EXTRA_SERVICE));
+                characteristicUuid = UUID.fromString(intent.getStringExtra(EXTRA_CHARACTERISTIC));
+
+                enableNotification(bluetoothDeviceAddress, serviceUuid, characteristicUuid);
                 break;
             case DISABLE_NOTIFICATION:
                 Log.d(this.getClass().getSimpleName(), "ACTION: Disable Notifications");
+
+                bluetoothDeviceAddress = bluetoothLeModel.getBluetoothDeviceAddress();
+                if(bluetoothDeviceAddress == null) {
+                    Log.w(this.getClass().getSimpleName(), "NULL BT_ADDR");
+                    break;
+                }
+
+                if(!intent.hasExtra(EXTRA_SERVICE) || !intent.hasExtra(EXTRA_CHARACTERISTIC)) {
+                    Log.w(this.getClass().getSimpleName(), "Invalid Action Packet");
+                }
+
+                serviceUuid = UUID.fromString(intent.getStringExtra(EXTRA_SERVICE));
+                characteristicUuid = UUID.fromString(intent.getStringExtra(EXTRA_CHARACTERISTIC));
+
+                disableNotification(bluetoothDeviceAddress, serviceUuid, characteristicUuid);
                 break;
             default:
                 Log.w(this.getClass().getSimpleName(), "ACTION: Unknown");
@@ -304,7 +405,28 @@ public class BluetoothLeService extends Service {
     }
 
     private void disconnect(String bluetoothDeviceAddress) {
+        if(bluetoothDeviceAddress == null) {
+            Log.w(this.getClass().getSimpleName(), "Could not Connect: NULL BT ADDR");
+            return;
+        }
 
+        BluetoothLeModel bluetoothLeModel = GET_DEVICE(bluetoothDeviceAddress);
+        if(bluetoothLeModel == null) {
+            return;
+        }
+
+        BluetoothDevice bluetoothDevice = mBluetoothAdapter.getRemoteDevice(bluetoothDeviceAddress);
+        if(bluetoothDevice == null) {
+            Log.w(this.getClass().getSimpleName(), "Could not Connect: NULL BT Device");
+            return;
+        }
+        BluetoothGatt gatt = bluetoothDevice.connectGatt(mContext, true, mBluetoothGattCallback);
+        if(gatt == null) {
+            Log.w(this.getClass().getSimpleName(), "Could not Connect: NULL GATT");
+            return;
+        }
+
+        Log.d(this.getClass().getSimpleName(), "Connecting to " + bluetoothDevice.getName() + " (" + bluetoothDevice.getAddress() + ")");
     }
 
     private void discoverServices(String bluetoothDeviceAddress) {
