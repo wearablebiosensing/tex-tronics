@@ -19,6 +19,8 @@ import java.util.UUID;
 import edu.uri.wbl.tex_tronics.R;
 
 /**
+ * Modifications made by Matthew Constant, Nathan Mensah
+ *
  * @see <a href="https://github.com/eclipse/paho.mqtt.android">Eclipse Paho MQTT</a>
  */
 

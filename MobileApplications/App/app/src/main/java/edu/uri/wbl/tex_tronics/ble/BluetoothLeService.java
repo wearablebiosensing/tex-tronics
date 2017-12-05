@@ -78,6 +78,7 @@ public class BluetoothLeService extends Service {
         if(mConnectedDevices != null) {
             for(BluetoothGatt gatt : mConnectedDevices.values()) {
                 gatt.disconnect();
+                gatt.close();
             }
         }
 
@@ -267,6 +268,7 @@ public class BluetoothLeService extends Service {
         }
 
         gatt.disconnect();
+        gatt.close();
     }
 
     /**
@@ -312,6 +314,7 @@ public class BluetoothLeService extends Service {
 
             switch (newState) {
                 case BluetoothProfile.STATE_CONNECTED:
+                    Log.d(TAG, "Connected to GATT");
                     mConnectedDevices.put(gatt.getDevice().getAddress(), gatt);
                     sendUpdate(BleUpdate.CONNECTED, gatt.getDevice().getAddress());
                     break;

@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:enabled="false"
         android:text="@string/connect_rh_btn"/>
 
     <Button
@@ -37,7 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/connect_lh_btn"
         android:layout_toEndOf="@+id/disconnect_lh_btn"
-        android:enabled="false"
         android:text="@string/disconnect_rh_btn"/>
 
     <Button

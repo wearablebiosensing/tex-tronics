@@ -44,7 +44,7 @@ import edu.uri.wbl.tex_tronics.mqtt.MqttSettings;
  * via an MQTT connection. Since this demo does not include a BLE scanner, device addresses must
  * be manually inputted to the GattDevices class (as a String).
  *
- * @author Matthew Constant, Andrew Peltier, Nathan Mensah, Nick Constant
+ * @author Matthew Constant
  * @version 1.0, 12/04/2017
  * @see <a href="https://github.com/wearablebiosensing/tex-tronics">Tex-Tronics GitHub Repository</a>
  * @see <a href="https://www.hivemq.com/mqtt-essentials/">MQTT Essentials</a>
@@ -242,7 +242,9 @@ public class MainActivity extends AppCompatActivity implements MqttManagerListen
                 case CONNECTED:
                     // A BLE Device has been Connected
                     Toast.makeText(mContext, "Connected to " + gatt.getDevice().getName(), Toast.LENGTH_LONG).show();
-                    mBluetoothLeService.discoverServices(gatt);
+                    //mBluetoothLeService.discoverServices(gatt);
+                    Log.d("MainActivity", "Connected to GATT");
+                    mqttPublish("Connected!");
                     break;
                 case DISCONNECTED:
                     // A BLE Device has been disconnected
@@ -267,24 +269,31 @@ public class MainActivity extends AppCompatActivity implements MqttManagerListen
                     byte[] value = intent.getByteArrayExtra(EXTRA_VALUE);
 
                     BluetoothGattService imuService = gatt.getService(UUID.fromString(GattServices.IMU));
+                    BluetoothGattCharacteristic characteristic;
 
+                    /**
+                     * TODO: Verify byte order (is 1st byte always NULL or last byte?)
+                     */
                     switch (charUuid) {
                         case GattCharacteristics.ACCEL:
-                            int accel_x = value[1] | value[2] << 8;
-                            int accel_y = value[3] | value[4] << 8;
-                            int accel_z = value[5] | value[6] << 8;
+                            characteristic = imuService.getCharacteristic(UUID.fromString(GattCharacteristics.ACCEL));
+                            // First byte is always NULL
+                            int accel_x = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 1);
+                            int accel_y = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 3);
+                            int accel_z = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 5);
                             String accel_data = accel_x + "," + accel_y + "," + accel_z;
                             DataLogService.log(mContext, ACCEL_FILE, accel_data, HEADER);
-
 
                             BluetoothGattCharacteristic gyroCharacteristic =
                                     imuService.getCharacteristic(UUID.fromString(GattCharacteristics.GYRO));
                             mBluetoothLeService.readCharacteristic(gatt, gyroCharacteristic);
                             break;
                         case GattCharacteristics.GYRO:
-                            int gyro_x = value[1] | value[2] << 8;
-                            int gyro_y = value[3] | value[4] << 8;
-                            int gyro_z = value[5] | value[6] << 8;
+                            characteristic = imuService.getCharacteristic(UUID.fromString(GattCharacteristics.GYRO));
+                            // First byte is always NULL
+                            int gyro_x = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 1);
+                            int gyro_y = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 3);
+                            int gyro_z = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 5);
                             String gyro_data = gyro_x + "," + gyro_y + "," + gyro_z;
                             DataLogService.log(mContext, GYRO_FILE, gyro_data, HEADER);
 
@@ -293,9 +302,11 @@ public class MainActivity extends AppCompatActivity implements MqttManagerListen
                             mBluetoothLeService.readCharacteristic(gatt, magCharacteristic);
                             break;
                         case GattCharacteristics.MAG:
-                            int mag_x = value[1] | value[2] << 8;
-                            int mag_y = value[3] | value[4] << 8;
-                            int mag_z = value[5] | value[6] << 8;
+                            characteristic = imuService.getCharacteristic(UUID.fromString(GattCharacteristics.MAG));
+                            // First byte is always NULL
+                            int mag_x = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 1);
+                            int mag_y = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 3);
+                            int mag_z = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 5);
                             String mag_data = mag_x + "," + mag_y + "," + mag_z;
                             DataLogService.log(mContext, MAG_FILE, mag_data, HEADER);
                             break;
