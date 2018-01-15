@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements MqttManagerListen
             Manifest.permission.BLUETOOTH                   // Use Android's BLE API
     };
 
-
     // MQTT Constants
     private static final String     MQTT_HOST = "fog.wbl.cloud";            // Host Name
     private static final int        MQTT_PORT = 1883;                       // Port Number
@@ -99,12 +98,12 @@ public class MainActivity extends AppCompatActivity implements MqttManagerListen
         } else {
             mMqttManager.connect(
                     mContext,
-                    MQTT_HOST,                  // wbl
-                    MQTT_PORT,                  // 1880
-                    MQTT_USERNAME,              // kabuki
+                    MQTT_HOST,
+                    MQTT_PORT,
+                    MQTT_USERNAME,
                     MQTT_PASSWORD,
-                    MQTT_CLEAN_SESSION,         // false
-                    MQTT_SSL                    // false
+                    MQTT_CLEAN_SESSION,
+                    MQTT_SSL
             );
         }
         mMqttManager.setListener(this);
