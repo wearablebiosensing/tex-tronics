@@ -200,6 +200,7 @@ void init_ble() {
   // Add the Services to the Peripheral
   ble.addService(imu_service);
   ble.addService(smart_service);
+  ble.addService(flex_service);
   // Set the Local Device Name
   ble.setDeviceName((const uint8_t *)BLE_DEVICE_NAME);
   // Set Tx Power
