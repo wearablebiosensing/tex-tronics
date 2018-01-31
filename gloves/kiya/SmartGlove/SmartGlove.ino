@@ -9,6 +9,21 @@ LSM9DS1 imu;                  // IMU Module
 Ticker ticker_task1;          // Timer for Periodic Callback (used instead of delay in loop)
 uint8_t setup_successful;
 
+
+// Measure the voltage at 5V and the actual resistance of your
+// 47k resistor, and enter them below:
+const float VCC = 3.3; // Measured voltage of Ardunio 5V line
+const float R_DIV = 10000.0; // Measured resistance of 3.3k resistor
+//const float R_DIV2 = 1200000.0; // Measured resistance of 3.3k resistor
+
+
+// Upload the code, then try to adjust these values to more
+// accurately calculate bend degree.
+const float STRAIGHT_RESISTANCE = 52000.0; // resistance when straight
+const float BEND_RESISTANCE = 155000.0; // resistance at 90 deg
+
+
+
 // List of Services Available, used in Advertising Data to display Services
 static const uint16_t uuid16_list[] = {
   UUID_IMU_SERVICE, 
@@ -93,8 +108,23 @@ void periodicCallback() {
     imu.readGyro();
     imu.readMag();
 
-    thumb_flex = analogRead(A3);      // Read Flex Sensor Values
-    index_flex = analogRead(A4);
+
+    // Read the ADC, and calculate voltage and resistance from it
+    int flexADC = analogRead(A3);
+    float flexV = flexADC * VCC / 1023.0;
+    float flexR = R_DIV * (VCC / flexV - 1.0);
+
+    int flexADC2 = analogRead(A4);
+    float flexV2 = flexADC2 * VCC / 1023.0;
+    float flexR2 = R_DIV * (VCC / flexV2 - 1.0);
+
+    // Use the calculated resistance to estimate the sensor's
+    // bend angle:
+    thumb_flex = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,0, 90.0);
+    index_flex = map(flexR2, STRAIGHT_RESISTANCE, BEND_RESISTANCE,0, 90.0);
+
+    //thumb_flex = map(analogRead(A3), 140, 200, 0, 90);      // Read Flex Sensor Values
+    //index_flex = map(analogRead(A4), 140, 200, 0, 90);
     // TODO: Add rest of fingers
     
     acc_x_data.f = imu.ax + 32767;            // Update Accelerometer Data
