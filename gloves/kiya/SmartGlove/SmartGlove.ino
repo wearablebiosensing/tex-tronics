@@ -80,9 +80,12 @@ GattService        flex_service(UUID_FLEX_SERVICE, flex_chars, sizeof(flex_chars
 
 // Create Smart Service and Characteristics
 uint8_t cnt;
+sg_time_t ticks;
 static uint8_t counter[2] = {0x00, cnt};
+static uint8_t timestamp[5] = {0x00, ticks.b[0], ticks.b[1], ticks.b[2], ticks.b[3] };
 GattCharacteristic data_ready_char(UUID_DATA_READY_CHAR, counter, sizeof(counter), sizeof(counter), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_NOTIFY);
-GattCharacteristic *smart_chars[] = {&data_ready_char, };
+GattCharacteristic timestamp_char(UUID_TIMESTAMP_CHAR, timestamp, sizeof(timestamp), sizeof(timestamp), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
+GattCharacteristic *smart_chars[] = {&data_ready_char, &timestamp_char, };
 GattService        smart_service(UUID_SMART_SERVICE, smart_chars, sizeof(smart_chars) / sizeof(GattCharacteristic *));
 
 
@@ -107,6 +110,8 @@ void periodicCallback() {
     imu.readAccel();                  // Read IMU Data (16 Bit ADC Resolution)
     imu.readGyro();
     imu.readMag();
+
+    ticks.value = millis();
 
 
     // Read the ADC, and calculate voltage and resistance from it
@@ -204,10 +209,24 @@ void periodicCallback() {
       counter[1] = ++cnt;
     }
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
+    
+    timestamp[1] = ticks.b[3];
+    timestamp[2] = ticks.b[2];
+    timestamp[3] = ticks.b[1];
+    timestamp[4] = ticks.b[0];
+    ble.updateCharacteristicValue(timestamp_char.getValueAttribute().getHandle(), timestamp, sizeof(timestamp));
   } else {
     // If the IMU is not connected properly, data ready will always have a value of 0 (no increment)
     counter[1] = (cnt = 0);
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
+
+    ticks.value = millis();
+
+    timestamp[1] = ticks.b[3];
+    timestamp[2] = ticks.b[2];
+    timestamp[3] = ticks.b[1];
+    timestamp[4] = ticks.b[0];
+    ble.updateCharacteristicValue(timestamp_char.getValueAttribute().getHandle(), timestamp, sizeof(timestamp));
   }
 }
 

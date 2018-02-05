@@ -104,14 +104,14 @@ void periodic_callback() {
 
     // Populate Packet 1
     packet1[0] = 0x01;
-    packet1[1] = ticks.b[0];
-    packet1[2] = ticks.b[1];
-    packet1[3] = ticks.b[2];
-    packet1[4] = ticks.b[3];
-    packet1[5] = thumb_data.b[0];
-    packet1[6] = thumb_data.b[1];
-    packet1[7] = index_data.b[0];
-    packet1[8] = index_data.b[1];
+    packet1[1] = ticks.b[3];
+    packet1[2] = ticks.b[2];
+    packet1[3] = ticks.b[1];
+    packet1[4] = ticks.b[0];
+    packet1[5] = thumb_data.b[1];
+    packet1[6] = thumb_data.b[0];
+    packet1[7] = index_data.b[1];
+    packet1[8] = index_data.b[0];
     packet1[9] = 0x00;
     packet1[10] = 0x00;
     packet1[11] = 0x00;
@@ -130,24 +130,24 @@ void periodic_callback() {
 
     // Populate Packet 2
     packet2[0] = 0x02;
-    packet2[1] = acc_x.b[0];
-    packet2[2] = acc_x.b[1];
-    packet2[3] = acc_y.b[0];
-    packet2[4] = acc_y.b[1];
-    packet2[5] = acc_z.b[0];
-    packet2[6] = acc_z.b[1];
-    packet2[7] = gyr_x.b[0];
-    packet2[8] = gyr_x.b[1];
-    packet2[9] = gyr_y.b[0];
-    packet2[10] = gyr_y.b[1];
-    packet2[11] = gyr_z.b[0];
-    packet2[12] = gyr_z.b[1];
-    packet2[13] = mag_x.b[0];
-    packet2[14] = mag_x.b[1];
-    packet2[15] = mag_y.b[0];
-    packet2[16] = mag_y.b[1];
-    packet2[17] = mag_z.b[0];
-    packet2[18] = mag_z.b[1];
+    packet2[1] = acc_x.b[1];
+    packet2[2] = acc_x.b[0];
+    packet2[3] = acc_y.b[1];
+    packet2[4] = acc_y.b[0];
+    packet2[5] = acc_z.b[1];
+    packet2[6] = acc_z.b[0];
+    packet2[7] = gyr_x.b[1];
+    packet2[8] = gyr_x.b[0];
+    packet2[9] = gyr_y.b[1];
+    packet2[10] = gyr_y.b[0];
+    packet2[11] = gyr_z.b[1];
+    packet2[12] = gyr_z.b[0];
+    packet2[13] = mag_x.b[1];
+    packet2[14] = mag_x.b[0];
+    packet2[15] = mag_y.b[1];
+    packet2[16] = mag_y.b[0];
+    packet2[17] = mag_z.b[1];
+    packet2[18] = mag_z.b[0];
 
     // Transmit Packet 2
     ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);

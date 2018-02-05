@@ -23,11 +23,17 @@
 #define UUID_PINKY_CHAR       0x4009        // Pinky Finger angle
 #define UUID_SMART_SERVICE    0x400A        // This Service holds misc. data related to the SmartGlove
 #define UUID_DATA_READY_CHAR  0x400B        // This is used as an indicator when all of the data has been updated and is ready to be read
+#define UUID_TIMESTAMP_CHAR   0x400C        // Timestamp of Last Data Refresh
 
 typedef union _imu_data {
   uint16_t f;
   uint8_t b[2];  // (int16 is 2 Bytes)
 } imu_data_t;                               // Use this for Float data that is to be sent via BLE                            // Container for Magnetometer data
+
+typedef union _sg_time {
+  uint8_t b[4];
+  unsigned long value;
+} sg_time_t;
 
 #define LSM9DS1_M             0x1E          // SDO_XM Address
 #define LSM9DS1_AG            0x6B          // SDO_G Address
