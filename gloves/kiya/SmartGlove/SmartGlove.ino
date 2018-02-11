@@ -70,6 +70,11 @@ static uint8_t middle_data[2] = {0x00, middle_flex};
 static uint8_t ring_data[2] = {0x00, ring_flex};
 static uint8_t pinky_data[2] = {0x00, pinky_flex};
 
+uint8_t temp_acc_data[7];
+uint8_t temp_gyro_data[7];
+uint8_t temp_mag_data[7];
+
+
 GattCharacteristic thumb_char(UUID_THUMB_CHAR, thumb_data, sizeof(thumb_data), sizeof(thumb_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
 GattCharacteristic index_char(UUID_INDEX_CHAR, index_data, sizeof(index_data), sizeof(index_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
 GattCharacteristic middle_char(UUID_MIDDLE_CHAR, middle_data, sizeof(middle_data), sizeof(middle_data), GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ);
@@ -88,7 +93,6 @@ GattCharacteristic timestamp_char(UUID_TIMESTAMP_CHAR, timestamp, sizeof(timesta
 GattCharacteristic *smart_chars[] = {&data_ready_char, &timestamp_char, };
 GattService        smart_service(UUID_SMART_SERVICE, smart_chars, sizeof(smart_chars) / sizeof(GattCharacteristic *));
 
-
 /**
  * This callback is invoked every time the device
  * is disconnected from. For now, just start
@@ -106,100 +110,9 @@ void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
  * SmartGlove.h.
  */
 void periodicCallback() {
-  if (ble.getGapState().connected && setup_successful) {
-    imu.readAccel();                  // Read IMU Data (16 Bit ADC Resolution)
-    imu.readGyro();
-    imu.readMag();
-
-    ticks.value = millis();
-
-
-    // Read the ADC, and calculate voltage and resistance from it
-    int flexADC = analogRead(A3);
-    float flexV = flexADC * VCC / 1023.0;
-    float flexR = R_DIV * (VCC / flexV - 1.0);
-
-    int flexADC2 = analogRead(A4);
-    float flexV2 = flexADC2 * VCC / 1023.0;
-    float flexR2 = R_DIV * (VCC / flexV2 - 1.0);
-
-    // Use the calculated resistance to estimate the sensor's
-    // bend angle:
-    thumb_flex = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,0, 90.0);
-    index_flex = map(flexR2, STRAIGHT_RESISTANCE, BEND_RESISTANCE,0, 90.0);
-
-    //thumb_flex = map(analogRead(A3), 140, 200, 0, 90);      // Read Flex Sensor Values
-    //index_flex = map(analogRead(A4), 140, 200, 0, 90);
-    // TODO: Add rest of fingers
-    
-    acc_x_data.f = imu.ax + 32767;            // Update Accelerometer Data
-    acc_x_data.b[0] = (uint8_t)(acc_x_data.f & 0xff);
-    acc_x_data.b[1] = (uint8_t)(acc_x_data.f >> 8);
-    Serial.println(imu.ax);
-    Serial.println((int16_t)((((uint16_t)acc_x_data.b[1] << 8) | acc_x_data.b[0])-32767));  //this is the undo process
-    acc_y_data.f = imu.ay + 32767;
-    acc_y_data.b[0] = (uint8_t)(acc_y_data.f & 0xff);
-    acc_y_data.b[1] = (uint8_t)(acc_y_data.f >> 8);
-    acc_z_data.f = imu.az + 32767;
-    acc_z_data.b[0] = (uint8_t)(acc_z_data.f & 0xff);
-    acc_z_data.b[1] = (uint8_t)(acc_z_data.f >> 8);
-    
-    gyro_x_data.f = imu.gx + 32767;           // Update Gyroscope Data
-    gyro_x_data.b[0] = (uint8_t)(gyro_x_data.f & 0xff);
-    gyro_x_data.b[1] = (uint8_t)(gyro_x_data.f >> 8);
-    gyro_y_data.f = imu.gy + 32767;
-    gyro_y_data.b[0] = (uint8_t)(gyro_y_data.f & 0xff);
-    gyro_y_data.b[1] = (uint8_t)(gyro_y_data.f >> 8);
-    gyro_z_data.f = imu.gz + 32767;
-    gyro_z_data.b[0] = (uint8_t)(gyro_z_data.f & 0xff);
-    gyro_z_data.b[1] = (uint8_t)(gyro_z_data.f >> 8);
-    
-    mag_x_data.f = imu.mx + 32767;            // Update Magnetometer Data
-    mag_x_data.b[0] = (uint8_t)(mag_x_data.f & 0xff);
-    mag_x_data.b[1] = (uint8_t)(mag_x_data.f >> 8);
-    mag_y_data.f = imu.my + 32767;
-    mag_y_data.b[0] = (uint8_t)(mag_y_data.f & 0xff);
-    mag_y_data.b[1] = (uint8_t)(mag_y_data.f >> 8);
-    mag_z_data.f = imu.mz + 32767;
-    mag_z_data.b[0] = (uint8_t)(mag_z_data.f & 0xff);
-    mag_z_data.b[1] = (uint8_t)(mag_z_data.f >> 8);
-
-    /**
-     * TODO:
-     *  This is probably a very inefficient way
-     *  of updating the characteristic, so it would be 
-     *  good to optimize this at some point.
-     */
-    uint8_t temp_acc_data[7] = {
-      0x00, 
-      acc_x_data.b[1], acc_x_data.b[0], 
-      acc_y_data.b[1], acc_y_data.b[0], 
-      acc_z_data.b[1], acc_z_data.b[0]
-    };
-    uint8_t temp_gyro_data[7] = {
-      0x00, 
-      gyro_x_data.b[1], gyro_x_data.b[0], 
-      gyro_y_data.b[1], gyro_y_data.b[0], 
-      gyro_z_data.b[1], gyro_z_data.b[0]
-    };
-    uint8_t temp_mag_data[7] = {
-      0x00, 
-      mag_x_data.b[1], mag_x_data.b[0], 
-      mag_y_data.b[1], mag_y_data.b[0], 
-      mag_z_data.b[1], mag_z_data.b[0]
-    };
-
-    // Update IMU Characteristic values
-    ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(temp_acc_data));
-    ble.updateCharacteristicValue(gyro_char.getValueAttribute().getHandle(), temp_gyro_data, sizeof(temp_gyro_data));
-    ble.updateCharacteristicValue(mag_char.getValueAttribute().getHandle(), temp_mag_data, sizeof(temp_mag_data));
-
-    // Update Flex Characteristic values
-    thumb_data[1] = thumb_flex;
-    index_data[1] = index_flex;
-    ble.updateCharacteristicValue(thumb_char.getValueAttribute().getHandle(), thumb_data, sizeof(thumb_data));
-    ble.updateCharacteristicValue(index_char.getValueAttribute().getHandle(), index_data, sizeof(index_data));
-
+  if(!setup_successful) {
+    counter[1] = 0;
+  } else {
     // This Characteristic is used to notify the Client that all the data is
     //  ready to be read. This is safer than each data characteristic notifying
     //  the Client individually since the Client could mismatch some data points.
@@ -208,25 +121,31 @@ void periodicCallback() {
       // Make sure Data Ready is never 0 when working properly
       counter[1] = ++cnt;
     }
-    ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
+  }
+  
+  if (ble.getGapState().connected) {
+    // Update IMU Characteristic values
+    ble.updateCharacteristicValue(acc_char.getValueAttribute().getHandle(), temp_acc_data, sizeof(temp_acc_data));
+    ble.updateCharacteristicValue(gyro_char.getValueAttribute().getHandle(), temp_gyro_data, sizeof(temp_gyro_data));
+    ble.updateCharacteristicValue(mag_char.getValueAttribute().getHandle(), temp_mag_data, sizeof(temp_mag_data));
+
+    // Update Flex Characteristic values
+    ble.updateCharacteristicValue(thumb_char.getValueAttribute().getHandle(), thumb_data, sizeof(thumb_data));
+    ble.updateCharacteristicValue(index_char.getValueAttribute().getHandle(), index_data, sizeof(index_data));
     
-    timestamp[1] = ticks.b[3];
-    timestamp[2] = ticks.b[2];
-    timestamp[3] = ticks.b[1];
-    timestamp[4] = ticks.b[0];
-    ble.updateCharacteristicValue(timestamp_char.getValueAttribute().getHandle(), timestamp, sizeof(timestamp));
-  } else {
-    // If the IMU is not connected properly, data ready will always have a value of 0 (no increment)
-    counter[1] = (cnt = 0);
+    // Update counter
     ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
 
     ticks.value = millis();
-
     timestamp[1] = ticks.b[3];
     timestamp[2] = ticks.b[2];
     timestamp[3] = ticks.b[1];
     timestamp[4] = ticks.b[0];
     ble.updateCharacteristicValue(timestamp_char.getValueAttribute().getHandle(), timestamp, sizeof(timestamp));
+
+    ble.updateCharacteristicValue(middle_char.getValueAttribute().getHandle(), middle_data, sizeof(middle_data));
+
+    ble.updateCharacteristicValue(data_ready_char.getValueAttribute().getHandle(), counter, sizeof(counter));
   }
 }
 
@@ -287,13 +206,109 @@ void setup() {
   Serial.println("Initializing SmartGlove...");
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
-  ticker_task1.attach_us(periodicCallback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer
   init_ble();                                     // Initialize BLE Module
   digitalWrite(13, HIGH);
   init_imu();                                     // Initialize IMU Module
+  ticker_task1.attach_us(periodicCallback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)
 }
 
 void loop() {
-  ble.waitForEvent();
+  long start_time, stop_time;
+  if (ble.getGapState().connected && setup_successful) {
+    start_time = millis();
+    imu.readAccel();                  // Read IMU Data (16 Bit ADC Resolution)
+    imu.readGyro();
+    imu.readMag();
+
+    // Read the ADC, and calculate voltage and resistance from it
+    int flexADC = analogRead(A3);
+    float flexV = flexADC * VCC / 1023.0;
+    float flexR = R_DIV * (VCC / flexV - 1.0);
+
+    int flexADC2 = analogRead(A4);
+    float flexV2 = flexADC2 * VCC / 1023.0;
+    float flexR2 = R_DIV * (VCC / flexV2 - 1.0);
+
+    // Use the calculated resistance to estimate the sensor's
+    // bend angle:
+    thumb_flex = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,0, 90.0);
+    index_flex = map(flexR2, STRAIGHT_RESISTANCE, BEND_RESISTANCE,0, 90.0);
+
+    thumb_data[1] = thumb_flex;
+    index_data[1] = index_flex;
+
+    //thumb_flex = map(analogRead(A3), 140, 200, 0, 90);      // Read Flex Sensor Values
+    //index_flex = map(analogRead(A4), 140, 200, 0, 90);
+    // TODO: Add rest of fingers
+    
+    acc_x_data.f = imu.ax + 32767;            // Update Accelerometer Data
+    acc_x_data.b[0] = (uint8_t)(acc_x_data.f & 0xff);
+    acc_x_data.b[1] = (uint8_t)(acc_x_data.f >> 8);
+    //Serial.println(imu.ax);
+    //Serial.println((int16_t)((((uint16_t)acc_x_data.b[1] << 8) | acc_x_data.b[0])-32767));  //this is the undo process
+    acc_y_data.f = imu.ay + 32767;
+    acc_y_data.b[0] = (uint8_t)(acc_y_data.f & 0xff);
+    acc_y_data.b[1] = (uint8_t)(acc_y_data.f >> 8);
+    acc_z_data.f = imu.az + 32767;
+    acc_z_data.b[0] = (uint8_t)(acc_z_data.f & 0xff);
+    acc_z_data.b[1] = (uint8_t)(acc_z_data.f >> 8);
+    
+    gyro_x_data.f = imu.gx + 32767;           // Update Gyroscope Data
+    gyro_x_data.b[0] = (uint8_t)(gyro_x_data.f & 0xff);
+    gyro_x_data.b[1] = (uint8_t)(gyro_x_data.f >> 8);
+    gyro_y_data.f = imu.gy + 32767;
+    gyro_y_data.b[0] = (uint8_t)(gyro_y_data.f & 0xff);
+    gyro_y_data.b[1] = (uint8_t)(gyro_y_data.f >> 8);
+    gyro_z_data.f = imu.gz + 32767;
+    gyro_z_data.b[0] = (uint8_t)(gyro_z_data.f & 0xff);
+    gyro_z_data.b[1] = (uint8_t)(gyro_z_data.f >> 8);
+    
+    mag_x_data.f = imu.mx + 32767;            // Update Magnetometer Data
+    mag_x_data.b[0] = (uint8_t)(mag_x_data.f & 0xff);
+    mag_x_data.b[1] = (uint8_t)(mag_x_data.f >> 8);
+    mag_y_data.f = imu.my + 32767;
+    mag_y_data.b[0] = (uint8_t)(mag_y_data.f & 0xff);
+    mag_y_data.b[1] = (uint8_t)(mag_y_data.f >> 8);
+    mag_z_data.f = imu.mz + 32767;
+    mag_z_data.b[0] = (uint8_t)(mag_z_data.f & 0xff);
+    mag_z_data.b[1] = (uint8_t)(mag_z_data.f >> 8);
+
+    /**
+     * TODO:
+     *  This is probably a very inefficient way
+     *  of updating the characteristic, so it would be 
+     *  good to optimize this at some point.
+     */
+     temp_acc_data[0] = 0x00;
+     temp_acc_data[1] = acc_x_data.b[1];
+     temp_acc_data[2] = acc_x_data.b[0];
+     temp_acc_data[3] = acc_y_data.b[1];
+     temp_acc_data[4] = acc_y_data.b[0];
+     temp_acc_data[5] = acc_z_data.b[1];
+     temp_acc_data[6] = acc_z_data.b[0];
+
+     temp_gyro_data[0] = 0x00;
+     temp_gyro_data[1] = gyro_x_data.b[1];
+     temp_gyro_data[2] = gyro_x_data.b[0];
+     temp_gyro_data[3] = gyro_y_data.b[1];
+     temp_gyro_data[4] = gyro_y_data.b[0];
+     temp_gyro_data[5] = gyro_z_data.b[1];
+     temp_gyro_data[6] = gyro_z_data.b[0];
+
+     temp_mag_data[0] = 0x00;
+     temp_mag_data[1] = mag_x_data.b[1];
+     temp_mag_data[2] = mag_x_data.b[0];
+     temp_mag_data[3] = mag_y_data.b[1];
+     temp_mag_data[4] = mag_y_data.b[0];
+     temp_mag_data[5] = mag_z_data.b[1];
+     temp_mag_data[6] = mag_z_data.b[0];
+
+    stop_time = millis();
+
+    int time_dif = (stop_time - start_time) >> 16;
+    middle_data[1] = middle_flex;
+  } else {
+    ble.waitForEvent();
+  }
 }
 

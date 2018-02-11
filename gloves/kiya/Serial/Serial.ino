@@ -62,7 +62,6 @@ GattCharacteristic  rx_characteristic(rx_characteristic_uuid, rx_value, 1, TXRX_
 GattCharacteristic *uart_chars[] = {&tx_characteristic, &rx_characteristic};
 GattService         uart_service(uart_service_uuid, uart_chars, sizeof(uart_chars) / sizeof(GattCharacteristic *));
 
-
 void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
   ble.startAdvertising();
 }
@@ -82,13 +81,9 @@ void gattServerWriteCallBack(const GattWriteCallbackParams *Handler) {
 // This function is called every DATA_REFRESH_MS (SmartGlove.h)
 void periodic_callback() {
   if (ble.getGapState().connected) {
-    // Update Data on IMU
-    imu.readAccel();
-    imu.readGyro();
-    imu.readMag();
     // Get Timestamp
     ticks.value = millis();
-    // Collect Daat from FlexSensors
+    // Collect Data from FlexSensors
     thumb_data.value = analogRead(A3);
     index_data.value = analogRead(A4);
     // Collect Data from IMU
@@ -194,12 +189,18 @@ void setup() {
   Serial.begin(115200);                             // Setup Serial Monitor
   init_ble();                                       // Configure BLE Module and Start Advertising
   init_imu();                                       // Configure IMU Module and Start IMU
-
   ticker_task1.attach_us(periodic_callback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  ble.waitForEvent();
+  if (ble.getGapState().connected) {
+  // Update Data on IMU
+    imu.readAccel();
+    imu.readGyro();
+    imu.readMag();
+  } else {
+    ble.waitForEvent(); 
+  }
 }
 
