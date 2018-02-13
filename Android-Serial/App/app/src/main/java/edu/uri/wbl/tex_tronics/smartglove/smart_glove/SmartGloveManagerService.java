@@ -29,8 +29,11 @@ import edu.uri.wbl.tex_tronics.smartglove.io.DataLogService;
 public class SmartGloveManagerService extends Service {
     private static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.sg.device";
     private static final String HEADER = "Date,Time,Data";
+    private static final byte PACKET_ID_1 = 0x01;
+    private static final byte PACKET_ID_2 = 0x02;
 
     private Context mContext;
+    private SmartGloveData mSmartGloveData;
     private File mFile;
     private boolean mServiceBound;
     private BluetoothLeConnectionService mService;
@@ -59,11 +62,33 @@ public class SmartGloveManagerService extends Service {
                     if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC)) {
                         // Read Packet Data and Log in CSV File
                         Log.d("SmartGlove", "Data Received");
+                        String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
                         byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
 
-                        
+                        if(data[0] == PACKET_ID_1) {
+                            mSmartGloveData = new SmartGloveData();
+                            mSmartGloveData.setTimestamp(((long)data[1] << 24) | ((long)data[2] << 16) | ((long)data[3] << 8) | ((long)data[4]));
+                            mSmartGloveData.setThumbFlex(((int)data[5] << 8) | ((int)data[6]));
+                            mSmartGloveData.setIndexFlex(((int)data[7] << 8) | ((int)data[8]));
+                            // TODO: Add rest of fingers
+                        } else if(data[0] == PACKET_ID_2) {
+                            mSmartGloveData.setAccX(((int)data[1] << 8) | ((int)data[2]));
+                            mSmartGloveData.setAccY(((int)data[3] << 8) | ((int)data[4]));
+                            mSmartGloveData.setAccZ(((int)data[5] << 8) | ((int)data[6]));
+                            mSmartGloveData.setGyrX(((int)data[7] << 8) | ((int)data[8]));
+                            mSmartGloveData.setGyrY(((int)data[9] << 8) | ((int)data[10]));
+                            mSmartGloveData.setGyrZ(((int)data[11] << 8) | ((int)data[12]));
+                            mSmartGloveData.setMagX(((int)data[13] << 8) | ((int)data[14]));
+                            mSmartGloveData.setMagY(((int)data[15] << 8) | ((int)data[16]));
+                            mSmartGloveData.setMagZ(((int)data[17] << 8) | ((int)data[18]));
 
-                        DataLogService.log(mContext, mFile, data.toString(), HEADER);
+                            String contents = deviceAddress + "," + mSmartGloveData.toString();
+
+                            DataLogService.log(mContext, mFile, contents, HEADER);
+                        } else {
+                            log("Invalid Data Packet");
+                            return;
+                        }
                     }
                     break;
                 case BluetoothLeConnectionService.GATT_CHARACTERISTIC_READ:
