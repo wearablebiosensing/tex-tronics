@@ -7,6 +7,10 @@ import android.content.Intent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Matt Constant on 2/22/17.
@@ -82,12 +86,18 @@ public class DataLogService extends IntentService {
 
         // write to the file
         try {
+            Date date = Calendar.getInstance().getTime();
+            String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
+            String timeString = new SimpleDateFormat("kk:mm:ss.SSS", Locale.US).format(date);
+            String time = dateString + "," + timeString + ",";
+
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
             if (newFile) {
                 // if flagged as a new file, apply the header before the data.
                 fileOutputStream.write(intent.getStringExtra(EXTRA_HEADER).getBytes());
                 fileOutputStream.write("\n".getBytes());
             }
+            fileOutputStream.write(time.getBytes());
             fileOutputStream.write(intent.getStringExtra(EXTRA_DATA).getBytes());
             fileOutputStream.write("\n".getBytes());
             fileOutputStream.flush();

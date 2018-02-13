@@ -10,7 +10,21 @@ public class SmartGloveData {
     private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ, mMagX, mMagY, mMagZ;
 
     public SmartGloveData() {
-
+        mTimestamp = 0;
+        mThumbFlex = 0;
+        mIndexFlex = 0;
+        mMiddleFlex = 0;
+        mRingFlex = 0;
+        mPinkyFlex = 0;
+        mAccX = 0;
+        mAccY = 0;
+        mAccZ = 0;
+        mGyrX = 0;
+        mGyrY = 0;
+        mGyrZ = 0;
+        mMagX = 0;
+        mMagY = 0;
+        mMagZ = 0;
     }
 
     @Override

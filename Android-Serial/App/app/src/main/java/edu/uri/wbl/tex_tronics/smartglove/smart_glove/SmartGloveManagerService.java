@@ -28,7 +28,7 @@ import edu.uri.wbl.tex_tronics.smartglove.io.DataLogService;
 
 public class SmartGloveManagerService extends Service {
     private static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.sg.device";
-    private static final String HEADER = "Date,Time,Data";
+    private static final String HEADER = "Phone Date,Phone Time,Device Address,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
     private static final byte PACKET_ID_1 = 0x01;
     private static final byte PACKET_ID_2 = 0x02;
 
@@ -61,6 +61,7 @@ public class SmartGloveManagerService extends Service {
                     UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
                     if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC)) {
                         // Read Packet Data and Log in CSV File
+                        // this can be done in separate Thread if needed
                         Log.d("SmartGlove", "Data Received");
                         String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
                         byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
@@ -68,8 +69,8 @@ public class SmartGloveManagerService extends Service {
                         if(data[0] == PACKET_ID_1) {
                             mSmartGloveData = new SmartGloveData();
                             mSmartGloveData.setTimestamp(((long)data[1] << 24) | ((long)data[2] << 16) | ((long)data[3] << 8) | ((long)data[4]));
-                            mSmartGloveData.setThumbFlex(((int)data[5] << 8) | ((int)data[6]));
-                            mSmartGloveData.setIndexFlex(((int)data[7] << 8) | ((int)data[8]));
+                            mSmartGloveData.setThumbFlex((((int)data[5] << 8) | ((int)data[6])) & 0x0000FFFF);
+                            mSmartGloveData.setIndexFlex((((int)data[7] << 8) | ((int)data[8])) & 0x0000FFFF);
                             // TODO: Add rest of fingers
                         } else if(data[0] == PACKET_ID_2) {
                             mSmartGloveData.setAccX(((int)data[1] << 8) | ((int)data[2]));
@@ -83,6 +84,8 @@ public class SmartGloveManagerService extends Service {
                             mSmartGloveData.setMagZ(((int)data[17] << 8) | ((int)data[18]));
 
                             String contents = deviceAddress + "," + mSmartGloveData.toString();
+
+                            log("Data: " + mSmartGloveData.toString());
 
                             DataLogService.log(mContext, mFile, contents, HEADER);
                         } else {
@@ -122,7 +125,11 @@ public class SmartGloveManagerService extends Service {
         super.onCreate();
 
         mContext = this;
-        mFile = new File("/storage/emulated/0/Documents/session1.csv");
+
+        File parentFile = new File("/storage/emulated/0/Documents");
+        int count = parentFile.list().length;
+        mFile = new File(parentFile, "Session" + count + ".csv");
+
         mServiceConnection = new BleServiceConnection();
 
         registerReceiver(mBLEUpdateReceiver, new IntentFilter(BluetoothLeConnectionService.INTENT_FILTER_STRING));
