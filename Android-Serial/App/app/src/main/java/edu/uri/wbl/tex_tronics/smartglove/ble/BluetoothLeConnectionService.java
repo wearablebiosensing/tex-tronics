@@ -248,7 +248,7 @@ public class BluetoothLeConnectionService extends Service {
             return false;
         }
 
-        bluetoothGatt.close();
+        bluetoothGatt.disconnect();
         log("Disconnecting from " + bluetoothDeviceAddress + "...");
         return true;
     }

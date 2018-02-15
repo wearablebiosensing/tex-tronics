@@ -14,6 +14,10 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import edu.uri.wbl.tex_tronics.smartglove.ble.BluetoothLeConnectionService;
@@ -28,7 +32,7 @@ import edu.uri.wbl.tex_tronics.smartglove.io.DataLogService;
 
 public class SmartGloveManagerService extends Service {
     private static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.sg.device";
-    private static final String HEADER = "Phone Date,Phone Time,Device Address,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
+    private static final String HEADER = "Device Address,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
     private static final byte PACKET_ID_1 = 0x01;
     private static final byte PACKET_ID_2 = 0x02;
 
@@ -68,20 +72,21 @@ public class SmartGloveManagerService extends Service {
 
                         if(data[0] == PACKET_ID_1) {
                             mSmartGloveData = new SmartGloveData();
-                            mSmartGloveData.setTimestamp(((long)data[1] << 24) | ((long)data[2] << 16) | ((long)data[3] << 8) | ((long)data[4]));
-                            mSmartGloveData.setThumbFlex((((int)data[5] << 8) | ((int)data[6])) & 0x0000FFFF);
-                            mSmartGloveData.setIndexFlex((((int)data[7] << 8) | ((int)data[8])) & 0x0000FFFF);
+                            mSmartGloveData.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                            //mSmartGloveData.setTimestamp(((long)(data[1] & 0x00FF) << 24) | ((long)(data[2] & 0x00FF) << 16) | ((long)data[3] << 8) | ((long)data[4]));
+                            mSmartGloveData.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                            mSmartGloveData.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
                             // TODO: Add rest of fingers
                         } else if(data[0] == PACKET_ID_2) {
-                            mSmartGloveData.setAccX(((int)data[1] << 8) | ((int)data[2]));
-                            mSmartGloveData.setAccY(((int)data[3] << 8) | ((int)data[4]));
-                            mSmartGloveData.setAccZ(((int)data[5] << 8) | ((int)data[6]));
-                            mSmartGloveData.setGyrX(((int)data[7] << 8) | ((int)data[8]));
-                            mSmartGloveData.setGyrY(((int)data[9] << 8) | ((int)data[10]));
-                            mSmartGloveData.setGyrZ(((int)data[11] << 8) | ((int)data[12]));
-                            mSmartGloveData.setMagX(((int)data[13] << 8) | ((int)data[14]));
-                            mSmartGloveData.setMagY(((int)data[15] << 8) | ((int)data[16]));
-                            mSmartGloveData.setMagZ(((int)data[17] << 8) | ((int)data[18]));
+                            mSmartGloveData.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
+                            mSmartGloveData.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
+                            mSmartGloveData.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
+                            mSmartGloveData.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
+                            mSmartGloveData.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+                            mSmartGloveData.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
+                            mSmartGloveData.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+                            mSmartGloveData.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
+                            mSmartGloveData.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
                             String contents = deviceAddress + "," + mSmartGloveData.toString();
 
@@ -126,9 +131,13 @@ public class SmartGloveManagerService extends Service {
 
         mContext = this;
 
+        Date date = Calendar.getInstance().getTime();
+        String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
+        String timeString = new SimpleDateFormat("kk_mm_ss_SSS", Locale.US).format(date);
+        String fileName = dateString + "/" + timeString + ".csv";
+
         File parentFile = new File("/storage/emulated/0/Documents");
-        int count = parentFile.list().length;
-        mFile = new File(parentFile, "Session" + count + ".csv");
+        mFile = new File(parentFile, fileName);
 
         mServiceConnection = new BleServiceConnection();
 
@@ -194,7 +203,6 @@ public class SmartGloveManagerService extends Service {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mServiceBound = true;
             mService = ((BluetoothLeConnectionService.BLEConnectionBinder) iBinder).getService();
-            mService.connect(GattDevices.SMART_GLOVE_DEVICE);
         }
 
         @Override

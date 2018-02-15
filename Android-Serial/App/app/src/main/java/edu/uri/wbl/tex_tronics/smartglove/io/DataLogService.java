@@ -86,18 +86,12 @@ public class DataLogService extends IntentService {
 
         // write to the file
         try {
-            Date date = Calendar.getInstance().getTime();
-            String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
-            String timeString = new SimpleDateFormat("kk:mm:ss.SSS", Locale.US).format(date);
-            String time = dateString + "," + timeString + ",";
-
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
             if (newFile) {
                 // if flagged as a new file, apply the header before the data.
                 fileOutputStream.write(intent.getStringExtra(EXTRA_HEADER).getBytes());
                 fileOutputStream.write("\n".getBytes());
             }
-            fileOutputStream.write(time.getBytes());
             fileOutputStream.write(intent.getStringExtra(EXTRA_DATA).getBytes());
             fileOutputStream.write("\n".getBytes());
             fileOutputStream.flush();

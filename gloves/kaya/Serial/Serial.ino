@@ -23,11 +23,11 @@
  *        each imu reading = 2 bytes (2 * 9 = 18 bytes)
  *    long data type is 4 bytes (for the timestamp)
  *    
- *    Total Bytes to Transmit per Sample = (10 + 18 + 4) = 32 bytes
+ *    Total Bytes to Transmit per Sample = (10 + 19 + 4) = 33 bytes
  *    
  *    Android Max Packets Sent/Received (Reliably) = 20 bytes
- *    First Packet (18 Bytes) - Timestamp (4); flex sensor readings (10); null bytes (4)
- *    Second Packet (18 Bytes) - IMU readings (18)
+ *    First Packet (19 Bytes) - 0x01 (1); Timestamp (4); flex sensor readings (10); null bytes (4)
+ *    Second Packet (19 Bytes) - 0x02 (1); IMU readings (18)
  */
  
  
