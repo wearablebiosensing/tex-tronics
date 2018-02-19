@@ -91,12 +91,12 @@ void periodic_callback() {
     }
     else
     {
-      packet2[0 + (looper-2) * PACKET_LENGTH] = ticks.b[1];
-      packet2[1 + (looper-2) * PACKET_LENGTH] = ticks.b[0];
-      packet2[2 + (looper-2) * PACKET_LENGTH] = thumb_data.b[1];
-      packet2[3 + (looper-2) * PACKET_LENGTH] = thumb_data.b[0];
-      packet2[4 + (looper-2) * PACKET_LENGTH] = index_data.b[1];
-      packet2[5 + (looper-2) * PACKET_LENGTH] = index_data.b[0];
+      packet2[0 + (looper-3) * PACKET_LENGTH] = ticks.b[1];
+      packet2[1 + (looper-3) * PACKET_LENGTH] = ticks.b[0];
+      packet2[2 + (looper-3) * PACKET_LENGTH] = thumb_data.b[1];
+      packet2[3 + (looper-3) * PACKET_LENGTH] = thumb_data.b[0];
+      packet2[4 + (looper-3) * PACKET_LENGTH] = index_data.b[1];
+      packet2[5 + (looper-3) * PACKET_LENGTH] = index_data.b[0];
     }
 
 
