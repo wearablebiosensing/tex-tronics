@@ -10,7 +10,7 @@
 
 #define DEVICE_NAME           "SG - Serial"  // Local Device Name
 #define TXRX_BUF_LEN          19            // BLE Packet Length
-#define DATA_REFRESH_RATE_MS  8           // Delay between data collection (milliseconds)
+#define DATA_REFRESH_RATE_MS  10           // Delay between data collection (milliseconds)
 
 typedef union _sg_time {
   uint8_t b[4];

@@ -48,6 +48,13 @@ sg_time_t ticks;                                                // Timestamp sen
 flex_data_t thumb_data, index_data;                             // FlexSensor Values
 imu_data_t acc_x, acc_y, acc_z, gyr_x, gyr_y, gyr_z, mag_x, mag_y, mag_z; // IMU Values
 
+static Gap::ConnectionParams_t conn_params = {
+  .minConnectionInterval = 8,
+  .maxConnectionInterval = 70,
+  .slaveLatency = 0,
+  .connectionSupervisionTimeout = 1000
+};
+
 // The uuid of service and characteristics
 static const uint8_t uart_service_uuid[]        = {0x6E, 0x40, 0X00, 0X01, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E}; // 6E400001-B5A3-F393-E0A9-E50E24DCCA9E
 static const uint8_t tx_characteristic_uuid[]   = {0x6E, 0x40, 0X00, 0X02, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E}; // 6E400002-B5A3-F393-E0A9-E50E24DCCA9E
@@ -180,6 +187,8 @@ void init_ble() {
   ble.setAdvertisingInterval(160);
   // set adv_timeout, in seconds
   ble.setAdvertisingTimeout(0);
+  // Set Connection Parameters
+  ble.setPreferredConnectionParams(&conn_params);
   // start advertising
   ble.startAdvertising();
 }
