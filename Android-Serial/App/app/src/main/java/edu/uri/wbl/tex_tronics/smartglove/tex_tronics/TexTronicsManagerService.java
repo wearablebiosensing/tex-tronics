@@ -11,17 +11,26 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
 import edu.uri.wbl.tex_tronics.smartglove.ble.BluetoothLeConnectionService;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattCharacteristics;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattServices;
-
-import static edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsData.TexTronicsMode.FLEX_IMU;
+import edu.uri.wbl.tex_tronics.smartglove.mqtt.MqttConnectionService;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.devices.SmartGlove;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.devices.TexTronicsDevice;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.Action;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceType;
 
 /**
  * Created by mcons on 2/27/2018.
+ *
+ * @author Matthew Constant
+ * @version 1.0, 02/28/2018
  */
 
 public class TexTronicsManagerService extends Service {
@@ -88,10 +97,12 @@ public class TexTronicsManagerService extends Service {
      *
      * @since 1.0
      */
-    public static void connect(Context context, String deviceAddress) {
+    public static void connect(Context context, String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType) {
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.putExtra(EXTRA_DEVICE, deviceAddress);
-        intent.setAction(TexTronicsData.TexTronicsAction.connect.toString());
+        intent.putExtra(EXTRA_MODE, exerciseMode);
+        intent.putExtra(EXTRA_TYPE, deviceType);
+        intent.setAction(Action.connect.toString());
         context.startService(intent);
     }
 
@@ -112,7 +123,19 @@ public class TexTronicsManagerService extends Service {
     public static void disconnect(Context context, String deviceAddress) {
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.putExtra(EXTRA_DEVICE, deviceAddress);
-        intent.setAction(TexTronicsData.TexTronicsAction.disconnect.toString());
+        intent.setAction(Action.disconnect.toString());
+        context.startService(intent);
+    }
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, TexTronicsManagerService.class);
+        intent.setAction(Action.start.toString());
+        context.startService(intent);
+    }
+
+    public static void stop(Context context) {
+        Intent intent = new Intent(context, TexTronicsManagerService.class);
+        intent.setAction(Action.stop.toString());
         context.startService(intent);
     }
 
@@ -128,7 +151,7 @@ public class TexTronicsManagerService extends Service {
     /**
      * Contains reference to each connected Tex-Tronics Device.
      */
-    private HashMap<String, TexTronicsData> mTexTronicsList;
+    private HashMap<String, TexTronicsDevice> mTexTronicsList;
 
     @Override
     public void onCreate() {
@@ -167,18 +190,27 @@ public class TexTronicsManagerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startID) {
-        // Initial Check of Action Packet to make sure it contains the device address and action
-        if (intent == null || !intent.hasExtra(EXTRA_DEVICE) || intent.getAction() == null) {
+        // Initial Check of Action Packet to make sure it contains the device address and Action
+        if (intent == null || intent.getAction() == null) {
             Log.w(TAG, "Invalid Action Packet Received");
+            return INTENT_RETURN_POLICY;
+        }
+
+        // Action to be performed on the BLE Device
+        Action action = Action.getAction(intent.getAction());
+        if(action == Action.start) {
+            // Do Nothing
+
+            // Start MQTT Service As Well
+            MqttConnectionService.start(mContext);
+
             return INTENT_RETURN_POLICY;
         }
 
         // Device Address of the BLE Device corresponding to this Action Packet
         String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
-        // Action to be performed on the BLE Device
-        TexTronicsData.TexTronicsAction action = TexTronicsData.TexTronicsAction.getAction(intent.getAction());
 
-        // Make sure it is a valid action
+        // Make sure it is a valid Action
         if(action == null) {
             Log.w(TAG, "Invalid Action Packet Received");
             return INTENT_RETURN_POLICY;
@@ -192,15 +224,18 @@ public class TexTronicsManagerService extends Service {
                     Log.w(TAG, "Invalid connect Action Packet Received");
                     return INTENT_RETURN_POLICY;
                 }
-                TexTronicsData.TexTronicsMode smartGloveMode = (TexTronicsData.TexTronicsMode) intent.getSerializableExtra(EXTRA_MODE);
-                TexTronicsData.TexTronicsDevice texTronicsDevice = (TexTronicsData.TexTronicsDevice) intent.getSerializableExtra(EXTRA_TYPE);
-                connect(deviceAddress, smartGloveMode, texTronicsDevice);
+                ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
+                DeviceType deviceType = (DeviceType) intent.getSerializableExtra(EXTRA_TYPE);
+                connect(deviceAddress, exerciseMode, deviceType);
             }
             break;
             case disconnect:
                 // Attempt to disconnect from a currently connected BLE Device
                 disconnect(deviceAddress);
                 break;
+            case stop:
+                // TODO Disconnect from Connected Devices First
+                stopSelf();
         }
 
         return INTENT_RETURN_POLICY;
@@ -211,14 +246,26 @@ public class TexTronicsManagerService extends Service {
         unregisterReceiver(mBLEUpdateReceiver);
         unbindService(mServiceConnection);
 
+        Log.d(TAG,"Service Destroyed");
+
         super.onDestroy();
     }
 
-    private void connect(String deviceAddress, TexTronicsData.TexTronicsMode texTronicsMode, TexTronicsData.TexTronicsDevice texTronicsDevice) {
+    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType) {
         if (mServiceBound) {
-            TexTronicsData texTronicsData = new TexTronicsData(deviceAddress, texTronicsDevice, texTronicsMode);
-            // TODO Assume connection will be successful, if connection fails we must remove it from list.
-            mTexTronicsList.put(deviceAddress, texTronicsData);
+            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
+            switch (deviceType) {
+                case SMART_GLOVE:
+                    // TODO Assume connection will be successful, if connection fails we must remove it from list.
+                    SmartGlove smartGlove = new SmartGlove(deviceAddress, exerciseMode);
+                    mTexTronicsList.put(deviceAddress, smartGlove);
+                    break;
+                // Add Different Devices Here
+                default:
+
+                    break;
+            }
+
             mService.connect(deviceAddress);
         } else {
             Log.w(TAG,"Cannot Connect - BLE Connection Service is not bound yet!");
@@ -266,57 +313,69 @@ public class TexTronicsManagerService extends Service {
                     }
                     break;
                 case BluetoothLeConnectionService.GATT_CHARACTERISTIC_NOTIFY:
-                    /*UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
+                    UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
                     if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC)) {
                         Log.d(TAG, "Data Received");
                         byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
 
-                        TexTronicsData texTronicsData = mTexTronicsList.get(deviceAddress);
+                        TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
+                        ExerciseMode exerciseMode = device.getExerciseMode();
 
-                        if(texTronicsData.getTexTronicsMode() == FLEX_IMU) {
-                            if(data[0] == PACKET_ID_1) {
-                                texTronicsData.clear();
-                                texTronicsData.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                texTronicsData.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                texTronicsData.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
-                                // TODO: Add rest of fingers
-                            } else if(data[0] == PACKET_ID_2) {
-                                texTronicsData.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
-                                texTronicsData.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
-                                texTronicsData.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
-                                texTronicsData.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                texTronicsData.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
-                                texTronicsData.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
-                                texTronicsData.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
-                                texTronicsData.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
-                                texTronicsData.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
-                            } else {
-                                Log.w(TAG,"Invalid Data Packet");
-                                return;
+                        try {
+                            switch (exerciseMode) {
+                                case FLEX_IMU:
+                                    if (data[0] == PACKET_ID_1) {
+                                        device.clear();
+                                        device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                                        device.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                        device.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
+                                        // TODO: Add rest of fingers
+                                    } else if (data[0] == PACKET_ID_2) {
+                                        device.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
+                                        device.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
+                                        device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
+                                        device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
+                                        device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+                                        device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
+                                        device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+                                        device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
+                                        device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
+
+                                        device.logData(mContext);
+                                    } else {
+                                        Log.w(TAG, "Invalid Data Packet");
+                                        return;
+                                    }
+                                    break;
+                                case FLEX_ONLY:
+                                    // First Data Set
+                                    device.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
+                                    device.setThumbFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
+                                    device.setIndexFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
+
+                                    device.logData(mContext);
+
+                                    // Second Data Set
+                                    device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
+                                    device.setThumbFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
+                                    device.setIndexFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
+
+                                    device.logData(mContext);
+
+                                    // Third Data Set
+                                    device.setTimestamp((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
+                                    device.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
+                                    device.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
+
+                                    device.logData(mContext);
+                                    break;
                             }
-                        } else {
-                            // First Data Set
-                            texTronicsData.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
-                            texTronicsData.setThumbFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
-                            texTronicsData.setIndexFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
-
-                            texTronicsData.log(mContext);
-
-                            // Second Data Set
-                            texTronicsData.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
-                            texTronicsData.setThumbFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
-                            texTronicsData.setIndexFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
-
-                            texTronicsData.log(mContext);
-
-                            // Third Data Set
-                            texTronicsData.setTimestamp((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
-                            texTronicsData.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
-                            texTronicsData.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-
-                            texTronicsData.log(mContext);
+                        } catch (IllegalDeviceType | IOException e) {
+                            Log.e(TAG, e.toString());
+                            // TODO Handle Error Event
+                            return;
                         }
-                    }*/
+                    }
                     break;
                 case BluetoothLeConnectionService.GATT_CHARACTERISTIC_READ:
                     break;

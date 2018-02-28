@@ -8,16 +8,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import edu.uri.wbl.tex_tronics.smartglove.smart_glove.SmartGloveManagerService;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattDevices;
-import edu.uri.wbl.tex_tronics.smartglove.smart_glove.SmartGloveState;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsManagerService;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 340;
     private static final String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     private Context mContext;
-    private SmartGloveState mSmartGloveState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +27,12 @@ public class MainActivity extends AppCompatActivity {
         // Store reference to Activity's Context (used by inner classes and callbacks)
         mContext = this;
 
-        // Initialize SmartGlove State Machine
-        mSmartGloveState = SmartGloveState.NOT_SELECTED;
-        // TODO: If Device saved, initialize state at Disconnected
-
         // Initialize UI
         Button connectBtn = findViewById(R.id.connect_btn);
         connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SmartGloveManagerService.connect(mContext, GattDevices.SMART_GLOVE_DEVICE);
+                TexTronicsManagerService.connect(mContext, GattDevices.SMART_GLOVE_DEVICE, ExerciseMode.FLEX_ONLY, DeviceType.SMART_GLOVE);
             }
         });
 
@@ -44,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         disconnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SmartGloveManagerService.disconnect(mContext, GattDevices.SMART_GLOVE_DEVICE);
+                TexTronicsManagerService.disconnect(mContext, GattDevices.SMART_GLOVE_DEVICE);
             }
         });
     }
@@ -57,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
         }
+
+        TexTronicsManagerService.start(mContext);
     }
 
     @Override

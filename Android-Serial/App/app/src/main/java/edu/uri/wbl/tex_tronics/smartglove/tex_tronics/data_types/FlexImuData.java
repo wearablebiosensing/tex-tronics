@@ -1,15 +1,16 @@
-package edu.uri.wbl.tex_tronics.smartglove.tex_tronics;
+package edu.uri.wbl.tex_tronics.smartglove.tex_tronics.data_types;
 
 /**
- * Created by mcons on 2/27/2018.
+ * Created by mcons on 2/28/2018.
  */
 
-public class FlexImuData {
+public class FlexImuData extends TexTronicsData {
     private long mTimestamp;
     private int mThumbFlex, mIndexFlex, mMiddleFlex, mRingFlex, mPinkyFlex;
     private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ, mMagX, mMagY, mMagZ;
 
     public FlexImuData() {
+        super();
         mTimestamp = 0;
         mThumbFlex = 0;
         mIndexFlex = 0;
@@ -27,22 +28,22 @@ public class FlexImuData {
         mMagZ = 0;
     }
 
-    public void set(long timestamp, int thumbFlex, int indexFlex, int middleFlex, int ringFlex, int pinkyFlex, int accX, int accY, int accZ, int gyrX, int gyrY, int gyrZ, int magX, int magY, int magZ) {
-        mTimestamp = timestamp;
-        mThumbFlex = thumbFlex;
-        mIndexFlex = indexFlex;
-        mMiddleFlex = middleFlex;
-        mRingFlex = ringFlex;
-        mPinkyFlex = pinkyFlex;
-        mAccX = accX;
-        mAccY = accY;
-        mAccZ = accZ;
-        mGyrX = gyrX;
-        mGyrY = gyrY;
-        mGyrZ = gyrZ;
-        mMagX = magX;
-        mMagY = magY;
-        mMagZ = magZ;
+    public void set(FlexImuData data) {
+        mTimestamp = data.getTimestamp();
+        mThumbFlex = data.getThumbFlex();
+        mIndexFlex = data.getIndexFlex();
+        mMiddleFlex = data.getMiddleFlex();
+        mRingFlex = data.getRingFlex();
+        mPinkyFlex = data.getPinkyFlex();
+        mAccX = data.getAccX();
+        mAccY = data.getAccY();
+        mAccZ = data.getAccZ();
+        mGyrX = data.getGyrX();
+        mGyrY = data.getGyrY();
+        mGyrZ = data.getGyrZ();
+        mMagX = data.getMagX();
+        mMagY = data.getMagY();
+        mMagZ = data.getMagZ();
     }
 
     public void clear() {

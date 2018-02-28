@@ -21,7 +21,9 @@
         </activity>
 
         <service android:name=".ble.BluetoothLeConnectionService"/>
-        <service android:name=".smart_glove.SmartGloveManagerService"/>
+        <!--<service android:name=".smart_glove.SmartGloveManagerService"/>-->
+        <service android:name=".tex_tronics.TexTronicsManagerService"/>
+        <service android:name=".mqtt.MqttConnectionService"/>
         <service android:name=".io.DataLogService"/>
     </application>
 
