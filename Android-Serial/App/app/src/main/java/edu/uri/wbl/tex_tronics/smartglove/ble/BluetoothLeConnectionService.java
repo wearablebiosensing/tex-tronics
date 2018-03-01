@@ -46,7 +46,6 @@ public class BluetoothLeConnectionService extends Service {
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private HashMap<String,BluetoothGatt> mBluetoothGattList;
-    private BluetoothGattCharacteristic returnChar;
 
     private BluetoothGattCallback mBluetoothGattCallback = new BluetoothGattCallback() {
         @Override

@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +27,7 @@
         <!--<service android:name=".smart_glove.SmartGloveManagerService"/>-->
         <service android:name=".tex_tronics.TexTronicsManagerService"/>
         <service android:name=".mqtt.MqttConnectionService"/>
+        <service android:name="org.eclipse.paho.android.service.MqttService"/>
         <service android:name=".io.DataLogService"/>
     </application>
 

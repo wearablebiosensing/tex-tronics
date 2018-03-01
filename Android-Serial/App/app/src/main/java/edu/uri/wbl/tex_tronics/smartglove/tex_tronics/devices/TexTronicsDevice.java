@@ -6,6 +6,10 @@ import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.data_types.TexTronicsData;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
@@ -21,6 +25,7 @@ public abstract class TexTronicsDevice {
 
     protected String mHeader;
     protected File mCsvFile;
+    protected String mDate;
 
     protected String mDeviceAddress;
 
@@ -36,10 +41,25 @@ public abstract class TexTronicsDevice {
 
         // Initialize CSV File to NULL
         mCsvFile = null;
+
+        Date date = Calendar.getInstance().getTime();
+        mDate = new SimpleDateFormat("MM-dd-yyyy kk:mm:ss:SSS", Locale.US).format(date);
     }
 
     public void setCsvFile(File file) {
         mCsvFile = file;
+    }
+
+    public File getCsvFile() {
+        return mCsvFile;
+    }
+
+    public String getDeviceAddress(){
+        return DEVICE_ADDRESS;
+    }
+
+    public String getDate() {
+        return mDate;
     }
 
     public ExerciseMode getExerciseMode() {

@@ -18,9 +18,9 @@ public enum UpdateType {
 
     public static UpdateType getUpdate(String update) {
         switch (update) {
-            case "uri.wbl.tex_tronics.ble.connect":
+            case "uri.wbl.tex_tronics.mqtt.connected":
                 return connected;
-            case "uri.wbl.tex_tronics.ble.disconnect":
+            case "uri.wbl.tex_tronics.mqtt.disconnected":
                 return disconnected;
             default:
                 return null;

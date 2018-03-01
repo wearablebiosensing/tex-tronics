@@ -1,9 +1,12 @@
 package edu.uri.wbl.tex_tronics.smartglove.mqtt;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -14,6 +17,8 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import edu.uri.wbl.tex_tronics.smartglove.R;
 
 /**
  * Created by mcons on 2/28/2018.
@@ -31,12 +36,6 @@ public class MqttConnectionService extends Service {
         context.startService(intent);
     }
 
-    public static void publish(Context context, String data) {
-        Intent intent = new Intent(context, MqttConnectionService.class);
-        intent.putExtra(EXTRA_DATA, data);
-        context.startService(intent);
-    }
-
     public static String generateJson(String date, String sensorId, String data) {
         JsonData jsonData = new JsonData(date, sensorId, data);
         Log.d(TAG,"JSON Data: " + jsonData.toString());
@@ -50,6 +49,7 @@ public class MqttConnectionService extends Service {
     private boolean mConnected;
     private String mClientId;
 
+    private IBinder mBinder = new MqttConnectionBinder();
 
     @Override
     public void onCreate() {
@@ -93,7 +93,7 @@ public class MqttConnectionService extends Service {
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.d(TAG, "Failed to Connect");
+                    Log.d(TAG, "Failed to Connect (" + exception.toString() + ")");
                     sendUpdate(UpdateType.disconnected);
                     mConnected = false;
                 }
@@ -105,21 +105,12 @@ public class MqttConnectionService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(!intent.hasExtra(EXTRA_DATA)) {
-            Log.w(TAG,"Invalid Data Packet");
-            return START_STICKY;
-        }
-
-        String data = intent.getStringExtra(EXTRA_DATA);
-        Log.d(TAG, "DATA: " + data);
-        publishMessage(data);
-
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
@@ -127,6 +118,12 @@ public class MqttConnectionService extends Service {
         Log.d(TAG, "Service Destroyed");
 
         super.onDestroy();
+    }
+
+    public class MqttConnectionBinder extends Binder {
+        public MqttConnectionService getService() {
+            return MqttConnectionService.this;
+        }
     }
 
     public void publishMessage(String data){

@@ -28,7 +28,6 @@ import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceTy
 
 public class SmartGlove extends TexTronicsDevice {
     private TexTronicsData mData;
-    private String mDate;
 
     public SmartGlove(String deviceAddress, ExerciseMode exerciseMode) {
         super(deviceAddress, exerciseMode);
@@ -49,7 +48,7 @@ public class SmartGlove extends TexTronicsDevice {
 
         Date date = Calendar.getInstance().getTime();
 
-        mDate = new SimpleDateFormat("MM-dd-yyyy kk:mm:ss:SSS", Locale.US).format(date);
+
 
         // Set Default Output File
         String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
@@ -68,11 +67,6 @@ public class SmartGlove extends TexTronicsDevice {
         String data = mData.toString();
         String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + data;
         DataLogService.log(context, mCsvFile, logString, mHeader);
-
-        // Send to Servervia MQTT
-        String json = MqttConnectionService.generateJson(mDate, mDeviceAddress, data);
-        Log.d("SmartGlove", "JSON: " + json);
-        MqttConnectionService.publish(context, json);
     }
 
     @Override
