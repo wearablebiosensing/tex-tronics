@@ -5,60 +5,270 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
     tools:context="edu.uri.wbl.tex_tronics.smartglove.MainActivity">
 
+    <!-- Left Glove Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="15dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/device_label"/>
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="@string/left_glove"/>
 
-        <Button
-            android:id="@+id/scan_button"
-            android:layout_width="wrap_content"
+        <!-- Layout for Left Glove Disconnected -->
+        <LinearLayout
+            android:id="@+id/left_glove_disconnected"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/scan_button"/>
+            android:gravity="center_horizontal">
+            <Button
+                android:id="@+id/left_glove_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/device_textview"
-            android:layout_width="wrap_content"
+        <!-- Layout for Left Glove Connected -->
+        <LinearLayout
+            android:id="@+id/left_glove_connected"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_address_label"/>
+                <TextView
+                    android:id="@+id/left_glove_device_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_name_label"/>
+                <TextView
+                    android:id="@+id/left_glove_device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
+    <!-- Right Glove Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="15dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/status_label"/>
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="@string/right_glove"/>
 
-        <TextView
-            android:id="@+id/status_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!-- Layout for Right Glove Disconnected -->
+        <LinearLayout
+            android:id="@+id/right_glove_disconnected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+            <Button
+                android:id="@+id/right_glove_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select"/>
+        </LinearLayout>
+
+        <!-- Layout for Right Glove Connected -->
+        <LinearLayout
+            android:id="@+id/right_glove_connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_address_label"/>
+                <TextView
+                    android:id="@+id/right_glove_device_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_name_label"/>
+                <TextView
+                    android:id="@+id/right_glove_device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/connect_btn"
-        android:layout_width="wrap_content"
+    <!-- Left Sock Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/connect_button"/>
+        android:padding="15dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/disconnect_btn"
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="@string/left_sock"/>
+
+        <!-- Layout for Left Sock Disconnected -->
+        <LinearLayout
+            android:id="@+id/left_sock_disconnected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+            <Button
+                android:id="@+id/left_sock_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select"/>
+        </LinearLayout>
+
+        <!-- Layout for Left Sock Connected -->
+        <LinearLayout
+            android:id="@+id/left_sock_connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_address_label"/>
+                <TextView
+                    android:id="@+id/left_sock_device_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_name_label"/>
+                <TextView
+                    android:id="@+id/left_sock_device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Right Sock Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/disconnect_button"/>
+        android:padding="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="@string/right_sock"/>
+
+        <!-- Layout for Right Sock Disconnected -->
+        <LinearLayout
+            android:id="@+id/right_sock_disconnected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+            <Button
+                android:id="@+id/right_sock_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select"/>
+        </LinearLayout>
+
+        <!-- Layout for Right Sock Connected -->
+        <LinearLayout
+            android:id="@+id/right_sock_connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_address_label"/>
+                <TextView
+                    android:id="@+id/right_sock_device_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/device_name_label"/>
+                <TextView
+                    android:id="@+id/right_sock_device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

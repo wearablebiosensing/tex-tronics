@@ -30,7 +30,9 @@ public class BluetoothLeConnectionService extends Service {
     public static final String INTENT_CHARACTERISTIC = "uri.egr.biosensing.intent_characteristic";
     public static final String INTENT_FILTER_STRING = "uri.egr.biosensing.flexglove.ble_updates";
     public static final String GATT_STATE_CONNECTED = "gatt_state_connected";
+    public static final String GATT_STATE_CONNECTING = "gatt_state_connecting";
     public static final String GATT_STATE_DISCONNECTED = "gatt_state_disconnected";
+    public static final String GATT_STATE_DISCONNECTING = "gatt_state_disconnecting";
     public static final String GATT_DISCOVERED_SERVICES = "gatt_discovered_services";
     public static final String GATT_CHARACTERISTIC_READ = "gatt_characteristic_read";
     public static final String GATT_CHARACTERISTIC_NOTIFY = "gatt_characteristic_notify";
@@ -232,6 +234,7 @@ public class BluetoothLeConnectionService extends Service {
             return false;
         }
         log("Establishing connection to " + bluetoothDeviceAddress + "...");
+        sendBroadcast(generateIntent(bluetoothDeviceAddress, GATT_STATE_CONNECTING));
         return true;
     }
 
@@ -249,6 +252,7 @@ public class BluetoothLeConnectionService extends Service {
 
         bluetoothGatt.disconnect();
         log("Disconnecting from " + bluetoothDeviceAddress + "...");
+        sendBroadcast(generateIntent(bluetoothDeviceAddress, GATT_STATE_DISCONNECTING));
         return true;
     }
 

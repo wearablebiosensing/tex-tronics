@@ -331,8 +331,14 @@ public class TexTronicsManagerService extends Service {
             String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
             String action = intent.getStringExtra(BluetoothLeConnectionService.INTENT_EXTRA);
             switch (action) {
+                case BluetoothLeConnectionService.GATT_STATE_CONNECTING:
+                    TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_connecting);
+                    break;
                 case BluetoothLeConnectionService.GATT_STATE_CONNECTED:
                     mBleService.discoverServices(deviceAddress);
+                    break;
+                case BluetoothLeConnectionService.GATT_STATE_DISCONNECTING:
+                    TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnecting);
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTED:
                     TexTronicsDevice disconnectDevice = mTexTronicsList.get(deviceAddress);
@@ -453,9 +459,11 @@ public class TexTronicsManagerService extends Service {
             switch (updateType) {
                 case connected:
                     Log.d(TAG, "MQTT Connected");
+                    TexTronicsUpdateReceiver.update(mContext, null, TexTronicsUpdate.mqtt_connected);
                     break;
                 case disconnected:
                     Log.d(TAG, "MQTT Disconnected");
+                    TexTronicsUpdateReceiver.update(mContext, null, TexTronicsUpdate.mqtt_disconnected);
                     break;
                 default:
                     Log.d(TAG, "Unknown MQTT Update");
