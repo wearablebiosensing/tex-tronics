@@ -10,6 +10,7 @@ from flask import Flask, render_template
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
+from store_Sensor_Data_to_DB import sensor_Data_Handler
 
 eventlet.monkey_patch()
 
@@ -61,7 +62,9 @@ def handle_mqtt_message(client, userdata, message):
         payload=message.payload.decode(),
         qos=message.qos,
     )
+    sensor_Data_Handler(message.topic, message.payload)
     socketio.emit('mqtt_message', data=data)
+    
 
 
 @mqtt.on_log()
