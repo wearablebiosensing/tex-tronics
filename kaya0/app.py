@@ -11,13 +11,14 @@ from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
 from store_Sensor_Data_to_DB import sensor_Data_Handler
+import os
 
 eventlet.monkey_patch()
 
 app = Flask(__name__)
 app.config['SECRET'] = 'my secret key'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['MQTT_BROKER_URL'] = '127.0.0.1'
+app.config['MQTT_BROKER_URL'] = '131.128.51.213'
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_USERNAME'] = ''
 app.config['MQTT_PASSWORD'] = ''
@@ -39,8 +40,24 @@ bootstrap = Bootstrap(app)
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return render_template('index.html')
+
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if request.form['password'] == 'password' and request.form['username'] == 'admin':
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return home()
+
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    return home()
 
 
 @socketio.on('publish')
@@ -73,4 +90,5 @@ def handle_logging(client, userdata, level, buf):
 
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, use_reloader=True, debug=True)
+	app.secret_key = os.urandom(12)
+    socketio.run(app, host='131.128.51.213', port=5000, use_reloader=True, debug=True)
