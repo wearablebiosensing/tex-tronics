@@ -38,6 +38,7 @@ mqtt = Mqtt(app)
 socketio = SocketIO(app)
 bootstrap = Bootstrap(app)
 
+session['logged_in'] = False
 
 @app.route('/')
 def home():
@@ -58,7 +59,6 @@ def do_admin_login():
 def logout():
     session['logged_in'] = False
     return home()
-
 
 @socketio.on('publish')
 def handle_publish(json_str):
