@@ -38,7 +38,6 @@ mqtt = Mqtt(app)
 socketio = SocketIO(app)
 bootstrap = Bootstrap(app)
 
-session['logged_in'] = False
 
 @app.route('/')
 def home():
@@ -46,6 +45,7 @@ def home():
         return render_template('login.html')
     else:
         return render_template('index.html')
+
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
@@ -55,10 +55,12 @@ def do_admin_login():
         flash('wrong password!')
     return home()
 
+
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
     return home()
+
 
 @socketio.on('publish')
 def handle_publish(json_str):
@@ -83,7 +85,6 @@ def handle_mqtt_message(client, userdata, message):
     socketio.emit('mqtt_message', data=data)
     
 
-
 @mqtt.on_log()
 def handle_logging(client, userdata, level, buf):
     print(level, buf)
@@ -91,5 +92,6 @@ def handle_logging(client, userdata, level, buf):
 
 if __name__ == '__main__':
 	app.secret_key = os.urandom(12)
+	session['logged_in'] = False
 	socketio.run(app, host='131.128.51.213', port=5000, use_reloader=True, debug=True)
     
