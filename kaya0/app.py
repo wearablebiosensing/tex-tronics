@@ -6,7 +6,7 @@ A small Test application to show how to use Flask-MQTT.
 
 import eventlet
 import json
-from flask import Flask, render_template
+from flask import Flask, flash, redirect, render_template, request, session, abort
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
@@ -38,15 +38,13 @@ mqtt = Mqtt(app)
 socketio = SocketIO(app)
 bootstrap = Bootstrap(app)
 
-
 @app.route('/')
 def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
         return render_template('index.html')
-
-
+ 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
     if request.form['password'] == 'password' and request.form['username'] == 'admin':
@@ -55,11 +53,15 @@ def do_admin_login():
         flash('wrong password!')
     return home()
 
-
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
     return home()
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 @socketio.on('publish')
@@ -83,7 +85,7 @@ def handle_mqtt_message(client, userdata, message):
     )
     sensor_Data_Handler(message.topic, message.payload)
     socketio.emit('mqtt_message', data=data)
-    
+
 
 @mqtt.on_log()
 def handle_logging(client, userdata, level, buf):
