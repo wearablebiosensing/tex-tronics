@@ -8,10 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
+import edu.uri.wbl.tex_tronics.smartglove.ble.GattDevices;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsManagerService;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdate;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdateReceiver;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 
 /**
  * A simple Activity demonstrating how to use the features provided by TexTronics Manager Service.
@@ -30,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
 
+    private Button mConnectButton;
+    private Button mDisconnectButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +45,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Data Members
         mContext = this;            // Used by any method calls requiring a Context argument
+
+        mConnectButton = findViewById(R.id.connect_button);
+        mDisconnectButton = findViewById(R.id.disconnect_button);
+
+        mConnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TexTronicsManagerService.connect(mContext, GattDevices.SMART_GLOVE_DEVICE, ExerciseMode.FLEX_ONLY, DeviceType.SMART_GLOVE);
+            }
+        });
+
+        mDisconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TexTronicsManagerService.disconnect(mContext, GattDevices.SMART_GLOVE_DEVICE);
+            }
+        });
     }
 
     @Override
@@ -96,21 +121,27 @@ public class MainActivity extends AppCompatActivity {
             switch (updateType) {
                 case ble_connecting:
                     // Connecting to Device <deviceAddress>
+                    Log.d(TAG,"Connecting to " + deviceAddress);
                     break;
                 case ble_connected:
                     // Device <deviceAddress> Has Been Connected
+                    Log.d(TAG,"Connected to " + deviceAddress);
                     break;
                 case ble_disconnecting:
                     // Disconnecting from Device <deviceAddress>
+                    Log.d(TAG,"Disconnecting from " + deviceAddress);
                     break;
                 case ble_disconnected:
                     // Device <deviceAddress> Has Been Disconnected
+                    Log.d(TAG,"Disconnected from " + deviceAddress);
                     break;
                 case mqtt_connected:
                     // Connected to MQTT Server
+                    Log.d(TAG,"Connected to MQTT Server");
                     break;
                 case mqtt_disconnected:
                     // Disconnected from MQTT Server
+                    Log.d(TAG,"Disconnected from MQTT Server");
                     break;
                 default:
                     Log.w(TAG, "Unknown Update Received");

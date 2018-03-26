@@ -335,6 +335,7 @@ public class TexTronicsManagerService extends Service {
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_connecting);
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_CONNECTED:
+                    TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_connected);
                     mBleService.discoverServices(deviceAddress);
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTING:
@@ -367,6 +368,10 @@ public class TexTronicsManagerService extends Service {
                     if (characteristic != null) {
                         mBleService.enableNotifications(deviceAddress, characteristic);
                     }
+
+                    BluetoothGattCharacteristic txChar = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.TX_CHARACTERISTIC);
+                    mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});
+
                     break;
                 case BluetoothLeConnectionService.GATT_CHARACTERISTIC_NOTIFY:
                     UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
