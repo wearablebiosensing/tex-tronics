@@ -336,24 +336,25 @@ public class TexTronicsManagerService extends Service {
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTING:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnecting);
+
+                    TexTronicsDevice disconnectingDevice = mTexTronicsList.get(deviceAddress);
+                    // Send to Server via MQTT
+                    if(mMqttServiceBound) {
+                        try {
+                            byte[] buffer = IOUtil.readFile(disconnectingDevice.getCsvFile());
+                            String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(), disconnectingDevice.getDeviceAddress(), new String(buffer));
+                            Log.d("SmartGlove", "JSON: " + json);
+                            mMqttService.publishMessage(json);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTED:
                     TexTronicsDevice disconnectDevice = mTexTronicsList.get(deviceAddress);
                     if(disconnectDevice == null) {
                         Log.w(TAG, "Device not Found");
                         return;
-                    }
-
-                    // Send to Server via MQTT
-                    if(mMqttServiceBound) {
-                        try {
-                            byte[] buffer = IOUtil.readFile(disconnectDevice.getCsvFile());
-                            String json = MqttConnectionService.generateJson(disconnectDevice.getDate(), disconnectDevice.getDeviceAddress(), new String(buffer));
-                            Log.d("SmartGlove", "JSON: " + json);
-                            mMqttService.publishMessage(json);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
 
                     mTexTronicsList.remove(deviceAddress);
