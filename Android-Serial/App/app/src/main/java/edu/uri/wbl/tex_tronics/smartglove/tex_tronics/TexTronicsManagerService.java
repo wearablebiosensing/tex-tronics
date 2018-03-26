@@ -213,16 +213,8 @@ public class TexTronicsManagerService extends Service {
             return INTENT_RETURN_POLICY;
         }
 
-        // Action to be performed on the BLE Device
+        // Action to be performed on the TexTronics Device
         Action action = Action.getAction(intent.getAction());
-        if(action == Action.start) {
-            // Do Nothing
-
-            // Start MQTT Service As Well
-            MqttConnectionService.start(mContext);
-
-            return INTENT_RETURN_POLICY;
-        }
 
         // Device Address of the BLE Device corresponding to this Action Packet
         String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
@@ -235,6 +227,9 @@ public class TexTronicsManagerService extends Service {
 
         // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
         switch (action) {
+            case start:
+                MqttConnectionService.start(mContext);
+                break;
             case connect: {
                 // Attempt to connect to BLE Device (Device Type and Transmitting Mode should be obtained during scan)
                 if (!intent.hasExtra(EXTRA_TYPE) || !intent.hasExtra(EXTRA_MODE)) {
@@ -251,6 +246,7 @@ public class TexTronicsManagerService extends Service {
                 disconnect(deviceAddress);
                 break;
             case stop:
+                MqttConnectionService.stop(mContext);
                 // TODO Disconnect from Connected Devices First
                 stopSelf();
         }
