@@ -152,7 +152,8 @@ public class TexTronicsManagerService extends Service {
      * unless this Service implements multi-threading in future.
      */
     private Context mContext;
-    private boolean mBleServiceBound, mMqttServiceBound;
+    private boolean mBleServiceBound = false;
+    private boolean mMqttServiceBound = false;
     private BluetoothLeConnectionService mBleService;
     private MqttConnectionService mMqttService;
     private ServiceConnection mBleServiceConnection, mMqttServiceConnection;
@@ -189,6 +190,8 @@ public class TexTronicsManagerService extends Service {
         // Initialize the Connection Service to interface to BluetoothLeService
         mBleServiceConnection = new BleServiceConnection();
 
+        mMqttServiceConnection = new MqttServiceConnection();
+
         // Initialize Container for Tex-Tronic Connected Devices (set the initial capacity to 4 - 2 gloves, 2 socks)
         mTexTronicsList = new HashMap<>(4);
 
@@ -197,6 +200,7 @@ public class TexTronicsManagerService extends Service {
         registerReceiver(mMqttUpdateReceiver, MqttUpdateReceiver.INTENT_FILTER);
         // Bind to BluetoothLeService. This Service provides the methods required to interact with BLE devices.
         bindService(new Intent(this, BluetoothLeConnectionService.class), mBleServiceConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, MqttConnectionService.class), mMqttServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -227,9 +231,6 @@ public class TexTronicsManagerService extends Service {
 
         // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
         switch (action) {
-            case start:
-                MqttConnectionService.start(mContext);
-                break;
             case connect: {
                 // Attempt to connect to BLE Device (Device Type and Transmitting Mode should be obtained during scan)
                 if (!intent.hasExtra(EXTRA_TYPE) || !intent.hasExtra(EXTRA_MODE)) {
@@ -246,7 +247,6 @@ public class TexTronicsManagerService extends Service {
                 disconnect(deviceAddress);
                 break;
             case stop:
-                MqttConnectionService.stop(mContext);
                 // TODO Disconnect from Connected Devices First
                 stopSelf();
         }
@@ -259,6 +259,7 @@ public class TexTronicsManagerService extends Service {
         unregisterReceiver(mBLEUpdateReceiver);
         unregisterReceiver(mMqttUpdateReceiver);
         unbindService(mBleServiceConnection);
+        unbindService(mMqttServiceConnection);
 
         Log.d(TAG,"Service Destroyed");
 
@@ -351,6 +352,8 @@ public class TexTronicsManagerService extends Service {
                     }
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTED:
+                    TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnected);
+
                     TexTronicsDevice disconnectDevice = mTexTronicsList.get(deviceAddress);
                     if(disconnectDevice == null) {
                         Log.w(TAG, "Device not Found");

@@ -144,6 +144,8 @@ public class MqttConnectionService extends Service {
             } catch (MqttException e) {
                 Log.w(TAG, "Error Publishing: " + e.getMessage());
                 e.printStackTrace();
+            } finally {
+                Log.w(TAG, "Published");
             }
         } else {
             Log.w(TAG, "Not Connected Yet!");
