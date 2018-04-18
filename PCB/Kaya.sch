@@ -147,14 +147,14 @@
 <library name="tex-tronics">
 <packages>
 <package name="INDUCTIVE-CHARGE-5V">
-<wire x1="4.9" y1="12.1" x2="4.9" y2="-12.1" width="0.127" layer="21"/>
-<wire x1="4.9" y1="-12.1" x2="-4.9" y2="-12.1" width="0.127" layer="21"/>
-<wire x1="-4.9" y1="-12.1" x2="-4.9" y2="12.1" width="0.127" layer="21"/>
-<wire x1="-4.9" y1="12.1" x2="4.9" y2="12.1" width="0.127" layer="21"/>
-<smd name="OUT+" x="-3.81" y="11.43" dx="1.27" dy="0.635" layer="1"/>
-<smd name="OUT-" x="3.81" y="11.43" dx="1.27" dy="0.635" layer="1"/>
-<smd name="CPR_IN2" x="3.81" y="-11.43" dx="1.27" dy="0.635" layer="1"/>
-<smd name="CPR_IN1" x="-3.81" y="-11.43" dx="1.27" dy="0.635" layer="1"/>
+<wire x1="5" y1="12" x2="5" y2="-12" width="0.127" layer="21"/>
+<wire x1="5" y1="-12" x2="-5" y2="-12" width="0.127" layer="21"/>
+<wire x1="-5" y1="-12" x2="-5" y2="12" width="0.127" layer="21"/>
+<wire x1="-5" y1="12" x2="5" y2="12" width="0.127" layer="21"/>
+<smd name="IN_L" x="-3.33" y="10.33" dx="3" dy="3" layer="1"/>
+<smd name="IN_R" x="3.33" y="10.32" dx="3" dy="3" layer="1"/>
+<smd name="OUT-" x="-2.41" y="-10.43" dx="3" dy="3" layer="1"/>
+<smd name="OUT+" x="2.42" y="-10.42" dx="3" dy="3" layer="1"/>
 </package>
 <package name="CONDUCTIVE-BUTTON">
 <smd name="1" x="0" y="0" dx="5" dy="5" layer="1" roundness="100"/>
@@ -164,8 +164,8 @@
 <symbol name="INDUCTIVE-CHARGE-5V">
 <pin name="OUT+" x="15.24" y="5.08" length="middle" rot="R180"/>
 <pin name="OUT-" x="15.24" y="-5.08" length="middle" rot="R180"/>
-<pin name="CPR_IN_1" x="-15.24" y="5.08" length="middle"/>
-<pin name="CPR_IN_2" x="-15.24" y="-5.08" length="middle"/>
+<pin name="IN_R" x="-15.24" y="5.08" length="middle"/>
+<pin name="IN_L" x="-15.24" y="-5.08" length="middle"/>
 <wire x1="-10.16" y1="7.62" x2="-10.16" y2="-7.62" width="0.1524" layer="94"/>
 <wire x1="-10.16" y1="-7.62" x2="10.16" y2="-7.62" width="0.1524" layer="94"/>
 <wire x1="10.16" y1="-7.62" x2="10.16" y2="7.62" width="0.1524" layer="94"/>
@@ -184,8 +184,8 @@
 <devices>
 <device name="" package="INDUCTIVE-CHARGE-5V">
 <connects>
-<connect gate="INDUCTIVE-5V" pin="CPR_IN_1" pad="CPR_IN1"/>
-<connect gate="INDUCTIVE-5V" pin="CPR_IN_2" pad="CPR_IN2"/>
+<connect gate="INDUCTIVE-5V" pin="IN_L" pad="IN_L"/>
+<connect gate="INDUCTIVE-5V" pin="IN_R" pad="IN_R"/>
 <connect gate="INDUCTIVE-5V" pin="OUT+" pad="OUT+"/>
 <connect gate="INDUCTIVE-5V" pin="OUT-" pad="OUT-"/>
 </connects>
@@ -2296,6 +2296,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="U$3" library="tex-tronics" deviceset="CONDUCTIVE-BUTTON" device=""/>
 <part name="U$4" library="tex-tronics" deviceset="CONDUCTIVE-BUTTON" device=""/>
 <part name="U$5" library="tex-tronics" deviceset="CONDUCTIVE-BUTTON" device=""/>
+<part name="PAD1" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="WIREPAD" device="SMD1,27-254" package3d_urn="urn:adsk.eagle:package:30839/1"/>
+<part name="PAD2" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="WIREPAD" device="SMD1,27-254" package3d_urn="urn:adsk.eagle:package:30839/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -2326,6 +2328,8 @@ Ireg = milliamps</text>
 <instance part="GND3" gate="1" x="124.46" y="30.48"/>
 <instance part="GND4" gate="1" x="172.72" y="30.48"/>
 <instance part="GND5" gate="1" x="187.96" y="30.48"/>
+<instance part="PAD1" gate="G$1" x="12.7" y="91.44"/>
+<instance part="PAD2" gate="G$1" x="12.7" y="81.28"/>
 </instances>
 <busses>
 </busses>
@@ -2433,6 +2437,20 @@ Ireg = milliamps</text>
 <pinref part="POWER_SWITCH" gate="G$1" pin="1"/>
 <wire x1="45.72" y1="55.88" x2="48.26" y2="55.88" width="0.1524" layer="91"/>
 <label x="48.26" y="55.88" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$10" class="0">
+<segment>
+<pinref part="PAD1" gate="G$1" pin="P"/>
+<pinref part="U$1" gate="INDUCTIVE-5V" pin="IN_R"/>
+<wire x1="15.24" y1="91.44" x2="33.02" y2="91.44" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$11" class="0">
+<segment>
+<pinref part="PAD2" gate="G$1" pin="P"/>
+<pinref part="U$1" gate="INDUCTIVE-5V" pin="IN_L"/>
+<wire x1="15.24" y1="81.28" x2="33.02" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

@@ -151,10 +151,10 @@
 <wire x1="4.9" y1="-12.1" x2="-4.9" y2="-12.1" width="0.127" layer="21"/>
 <wire x1="-4.9" y1="-12.1" x2="-4.9" y2="12.1" width="0.127" layer="21"/>
 <wire x1="-4.9" y1="12.1" x2="4.9" y2="12.1" width="0.127" layer="21"/>
-<pad name="CPR_IN2" x="3.5" y="-10.9" drill="0.6" shape="square"/>
-<pad name="CPR_IN1" x="-3.4" y="-10.9" drill="0.6" shape="square"/>
-<pad name="OUT+" x="-3.8" y="10.9" drill="0.6" shape="square"/>
-<pad name="OUT-" x="3.5" y="10.8" drill="0.6" shape="square"/>
+<smd name="OUT+" x="-3.81" y="11.43" dx="1.27" dy="0.635" layer="1"/>
+<smd name="OUT-" x="3.81" y="11.43" dx="1.27" dy="0.635" layer="1"/>
+<smd name="CPR_IN2" x="3.81" y="-11.43" dx="1.27" dy="0.635" layer="1"/>
+<smd name="CPR_IN1" x="-3.81" y="-11.43" dx="1.27" dy="0.635" layer="1"/>
 </package>
 <package name="CONDUCTIVE-BUTTON">
 <smd name="1" x="0" y="0" dx="5" dy="5" layer="1" roundness="100"/>
