@@ -4304,6 +4304,7 @@
 <rectangle x1="22.9235" y1="67.2211" x2="23.1267" y2="67.2465" layer="21" rot="R180"/>
 <rectangle x1="17.7927" y1="67.2211" x2="17.9959" y2="67.2465" layer="21" rot="R180"/>
 <text x="24.765" y="56.769" size="0.0508" layer="21" font="vector">C:/Users/mcons/Downloads/kTq6gCz2.bmp</text>
+<rectangle x1="37.7698" y1="54.8132" x2="50.5206" y2="68.5546" layer="46"/>
 </plain>
 <libraries>
 <library name="SparkFun-Capacitors">
