@@ -10431,7 +10431,7 @@ Source: www.kingbright.com</description>
 <wire x1="-78.74" y1="-43.18" x2="-93.98" y2="-43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="VBUS" class="0">
 <segment>
 <pinref part="J1" gate="G$1" pin="VBUS"/>
 <pinref part="LED1" gate="G$1" pin="A"/>
@@ -10601,6 +10601,20 @@ Source: www.kingbright.com</description>
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="108,1,-58.42,73.66,GND,,,,,"/>
+<approved hash="110,1,-53.34,35.56,GND,N$9,,,,"/>
+<approved hash="113,1,-96.5623,-41.6204,SV2,,,,,"/>
+<approved hash="115,1,-43.18,77.47,GND,,,,,"/>
+<approved hash="115,1,-91.44,-15.24,GND,,,,,"/>
+<approved hash="115,1,-92.71,-40.64,VDD,,,,,"/>
+<approved hash="115,1,-11.43,93.98,VDD,,,,,"/>
+<approved hash="115,1,-11.43,99.06,VDD,,,,,"/>
+<approved hash="115,1,-11.43,96.52,VDD,,,,,"/>
+<approved hash="115,1,-11.43,101.6,VDD,,,,,"/>
+<approved hash="115,1,54.17,82.76,VIN,,,,,"/>
+<approved hash="115,1,-91.44,-17.78,VIN,,,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>

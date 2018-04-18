@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 111;
 
     private Context mContext;
-
-    private Button mConnectButton;
-    private Button mDisconnectButton;
+    private CoordinatorLayout mMessageContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +45,37 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Data Members
         mContext = this;            // Used by any method calls requiring a Context argument
+        mMessageContainer = findViewById(R.id.message_container);
 
-        mConnectButton = findViewById(R.id.connect_button);
-        mDisconnectButton = findViewById(R.id.disconnect_button);
-
-        mConnectButton.setOnClickListener(new View.OnClickListener() {
+        Button connectLeftShoeBtn = findViewById(R.id.connect_btn1);
+        connectLeftShoeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TexTronicsManagerService.connect(mContext, GattDevices.SMART_GLOVE_DEVICE, ExerciseMode.FLEX_ONLY, DeviceType.SMART_GLOVE);
+                TexTronicsManagerService.connect(mContext, DeviceList.LEFT_SHOE, ExerciseMode.FLEX_ONLY, DeviceType.SMART_SOCK);
             }
         });
 
-        mDisconnectButton.setOnClickListener(new View.OnClickListener() {
+        Button connectRightShoeBtn = findViewById(R.id.connect_btn2);
+        connectRightShoeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TexTronicsManagerService.disconnect(mContext, GattDevices.SMART_GLOVE_DEVICE);
+                TexTronicsManagerService.connect(mContext, DeviceList.RIGHT_SHOE, ExerciseMode.FLEX_ONLY, DeviceType.SMART_SOCK);
+            }
+        });
+
+        Button disconnectLeftShoeBtn = findViewById(R.id.disconnect_btn1);
+        disconnectLeftShoeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TexTronicsManagerService.disconnect(mContext, DeviceList.LEFT_SHOE);
+            }
+        });
+
+        Button disconnectRightShoeBtn = findViewById(R.id.disconnect_btn2);
+        disconnectRightShoeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TexTronicsManagerService.disconnect(mContext, DeviceList.RIGHT_SHOE);
             }
         });
     }
@@ -97,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    private void showMessage(String message) {
+        Snackbar.make(mMessageContainer, message, Snackbar.LENGTH_LONG).show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         // TODO: Handle event Permissions denied
@@ -122,26 +142,36 @@ public class MainActivity extends AppCompatActivity {
                 case ble_connecting:
                     // Connecting to Device <deviceAddress>
                     Log.d(TAG,"Connecting to " + deviceAddress);
+                    showMessage("Connecting to " + deviceAddress);
                     break;
                 case ble_connected:
                     // Device <deviceAddress> Has Been Connected
                     Log.d(TAG,"Connected to " + deviceAddress);
+                    showMessage("Connected to " + deviceAddress);
                     break;
                 case ble_disconnecting:
                     // Disconnecting from Device <deviceAddress>
                     Log.d(TAG,"Disconnecting from " + deviceAddress);
+                    showMessage("Disconnecting from " + deviceAddress);
                     break;
                 case ble_disconnected:
                     // Device <deviceAddress> Has Been Disconnected
                     Log.d(TAG,"Disconnected from " + deviceAddress);
+                    showMessage("Disconnected from " + deviceAddress);
                     break;
                 case mqtt_connected:
                     // Connected to MQTT Server
                     Log.d(TAG,"Connected to MQTT Server");
+                    showMessage("Connected to MQTT Server");
                     break;
+                case mqtt_published:
+                    // Successfully Published Data
+                    Log.d(TAG,"Published Data");
+                    showMessage("Published Data");
                 case mqtt_disconnected:
                     // Disconnected from MQTT Server
                     Log.d(TAG,"Disconnected from MQTT Server");
+                    showMessage("Disconnected from MQTT Server");
                     break;
                 default:
                     Log.w(TAG, "Unknown Update Received");

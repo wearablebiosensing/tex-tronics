@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -23,10 +25,10 @@ import edu.uri.wbl.tex_tronics.smartglove.ble.GattServices;
 import edu.uri.wbl.tex_tronics.smartglove.io.IOUtil;
 import edu.uri.wbl.tex_tronics.smartglove.mqtt.MqttConnectionService;
 import edu.uri.wbl.tex_tronics.smartglove.mqtt.MqttUpdateReceiver;
-import edu.uri.wbl.tex_tronics.smartglove.mqtt.UpdateType;
+import edu.uri.wbl.tex_tronics.smartglove.mqtt.MqttUpdate;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.devices.SmartGlove;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.devices.SmartSock;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.devices.TexTronicsDevice;
-import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.Action;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceType;
@@ -107,7 +109,7 @@ public class TexTronicsManagerService extends Service {
         intent.putExtra(EXTRA_DEVICE, deviceAddress);
         intent.putExtra(EXTRA_MODE, exerciseMode);
         intent.putExtra(EXTRA_TYPE, deviceType);
-        intent.setAction(Action.connect.toString());
+        intent.setAction(TexTronicsAction.connect.toString());
         context.startService(intent);
     }
 
@@ -128,19 +130,26 @@ public class TexTronicsManagerService extends Service {
     public static void disconnect(Context context, String deviceAddress) {
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.putExtra(EXTRA_DEVICE, deviceAddress);
-        intent.setAction(Action.disconnect.toString());
+        intent.setAction(TexTronicsAction.disconnect.toString());
         context.startService(intent);
     }
 
     public static void start(Context context) {
         Intent intent = new Intent(context, TexTronicsManagerService.class);
-        intent.setAction(Action.start.toString());
+        intent.setAction(TexTronicsAction.start.toString());
         context.startService(intent);
     }
 
     public static void stop(Context context) {
         Intent intent = new Intent(context, TexTronicsManagerService.class);
-        intent.setAction(Action.stop.toString());
+        intent.setAction(TexTronicsAction.stop.toString());
+        context.startService(intent);
+    }
+
+    public static void publish(Context context, String deviceAddress) {
+        Intent intent = new Intent(context, TexTronicsManagerService.class);
+        intent.setAction(TexTronicsAction.publish.toString());
+        intent.putExtra(EXTRA_DEVICE, deviceAddress);
         context.startService(intent);
     }
 
@@ -153,10 +162,8 @@ public class TexTronicsManagerService extends Service {
      */
     private Context mContext;
     private boolean mBleServiceBound = false;
-    private boolean mMqttServiceBound = false;
     private BluetoothLeConnectionService mBleService;
-    private MqttConnectionService mMqttService;
-    private ServiceConnection mBleServiceConnection, mMqttServiceConnection;
+    private ServiceConnection mBleServiceConnection;
 
     /**
      * Contains reference to each connected Tex-Tronics Device.
@@ -190,8 +197,6 @@ public class TexTronicsManagerService extends Service {
         // Initialize the Connection Service to interface to BluetoothLeService
         mBleServiceConnection = new BleServiceConnection();
 
-        mMqttServiceConnection = new MqttServiceConnection();
-
         // Initialize Container for Tex-Tronic Connected Devices (set the initial capacity to 4 - 2 gloves, 2 socks)
         mTexTronicsList = new HashMap<>(4);
 
@@ -200,7 +205,6 @@ public class TexTronicsManagerService extends Service {
         registerReceiver(mMqttUpdateReceiver, MqttUpdateReceiver.INTENT_FILTER);
         // Bind to BluetoothLeService. This Service provides the methods required to interact with BLE devices.
         bindService(new Intent(this, BluetoothLeConnectionService.class), mBleServiceConnection, Context.BIND_AUTO_CREATE);
-        bindService(new Intent(this, MqttConnectionService.class), mMqttServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -211,30 +215,33 @@ public class TexTronicsManagerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startID) {
-        // Initial Check of Action Packet to make sure it contains the device address and Action
+        // Initial Check of TexTronicsAction Packet to make sure it contains the device address and TexTronicsAction
         if (intent == null || intent.getAction() == null) {
-            Log.w(TAG, "Invalid Action Packet Received");
+            Log.w(TAG, "Invalid TexTronicsAction Packet Received");
             return INTENT_RETURN_POLICY;
         }
 
-        // Action to be performed on the TexTronics Device
-        Action action = Action.getAction(intent.getAction());
+        // TexTronicsAction to be performed on the TexTronics Device
+        TexTronicsAction texTronicsAction = TexTronicsAction.getAction(intent.getAction());
 
-        // Device Address of the BLE Device corresponding to this Action Packet
+        // Device Address of the BLE Device corresponding to this TexTronicsAction Packet
         String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
 
-        // Make sure it is a valid Action
-        if(action == null) {
-            Log.w(TAG, "Invalid Action Packet Received");
+        // Make sure it is a valid TexTronicsAction
+        if(texTronicsAction == null) {
+            Log.w(TAG, "Invalid TexTronicsAction Packet Received");
             return INTENT_RETURN_POLICY;
         }
 
-        // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
-        switch (action) {
+        // Execute TexTronicsAction Packet (this can be done with multi-threading to be able to Service multiple TexTronicsAction Packets at once)
+        switch (texTronicsAction) {
+            case start:
+                MqttConnectionService.connect(mContext, "kaya/patient/data", false, false,"patientid" + System.currentTimeMillis());
+                break;
             case connect: {
                 // Attempt to connect to BLE Device (Device Type and Transmitting Mode should be obtained during scan)
                 if (!intent.hasExtra(EXTRA_TYPE) || !intent.hasExtra(EXTRA_MODE)) {
-                    Log.w(TAG, "Invalid connect Action Packet Received");
+                    Log.w(TAG, "Invalid connect TexTronicsAction Packet Received");
                     return INTENT_RETURN_POLICY;
                 }
                 ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
@@ -242,6 +249,9 @@ public class TexTronicsManagerService extends Service {
                 connect(deviceAddress, exerciseMode, deviceType);
             }
             break;
+            case publish:
+                publish(deviceAddress);
+                break;
             case disconnect:
                 // Attempt to disconnect from a currently connected BLE Device
                 disconnect(deviceAddress);
@@ -259,7 +269,6 @@ public class TexTronicsManagerService extends Service {
         unregisterReceiver(mBLEUpdateReceiver);
         unregisterReceiver(mMqttUpdateReceiver);
         unbindService(mBleServiceConnection);
-        unbindService(mMqttServiceConnection);
 
         Log.d(TAG,"Service Destroyed");
 
@@ -276,6 +285,11 @@ public class TexTronicsManagerService extends Service {
                     mTexTronicsList.put(deviceAddress, smartGlove);
                     break;
                 // Add Different Devices Here
+                case SMART_SOCK:
+                    // TODO Assume connection will be successful, if connection fails we must remove it from list.
+                    SmartSock smartSock = new SmartSock(deviceAddress, exerciseMode);
+                    mTexTronicsList.put(deviceAddress, smartSock);
+                    break;
                 default:
 
                     break;
@@ -284,6 +298,21 @@ public class TexTronicsManagerService extends Service {
             mBleService.connect(deviceAddress);
         } else {
             Log.w(TAG,"Cannot Connect - BLE Connection Service is not bound yet!");
+        }
+    }
+
+    private void publish(String deviceAddress) {
+        TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
+        if(device != null) {
+            try {
+                byte[] buffer = IOUtil.readFile(device.getCsvFile());
+                String json = MqttConnectionService.generateJson(device.getDate(), device.getDeviceAddress(), new String(buffer));
+                Log.d(TAG, "Publishing to " + deviceAddress);
+                MqttConnectionService.publish(mContext, json, "/kaya/patient/data");
+                TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.mqtt_published);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -308,19 +337,6 @@ public class TexTronicsManagerService extends Service {
         }
     }
 
-    private class MqttServiceConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mMqttServiceBound = true;
-            mMqttService = ((MqttConnectionService.MqttConnectionBinder) iBinder).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mMqttServiceBound = false;
-        }
-    }
-
     private BroadcastReceiver mBLEUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -337,19 +353,6 @@ public class TexTronicsManagerService extends Service {
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTING:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnecting);
-
-                    TexTronicsDevice disconnectingDevice = mTexTronicsList.get(deviceAddress);
-                    // Send to Server via MQTT
-                    if(mMqttServiceBound) {
-                        try {
-                            byte[] buffer = IOUtil.readFile(disconnectingDevice.getCsvFile());
-                            String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(), disconnectingDevice.getDeviceAddress(), new String(buffer));
-                            Log.d("SmartGlove", "JSON: " + json);
-                            mMqttService.publishMessage(json);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTED:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnected);
@@ -359,6 +362,9 @@ public class TexTronicsManagerService extends Service {
                         Log.w(TAG, "Device not Found");
                         return;
                     }
+
+                    // Automatically Publish Data on Disconnect
+                    publish(deviceAddress);
 
                     mTexTronicsList.remove(deviceAddress);
 
@@ -380,6 +386,10 @@ public class TexTronicsManagerService extends Service {
                         byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
 
                         TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
+                        if(device == null) {
+                            Log.w(TAG,"Device Not Connected, Invalid Update");
+                            break;
+                        }
                         ExerciseMode exerciseMode = device.getExerciseMode();
 
                         try {
@@ -460,8 +470,8 @@ public class TexTronicsManagerService extends Service {
                 return;
             }
 
-            UpdateType updateType = (UpdateType)intent.getSerializableExtra(UPDATE_TYPE);
-            switch (updateType) {
+            MqttUpdate mqttUpdate = (MqttUpdate)intent.getSerializableExtra(UPDATE_TYPE);
+            switch (mqttUpdate) {
                 case connected:
                     Log.d(TAG, "MQTT Connected");
                     TexTronicsUpdateReceiver.update(mContext, null, TexTronicsUpdate.mqtt_connected);
