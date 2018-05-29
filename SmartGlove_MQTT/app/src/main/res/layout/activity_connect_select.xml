@@ -24,10 +24,12 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        style="@style/Widget.AppCompat.Button.Colored"/>
 
     <Button
         android:id="@+id/right_shoe"
+        android:textColor="@color/White"
         android:layout_width="245dp"
         android:layout_height="105dp"
         android:layout_marginBottom="72dp"
@@ -38,12 +40,13 @@
 
     <Button
         android:id="@+id/left_shoe"
+        android:textColor="@color/White"
         android:layout_width="245dp"
         android:layout_height="105dp"
         android:layout_marginBottom="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Left Shoe"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/right_shoe"
@@ -54,19 +57,19 @@
 
     <Button
         android:id="@+id/right_glove"
+        android:textColor="@color/White"
         android:layout_width="245dp"
         android:layout_height="105dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Right Glove"
-        app:layout_constraintBottom_toTopOf="@+id/right_shoe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.615" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/left_glove"
+        android:textColor="@color/White"
         android:layout_width="245dp"
         android:layout_height="105dp"
         android:layout_marginEnd="8dp"

@@ -268,14 +268,20 @@ public class TexTronicsManagerService extends Service {
 
     private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType) {
         if (mBleServiceBound) {
+            SmartGlove smartGlove;
             // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
             switch (deviceType) {
                 case SMART_GLOVE:
                     // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                    SmartGlove smartGlove = new SmartGlove(deviceAddress, exerciseMode);
+                    smartGlove = new SmartGlove(deviceAddress, exerciseMode);
                     mTexTronicsList.put(deviceAddress, smartGlove);
                     break;
                 // Add Different Devices Here
+                case SMART_SOCK:
+                    // Added the Smart Sock code, just copied from above
+                    smartGlove = new SmartGlove(deviceAddress, exerciseMode);
+                    mTexTronicsList.put(deviceAddress, smartGlove);
+                    break;
                 default:
 
                     break;

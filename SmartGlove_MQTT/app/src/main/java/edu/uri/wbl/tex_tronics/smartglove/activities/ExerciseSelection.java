@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uri.wbl.tex_tronics.smartglove.R;
-import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 
 public class ExerciseSelection extends AppCompatActivity
@@ -44,18 +43,19 @@ public class ExerciseSelection extends AppCompatActivity
     {
         // Sets up activity
         super.onCreate(savedInstanceState);
+        setTitle(R.string.ab_exercise_select);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setContentView(R.layout.exercise_selection_layout);
+        setContentView(R.layout.activity_exercise_sel);
         context = this;
         Log.e(TAG, "Creating ExerciseSelection Activity...");
 
         deviceAddressList = getIntent().getStringArrayExtra(EXTRA_DEVICE_ADDRS);
         for(String addr : deviceAddressList) {
-            Log.d("DEMO", "1 BT ADDRESS: " + addr);
+            Log.d(TAG, "1 BT ADDRESS: " + addr);
         }
         deviceTypeList = getIntent().getStringArrayExtra(EXTRA_DEVICE_TYPES);
         for(String type : deviceTypeList) {
-            Log.d("DEMO", "1 DEVICE TYPE: " + type);
+            Log.d(TAG, "1 DEVICE TYPE: " + type);
         }
         exerciseModes = new ArrayList<>();
 
@@ -139,23 +139,35 @@ public class ExerciseSelection extends AppCompatActivity
         intent.putExtra(EXTRA_DEVICE_ADDRS, deviceAddresses);
         intent.putExtra(EXTRA_DEVICE_TYPES, deviceTypes);
         for(String addr : deviceAddressList) {
-            Log.d("DEMO", "BT ADDRESS: " + addr);
+            Log.d(TAG, "BT ADDRESS: " + addr);
         }
         context.startActivity(intent);
     }
 
     private void launchInstructionActivity(int selection)
     {
-        Log.v(TAG, "Launching GloveExercise Activity...");
-        exerciseSelection = selection;
-        Intent intent = new Intent(context, GloveExerciseActivity.class);
-        String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
-        intent.putExtra(EXTRA_DEVICE_ADDRS, deviceAddressList);
-        intent.putExtra(EXTRA_DEVICE_TYPES, deviceTypeList);
-        intent.putExtra(EXTRA_EXERCISE_MODES, exerciseModeArray);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        if(selection <= 3)
+        {
+            Log.v(TAG, "Launching GloveExercise Activity...");
+            exerciseSelection = selection;
+            Intent intent = new Intent(context, GloveExerciseActivity.class);
+            String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
+            intent.putExtra(EXTRA_DEVICE_ADDRS, deviceAddressList);
+            intent.putExtra(EXTRA_DEVICE_TYPES, deviceTypeList);
+            intent.putExtra(EXTRA_EXERCISE_MODES, exerciseModeArray);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            exerciseSelection = selection;
+            Log.v(TAG, "Launching ExerciseSelection Activity...");
+            Intent intent = new Intent(context, ExerciseInstructions.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void checkCompletion()

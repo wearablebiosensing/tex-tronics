@@ -1,7 +1,6 @@
 package edu.uri.wbl.tex_tronics.smartglove.activities;
 
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,31 +13,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import edu.uri.wbl.tex_tronics.smartglove.R;
 import edu.uri.wbl.tex_tronics.smartglove.ble.BluetoothLeConnectionService;
-import edu.uri.wbl.tex_tronics.smartglove.ble.BluetoothLeUpdateReceiver;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattCharacteristics;
-import edu.uri.wbl.tex_tronics.smartglove.ble.GattServices;
-import edu.uri.wbl.tex_tronics.smartglove.io.IOUtil;
 import edu.uri.wbl.tex_tronics.smartglove.io.SmartGloveInterface;
-import edu.uri.wbl.tex_tronics.smartglove.mqtt.MqttConnectionService;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsManagerService;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdate;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdateReceiver;
-import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.devices.TexTronicsDevice;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
-import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.visualize.GenerateGraph;
 
 public class GloveExerciseActivity extends AppCompatActivity implements SmartGloveInterface
@@ -83,7 +76,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         // Sets up screen
         super.onCreate(savedInstanceBundle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setContentView(R.layout.glove_exercise_layout);
+        setContentView(R.layout.activity_glove_exercise);
 
         mContext = this;
 
@@ -148,7 +141,10 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         disconnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Disconnect Code
+                for(String address : deviceAddresses)
+                {
+                    TexTronicsManagerService.disconnect(mContext, address);
+                }
             }
         });
     }
@@ -252,42 +248,6 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         }
     }
 
-    @Override
-    public void onBackPressed()
-    {
-//        processData.setHandler(null);
-        Intent intent = this.getParentActivityIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-
-        registerReceiver(mBLEUpdateReceiver, new IntentFilter(BluetoothLeConnectionService.INTENT_FILTER_STRING));
-        registerReceiver(mTexTronicsUpdateReceiver, TexTronicsUpdateReceiver.INTENT_FILTER);
-    }
-
-    @Override
-    protected void onStop()
-    {
-//        processData.setHandler(null);
-        unregisterReceiver(mTexTronicsUpdateReceiver);
-        unregisterReceiver(mBLEUpdateReceiver);
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        TexTronicsManagerService.stop(mContext);
-
-        super.onDestroy();
-    }
-
     private void addEntry(int thumb, int index)
     {
         Log.e("MainActivity", "Thumb: " + thumb + " Index: " + index);
@@ -384,4 +344,40 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
             }
         }
     };
+
+    @Override
+    public void onBackPressed()
+    {
+        List<String> addressList = Arrays.asList(deviceAddresses);
+        List<String> devicesList = Arrays.asList(deviceTypes);
+//        processData.setHandler(null);
+        ExerciseSelection.start(mContext, addressList, devicesList);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        registerReceiver(mBLEUpdateReceiver, new IntentFilter(BluetoothLeConnectionService.INTENT_FILTER_STRING));
+        registerReceiver(mTexTronicsUpdateReceiver, TexTronicsUpdateReceiver.INTENT_FILTER);
+    }
+
+    @Override
+    protected void onStop()
+    {
+//        processData.setHandler(null);
+        unregisterReceiver(mTexTronicsUpdateReceiver);
+        unregisterReceiver(mBLEUpdateReceiver);
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        TexTronicsManagerService.stop(mContext);
+
+        super.onDestroy();
+    }
 }

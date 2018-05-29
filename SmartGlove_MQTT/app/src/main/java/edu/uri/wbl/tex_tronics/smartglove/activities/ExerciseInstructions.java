@@ -25,7 +25,7 @@ public class ExerciseInstructions extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setContentView(R.layout.exercise_instructions_layout);
+        setContentView(R.layout.activity_exercise_instr);
         Log.e(TAG, "Creating ExerciseInstructions Activity...");
 
         context = this;

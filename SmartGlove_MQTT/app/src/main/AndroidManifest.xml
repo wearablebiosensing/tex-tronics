@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity"
+        <activity
+            android:name=".activities.MainActivity"
             android:screenOrientation="landscape"
             >
             <intent-filter>
@@ -25,17 +27,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- Actual Second Activity -->
+        <!-- Second Activity -->
         <activity
             android:name=".activities.ConnectionSelection"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="landscape" />
-        <!-- Second Activity -->
+        <!-- Third Activity -->
         <activity
             android:name=".activities.ExerciseSelection"
             android:parentActivityName=".activities.ConnectionSelection"
             android:screenOrientation="landscape" />
-        <!-- Third Activity -->
+        <!-- Fourth Activity -->
         <activity
             android:name=".activities.ExerciseInstructions"
             android:parentActivityName=".activities.ExerciseSelection"

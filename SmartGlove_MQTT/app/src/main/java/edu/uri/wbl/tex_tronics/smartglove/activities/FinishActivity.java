@@ -21,7 +21,7 @@ public class FinishActivity extends AppCompatActivity
         Log.e(TAG, "Creating Finish Activity...");
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setContentView(R.layout.finish_layout);
+        setContentView(R.layout.activity_finish);
 
 //        GatherCSVData gatherCSVData = new GatherCSVData();
 //        gatherCSVData.logFingerTap(this);

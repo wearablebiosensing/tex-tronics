@@ -3,6 +3,7 @@ package edu.uri.wbl.tex_tronics.smartglove.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +17,8 @@ public class ScreenTapActivity extends AppCompatActivity
     private static final String TAG = "ScreenTapActivity";
     private static final int    REQUIRED_TAPS = 10;
     private static Context context;
-    private ImageButton screenTapButton;
     private TextView screenTapCount;
+    private ConstraintLayout constraintLayout;
     private int         count = 0;
     private long startTime;
 
@@ -27,34 +28,30 @@ public class ScreenTapActivity extends AppCompatActivity
         Log.e(TAG, "Creating ScreenTap Activity...");
         super.onCreate(savedInstanceBundle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setContentView(R.layout.screen_tap_layout);
+        setContentView(R.layout.activity_screen_tap);
         context = this;
         startTime = System.currentTimeMillis();
 
-        screenTapButton = (ImageButton) findViewById(R.id.screen_tap_button);
         screenTapCount = (TextView) findViewById(R.id.screen_tap_count);
+        constraintLayout = findViewById(R.id.screenTapLayout);
+    }
 
-        screenTapButton.setOnClickListener(new View.OnClickListener()
+    public void screenTapped(View view)
+    {
+        count++;
+        if(count < REQUIRED_TAPS)
         {
-            @Override
-            public void onClick(View v)
-            {
-                count++;
-                if(count < REQUIRED_TAPS)
-                {
-                    screenTapCount.setText("" + count);
-                }
-                else
-                {
+            screenTapCount.setText("" + count);
+        }
+        else
+        {
 //                    GatherCSVData.writeScreenTap((System.currentTimeMillis() - startTime) / 1000);
-                    ExerciseSelection.exerciseComplete(4);
-                    Intent intent = new Intent(context, ExerciseSelection.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
+            // ExerciseSelection.exerciseComplete(4);
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
 
