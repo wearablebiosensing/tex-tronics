@@ -34,8 +34,8 @@ def message_handler(client,msg,topic):
     data=dict()
     tnow=time.localtime(time.time())
     m=time.asctime(tnow)+" "+topic+" "+msg
-    data["time"]=tnow
-    data["topic"]=topic
+    #data["time"]=tnow
+    #data["topic"]=topic
     data["message"]=msg
     if command.options["storechangesonly"]:
         if has_changed(client,topic,msg):
