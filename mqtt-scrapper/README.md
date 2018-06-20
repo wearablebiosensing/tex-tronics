@@ -32,11 +32,11 @@ Example Usage:
 
 You will always need to specify the broker name or IP address and the topics to log
 
-Specify broker and topics:     python3 mqtt_data_logger.py -b 192.168.1.157 -t sensors/#
-Specify broker and multiple topics:    python3 mqtt_data_logger.py -b 192.168.1.157 -t sensors/# -t  home/#
-Log All Data:    python3 mqtt_data_logger.py b 192.168.1.157 -t sensors/# -s 
-Specify the client name used by the logger:    python3 mqtt_data_logger.py b 192.168.1.157 -t sensors/# -n data-logger
-Specify the log directory:    python3 mqtt_data_logger.py b 192.168.1.157 -t sensors/# -l mylogs
+Specify broker and topics:     python3 mqtt-data-logger.py -t wbl/#
+Specify broker and multiple topics:    python3 mqtt-data-logger.py -t wbl/# -t  kaya/#
+Log All Data:    python3 mqtt-data-logger.py b fog.wbl.cloud -t wbl/# -s 
+Specify the client name used by the logger:    python3 mqtt_data_logger.py b fog.wbl.cloud -t wbl/# -n data-logger
+Specify the log directory:    python3 mqtt_data_logger.py b fog.wbl.cloud -t wbl/# -l mylogs
 
 ---------
 Logger
