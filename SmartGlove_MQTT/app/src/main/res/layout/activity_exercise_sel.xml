@@ -2,57 +2,44 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    android:background="@color/colorPrimary">
+    tools:context=".activities.ExerciseSelection">
 
     <LinearLayout
         android:id="@+id/col1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/col1"
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <RelativeLayout
+        <!--New-->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/fingertap_button"
+            <edu.uri.wbl.tex_tronics.smartglove.visualize.ExerciseView
+                android:id="@+id/exercise_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@null"
-                app:srcCompat="@null" />
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:scaleType="centerInside">
 
-            <ImageView
-                android:id="@+id/fingertapImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/fingertapicon" />
+                <com.yarolegovich.discretescrollview.DiscreteScrollView
+                    android:id="@+id/exercise_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="0dp"
+                    android:onClick="onClick" />
+            </edu.uri.wbl.tex_tronics.smartglove.visualize.ExerciseView>
 
-            <TextView
-                android:id="@+id/fingertapText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/fingertapImage"
-                android:layout_alignEnd="@+id/fingertapImage"
-                android:layout_alignStart="@+id/fingertapImage"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Finger Tap"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp" />
-        </RelativeLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -60,143 +47,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorAccent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <ImageButton
-                android:id="@+id/closedgrip_button"
+            <Button
+                android:id="@+id/continue_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@null"
-                app:srcCompat="@null" />
-
-            <ImageView
-                android:id="@+id/closedgripImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/closedgripicon" />
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Continue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.AppCompat.Button.Colored"/>
 
-            <TextView
-                android:id="@+id/closedgripText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/closedgripImage"
-                android:layout_alignParentStart="true"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Closed Grip"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/col3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/col3"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/handflip_button"
+            <ListView
+                android:id="@+id/listView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_height="238dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:background="@null"
-                app:srcCompat="@null" />
-
-            <ImageView
-                android:id="@+id/handflipImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/handflipicon" />
-
-            <TextView
-                android:id="@+id/handflipText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/handflipImage"
-                android:layout_alignParentStart="true"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Hand Flip"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp" />
-
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/col4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/col4"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/screentap_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@null"
-                app:srcCompat="@null" />
-
-            <ImageView
-                android:id="@+id/screentapImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/screentapicon" />
-
-            <TextView
-                android:id="@+id/screentapText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/screentapImage"
-                android:layout_alignParentStart="true"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Screen Tap"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp" />
-
-        </RelativeLayout>
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/continue_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 

@@ -296,6 +296,7 @@ public class TexTronicsManagerService extends Service {
     private void disconnect(String deviceAddress) {
         if (mBleServiceBound) {
             mBleService.disconnect(deviceAddress);
+
         } else {
             Log.w(TAG,"Could not Disconnect - BLE Connection Service is not bound!");
         }
@@ -387,62 +388,67 @@ public class TexTronicsManagerService extends Service {
                         byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
 
                         TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
-                        ExerciseMode exerciseMode = device.getExerciseMode();
+                        ExerciseMode exerciseMode = null;
+                        if(device != null)
+                            exerciseMode = device.getExerciseMode();
 
-                        try {
-                            switch (exerciseMode) {
-                                case FLEX_IMU:
-                                    // Move data processing into Data Model?
-                                    if (data[0] == PACKET_ID_1) {
-                                        device.clear();
-                                        device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                        device.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                        device.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
-                                        // TODO: Add rest of fingers
-                                    } else if (data[0] == PACKET_ID_2) {
-                                        device.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
-                                        device.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
-                                        device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
-                                        device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                        device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
-                                        device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
-                                        device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
-                                        device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
-                                        device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
+                        if(exerciseMode != null)
+                        {
+                            try {
+                                switch (exerciseMode) {
+                                    case FLEX_IMU:
+                                        // Move data processing into Data Model?
+                                        if (data[0] == PACKET_ID_1) {
+                                            device.clear();
+                                            device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                                            device.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                            device.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
+                                            // TODO: Add rest of fingers
+                                        } else if (data[0] == PACKET_ID_2) {
+                                            device.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
+                                            device.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
+                                            device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
+                                            device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
+                                            device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+                                            device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
+                                            device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+                                            device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
+                                            device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
+
+                                            device.logData(mContext);
+                                        } else {
+                                            Log.w(TAG, "Invalid Data Packet");
+                                            return;
+                                        }
+                                        break;
+                                    case FLEX_ONLY:
+                                        // First Data Set
+                                        device.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
+                                        device.setThumbFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
+                                        device.setIndexFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
 
                                         device.logData(mContext);
-                                    } else {
-                                        Log.w(TAG, "Invalid Data Packet");
-                                        return;
-                                    }
-                                    break;
-                                case FLEX_ONLY:
-                                    // First Data Set
-                                    device.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
-                                    device.setThumbFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
-                                    device.setIndexFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
 
-                                    device.logData(mContext);
+                                        // Second Data Set
+                                        device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
+                                        device.setThumbFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
+                                        device.setIndexFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
 
-                                    // Second Data Set
-                                    device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
-                                    device.setThumbFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
-                                    device.setIndexFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
+                                        device.logData(mContext);
 
-                                    device.logData(mContext);
+                                        // Third Data Set
+                                        device.setTimestamp((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
+                                        device.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
+                                        device.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
 
-                                    // Third Data Set
-                                    device.setTimestamp((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
-                                    device.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
-                                    device.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-
-                                    device.logData(mContext);
-                                    break;
+                                        device.logData(mContext);
+                                        break;
+                                }
+                            } catch (IllegalDeviceType | IOException e) {
+                                Log.e(TAG, e.toString());
+                                // TODO Handle Error Event
+                                return;
                             }
-                        } catch (IllegalDeviceType | IOException e) {
-                            Log.e(TAG, e.toString());
-                            // TODO Handle Error Event
-                            return;
                         }
                     }
                     break;

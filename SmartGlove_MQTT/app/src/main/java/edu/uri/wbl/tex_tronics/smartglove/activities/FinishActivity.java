@@ -34,7 +34,6 @@ public class FinishActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                exerciseSelection.resetCompletion();
                 onBackPressed();
             }
         });

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -27,18 +28,22 @@ import edu.uri.wbl.tex_tronics.smartglove.R;
 import edu.uri.wbl.tex_tronics.smartglove.ble.BluetoothLeConnectionService;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattCharacteristics;
 import edu.uri.wbl.tex_tronics.smartglove.io.SmartGloveInterface;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsExerciseManager;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsManagerService;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdate;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdateReceiver;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 import edu.uri.wbl.tex_tronics.smartglove.visualize.GenerateGraph;
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 public class GloveExerciseActivity extends AppCompatActivity implements SmartGloveInterface
 {
     private static final String TAG = "GloveExerciseActivity";
     private static final String COUNTER_TEXT = "Repetitions: ";
 
+    private static final String EXERCISE_NAME = "uri.wbl.tex_tronics.name";
     private static final String EXTRA_DEVICE_ADDRS = "uri.wbl.tex_tronics.devices";
     private static final String EXTRA_DEVICE_TYPES = "uri.wbl.tex_tronics.device_types";
     private static final String EXTRA_EXERCISE_MODES = "uri.wbl.tex_tronics.exercise_modes";
@@ -65,7 +70,9 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     private String[] deviceTypes;
     private String[] exerciseModes;
 
-    private Button disconnectBtn;
+    private Button disconnectBtn, nextButton;
+    private TextView sideInstructionsText;
+    private GifImageView sideImage;
 
     private Context mContext;
 
@@ -77,28 +84,39 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         super.onCreate(savedInstanceBundle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setContentView(R.layout.activity_glove_exercise);
-
         mContext = this;
 
         TexTronicsManagerService.start(mContext);
 
+        // Set screen name
         Intent intent = getIntent();
         if(intent == null) {
+            setTitle("Exercise");
             return;
         }
+        String name = intent.getStringExtra(EXERCISE_NAME);
+        setTitle(name);
 
-        deviceAddresses = intent.getStringArrayExtra(EXTRA_DEVICE_ADDRS);
-        deviceTypes = intent.getStringArrayExtra(EXTRA_DEVICE_TYPES);
-        exerciseModes = intent.getStringArrayExtra(EXTRA_EXERCISE_MODES);
+        sideInstructionsText = findViewById(R.id.exercise_side_text);
+        sideImage = findViewById(R.id.exercise_side_image);
+        if(intent != null)
+            setSideViews(name);
+
+        deviceAddresses = TexTronicsExerciseManager.getmDeviceAddressList();
+        deviceTypes = TexTronicsExerciseManager.getmDeviceTypeList();
+        exerciseModes = TexTronicsExerciseManager.getmExerciseModes();
+
+//        deviceAddresses = intent.getStringArrayExtra(EXTRA_DEVICE_ADDRS);
+//        deviceTypes = intent.getStringArrayExtra(EXTRA_DEVICE_TYPES);
+//        exerciseModes = intent.getStringArrayExtra(EXTRA_EXERCISE_MODES);
 
         if(deviceAddresses == null) {
             return;
         }
 
         // Sets up the repetition counter on the GUI
-
         count = 0;
-        graph = (GraphView) findViewById(R.id.graph);
+        graph = findViewById(R.id.graph);
         graph = GenerateGraph.makeGraph(graph);
         series1 = new LineGraphSeries<>();
         // Thumb
@@ -108,8 +126,6 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         // Index
         series2.setColor(Color.GREEN);
         graph.addSeries(series2);
-
-//        final GatherCSVData gatherCSVData = new GatherCSVData();
 
         // Gets the current time for graph timer
         startTime = System.currentTimeMillis();
@@ -147,7 +163,63 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                 }
             }
         });
+
+        nextButton = findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = getIntent();
+                finish();
+                TexTronicsExerciseManager.startExercise(intent, mContext);
+            }
+        });
     }
+
+    /** setSideViews
+     *  Sets the side instruction views to correspond with the active exercise
+     * @param name: Uses the name of the exercise to check what the views should be set to
+     */
+    private void setSideViews(String name)
+    {
+        if (name.equals("Finger Tap"))
+        {
+            sideInstructionsText.setText(InstructionsText.FINGER_TAP_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.FINGER_TAP_GIF);
+        }
+        else if (name.equals("Closed Grip"))
+        {
+            sideInstructionsText.setText(InstructionsText.CLOSED_GRIP_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.CLOSED_GRIP_GIF);
+        }
+        else if (name.equals("Hand Flip"))
+        {
+            sideInstructionsText.setText(InstructionsText.HAND_FLIP_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.HAND_FLIP_GIF);
+        }
+        else if (name.equals("Heel Tap"))
+        {
+            sideInstructionsText.setText(InstructionsText.HEEL_TAP_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.HEEL_TAP_GIF);
+        }
+        else if (name.equals("Toe Tap"))
+        {
+            sideInstructionsText.setText(InstructionsText.TOE_TAP_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.TOE_TAP_GIF);
+        }
+        else if (name.equals("Foot Stomp"))
+        {
+            sideInstructionsText.setText(InstructionsText.FOOT_STOMP_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.FOOT_STOMP_GIF);
+        }
+        else if (name.equals("Walk Steps"))
+        {
+            sideInstructionsText.setText(InstructionsText.WALK_STEPS_TEXT);
+            sideImage.setBackgroundResource(InstructionsImage.WALK_STEPS_GIF);
+        }
+    }
+
+
 
     /** setExerciseSelection(int selection)
      *
@@ -203,8 +275,6 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                     // Save the entry lists so that they can be converted into CSV files
 //                    GatherCSVData.writeFingerTap(indexEntries, thumbEntries, xAxis);
 
-                    // Tell the exercise selection screen that this exercise is completed
-                    ExerciseSelection.exerciseComplete(selectedExercise);
 
                     // Return to the exercise selection screen
                     Intent intent = new Intent(this, ExerciseSelection.class);
@@ -228,13 +298,8 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
             case 2:
                 if(count == REQUIRED_REPS)
                 {
-//                    processData.setHandler(null);
                     try{Thread.sleep(250);}
                     catch(Exception e){Log.d(TAG, "Could not sleep due to exception " + e);}
-
-//                    GatherCSVData.writeClosedGrip(indexEntries, thumbEntries, xAxis);
-                    ExerciseSelection.exerciseComplete(selectedExercise);
-
                     Intent intent = new Intent(this, ExerciseSelection.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -377,7 +442,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     @Override
     protected void onDestroy() {
         TexTronicsManagerService.stop(mContext);
-
+        Log.i(TAG, "Dead as shit");
         super.onDestroy();
     }
 }

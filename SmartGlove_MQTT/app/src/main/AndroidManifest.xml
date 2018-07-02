@@ -51,7 +51,8 @@
         <activity
             android:name=".activities.GloveExerciseActivity"
             android:parentActivityName=".activities.ExerciseInstructions"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:noHistory="true"/>
         <activity
             android:name=".activities.ScreenTapActivity"
             android:parentActivityName=".activities.ExerciseInstructions"

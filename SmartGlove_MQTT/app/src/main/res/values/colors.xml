@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Main Colors -->
     <color name="colorPrimary">#4CAF50</color>
     <color name="colorPrimaryDark">#388E3C</color>
     <color name="colorPrimaryLight">#C8E6C9</color>
@@ -9,4 +10,62 @@
     <color name="col1">#42D9C8</color>
     <color name="col3">#0B7189</color>
     <color name="col4">#28464B</color>
+
+    <!-- Exercise Selection Colors -->
+    <color name="grayIconTint">#727272</color>
+
+    <!-- Finger Tap -->
+    <color name="gradientFingerTap_c1">#3453d1</color>
+    <color name="gradientFingerTap_c2">#6d69ff</color>
+    <color name="gradientFingerTap_c3">#cd47c6</color>
+
+    <array name="gradientFingerTap">
+        <item>@color/gradientFingerTap_c1</item>
+        <item>@color/gradientFingerTap_c2</item>
+        <item>@color/gradientFingerTap_c3</item>
+    </array>
+
+    <!-- Closed Grip -->
+    <color name="gradientClosedGrip_c1">#62bff5</color>
+    <color name="gradientClosedGrip_c2">#61b3e5</color>
+    <color name="gradientClosedGrip_c3">#5d8fb2</color>
+
+    <array name="gradientClosedGrip">
+        <item>@color/gradientClosedGrip_c1</item>
+        <item>@color/gradientClosedGrip_c2</item>
+        <item>@color/gradientClosedGrip_c3</item>
+    </array>
+
+    <!-- Hand Flip -->
+    <color name="gradientHandFlip_c1">#51bbf5</color>
+    <color name="gradientHandFlip_c2">#71c3ee</color>
+    <color name="gradientHandFlip_c3">#f3e5d2</color>
+
+    <array name="gradientHandFlip">
+        <item>@color/gradientHandFlip_c1</item>
+        <item>@color/gradientHandFlip_c2</item>
+        <item>@color/gradientHandFlip_c3</item>
+    </array>
+
+    <!-- Screen Tap -->
+    <color name="gradientScreenTap_c1">#5b64be</color>
+    <color name="gradientScreenTap_c2">#6084df</color>
+    <color name="gradientScreenTap_c3">#64a2ff</color>
+
+    <array name="gradientScreenTap">
+        <item>@color/gradientScreenTap_c1</item>
+        <item>@color/gradientScreenTap_c2</item>
+        <item>@color/gradientScreenTap_c3</item>
+    </array>
+
+    <!-- Heel Tap -->
+    <color name="gradientHeelTap_c1">#6d4fbe</color>
+    <color name="gradientHeelTap_c2">#6c56be</color>
+    <color name="gradientHeelTap_c3">#a189f1</color>
+
+    <array name="gradientHeelTap">
+        <item>@color/gradientHeelTap_c1</item>
+        <item>@color/gradientHeelTap_c2</item>
+        <item>@color/gradientHeelTap_c3</item>
+    </array>
 </resources>

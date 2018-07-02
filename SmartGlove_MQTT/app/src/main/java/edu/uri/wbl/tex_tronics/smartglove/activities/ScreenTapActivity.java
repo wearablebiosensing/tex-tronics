@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import edu.uri.wbl.tex_tronics.smartglove.R;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsExerciseManager;
 
 public class ScreenTapActivity extends AppCompatActivity
 {
@@ -47,9 +48,8 @@ public class ScreenTapActivity extends AppCompatActivity
         {
 //                    GatherCSVData.writeScreenTap((System.currentTimeMillis() - startTime) / 1000);
             // ExerciseSelection.exerciseComplete(4);
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            Intent intent = new Intent(this, GloveExerciseActivity.class);
+            TexTronicsExerciseManager.startExercise(intent, context);
             finish();
         }
     }
