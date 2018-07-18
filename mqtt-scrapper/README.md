@@ -29,14 +29,17 @@ Valid command line Options:
 	-f <number of log files default= unlimited"
 
 Example Usage:
-
 You will always need to specify the broker name or IP address and the topics to log
 
-Specify broker and topics:     python3 mqtt-data-logger.py -t wbl/#
-Specify broker and multiple topics:    python3 mqtt-data-logger.py -t wbl/# -t  kaya/#
-Log All Data:    python3 mqtt-data-logger.py b fog.wbl.cloud -t wbl/# -s 
-Specify the client name used by the logger:    python3 mqtt_data_logger.py b fog.wbl.cloud -t wbl/# -n data-logger
-Specify the log directory:    python3 mqtt_data_logger.py b fog.wbl.cloud -t wbl/# -l mylogs
+1. Specify broker and topics:     python3 mqtt-data-logger.py -t wbl/#
+
+2. Specify broker and multiple topics:    python3 mqtt-data-logger.py -t wbl/# -t  kaya/#
+
+3. Log All Data:    python3 mqtt-data-logger.py b fog.wbl.cloud -t wbl/# -s 
+
+4. Specify the client name used by the logger:    python3 mqtt_data_logger.py b fog.wbl.cloud -t wbl/# -n data-logger
+
+5. Specify the log directory:    python3 mqtt_data_logger.py b fog.wbl.cloud -t wbl/# -l mylogs
 
 ---------
 Logger
