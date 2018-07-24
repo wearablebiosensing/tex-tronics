@@ -1,0 +1,117 @@
+2018-05-21 09:37:53,860 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:38:27,436 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:39:19,990 ERROR: Exception on /register [POST] [in /Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py:1560]
+Traceback (most recent call last):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1182, in _execute_context
+    context)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 470, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/kabuki/Desktop/wblblog-summer/app/routes.py", line 85, in register
+    if form.validate_on_submit():
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask_wtf/form.py", line 101, in validate_on_submit
+    return self.is_submitted() and self.validate()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/wtforms/form.py", line 310, in validate
+    return super(Form, self).validate(extra)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/wtforms/form.py", line 152, in validate
+    if not field.validate(self, extra):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/wtforms/fields/core.py", line 204, in validate
+    stop_validation = self._run_validation_chain(form, chain)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/wtforms/fields/core.py", line 224, in _run_validation_chain
+    validator(form, self)
+  File "/Users/kabuki/Desktop/wblblog-summer/app/forms.py", line 25, in validate_username
+    user = User.query.filter_by(username=username.data).first()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 2755, in first
+    ret = list(self[0:1])
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 2547, in __getitem__
+    return list(res)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 2855, in __iter__
+    return self._execute_and_instances(context)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 2878, in _execute_and_instances
+    result = conn.execute(querycontext.statement, self._params)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 945, in execute
+    return meth(self, multiparams, params)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/sql/elements.py", line 263, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1053, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1189, in _execute_context
+    context)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1402, in _handle_dbapi_exception
+    exc_info
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 203, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1182, in _execute_context
+    context)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 470, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user [SQL: 'SELECT user.id AS user_id, user.username AS user_username, user.email AS user_email, user.password_hash AS user_password_hash, user.about_me AS user_about_me, user.last_seen AS user_last_seen \nFROM user \nWHERE user.username = ?\n LIMIT ? OFFSET ?'] [parameters: ('kabuki4774', 1, 0)]
+2018-05-21 09:41:20,156 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:41:56,666 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:42:34,135 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:42:39,728 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:42:48,934 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:43:10,986 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:53:28,364 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:53:32,591 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:53:36,743 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:54:16,376 ERROR: Exception on /edit_profile [POST] [in /Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py:1560]
+Traceback (most recent call last):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask_login/utils.py", line 228, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/kabuki/Desktop/wblblog-summer/app/routes.py", line 148, in edit_profile
+    current_user.personality = forma.personality.data
+NameError: name 'forma' is not defined
+2018-05-21 09:54:49,154 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:59:11,993 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:59:17,241 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:59:21,018 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 09:59:23,845 ERROR: Exception on /edit_profile [GET] [in /Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py:1560]
+Traceback (most recent call last):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask_login/utils.py", line 228, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/kabuki/Desktop/wblblog-summer/app/routes.py", line 158, in edit_profile
+    form.traits.data = current_user.traits
+AttributeError: 'EditProfileForm' object has no attribute 'traits'
