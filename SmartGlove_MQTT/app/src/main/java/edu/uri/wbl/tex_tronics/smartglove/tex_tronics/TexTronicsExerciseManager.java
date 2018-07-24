@@ -12,6 +12,7 @@ import java.util.List;
 
 import edu.uri.wbl.tex_tronics.smartglove.activities.ExerciseInstructions;
 import edu.uri.wbl.tex_tronics.smartglove.activities.ExerciseSelection;
+import edu.uri.wbl.tex_tronics.smartglove.activities.FinishActivity;
 import edu.uri.wbl.tex_tronics.smartglove.activities.GloveExerciseActivity;
 import edu.uri.wbl.tex_tronics.smartglove.activities.MainActivity;
 import edu.uri.wbl.tex_tronics.smartglove.activities.ScreenTapActivity;
@@ -30,6 +31,7 @@ public class TexTronicsExerciseManager
     public static void setManager(String[] deviceAddressList, String[] deviceTypeList,
                                   String[] exerciseChoices, String[] exerciseModes)
     {
+        Log.v(TAG, "Setting T.T Exercise Manager");
         mDeviceAddressList = deviceAddressList;
         mDeviceTypeList = deviceTypeList;
         mExerciseChoices = exerciseChoices;
@@ -38,11 +40,23 @@ public class TexTronicsExerciseManager
         mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
     }
 
+    public static void clearManager()
+    {
+        Log.v(TAG, "Clearing T.T Exercise Manager");
+        mDeviceAddressList = null;
+        mDeviceTypeList = null;
+        mExerciseChoices = null;
+        mExerciseModes = null;
+    }
+
+
     public static void startExercise(Context mContext)
     {
-        if(mNames.size() > 0)
+        Log.v(TAG, "Starting T.T Exercise...");
+        if(mExerciseChoices.length > 0)
         {
-            String nextExercise = mNames.pop();
+            String nextExercise = mExerciseChoices[0];
+            mExerciseChoices = Arrays.copyOfRange(mExerciseChoices, 1, mExerciseChoices.length);
 
             Intent intent = new Intent(mContext, ExerciseInstructions.class);
             intent.putExtra(EXERCISE_NAME, nextExercise);
@@ -68,7 +82,7 @@ public class TexTronicsExerciseManager
         }
         else
         {
-            Intent intent = new Intent(mContext, MainActivity.class);
+            Intent intent = new Intent(mContext, FinishActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             mContext.startActivity(intent);

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import edu.uri.wbl.tex_tronics.smartglove.R;
+import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsExerciseManager;
 
 public class FinishActivity extends AppCompatActivity
 {
@@ -23,12 +24,8 @@ public class FinishActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setContentView(R.layout.activity_finish);
 
-//        GatherCSVData gatherCSVData = new GatherCSVData();
-//        gatherCSVData.logFingerTap(this);
-//        gatherCSVData.logScreenTap(this);
-
         exerciseSelection = new ExerciseSelection();
-        returnButton = (Button) findViewById(R.id.return_button);
+        returnButton = findViewById(R.id.return_button);
         returnButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -37,6 +34,10 @@ public class FinishActivity extends AppCompatActivity
                 onBackPressed();
             }
         });
+
+        TexTronicsExerciseManager.clearManager();
+        ExerciseSelection.listItems.clear();
+        ExerciseSelection.adapter.clear();
     }
 
     @Override

@@ -11,6 +11,7 @@
     <string name="disconnected">Disconnected</string>
     <string name="title_devices">BLE Device Scan</string>
     <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="finish_return">Return</string>
 
     <!-- Unknown Attributes -->
     <string name="unknown_device">Unknown device</string>

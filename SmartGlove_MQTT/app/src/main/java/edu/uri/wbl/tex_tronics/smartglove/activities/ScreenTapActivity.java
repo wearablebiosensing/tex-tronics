@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Arrays;
+import java.util.List;
+
 import edu.uri.wbl.tex_tronics.smartglove.R;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsExerciseManager;
 
@@ -60,9 +63,10 @@ public class ScreenTapActivity extends AppCompatActivity
     public void onBackPressed()
     {
         Log.e(TAG, "Back pressed. Navigating to " + getParentActivityIntent());
-        Intent intent = this.getParentActivityIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        List<String> addressList = Arrays.asList(TexTronicsExerciseManager.getmDeviceAddressList());
+        List<String> devicesList = Arrays.asList(TexTronicsExerciseManager.getmDeviceTypeList());
+
+        ExerciseSelection.start(context, addressList, devicesList);
         super.onBackPressed();
     }
 
