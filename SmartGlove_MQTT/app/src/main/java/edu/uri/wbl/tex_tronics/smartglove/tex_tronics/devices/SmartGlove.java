@@ -18,6 +18,7 @@ import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.data_types.FlexOnlyData;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.data_types.TexTronicsData;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceType;
+import edu.uri.wbl.tex_tronics.smartglove.visualize.Choice;
 
 /**
  * Created by mcons on 2/28/2018.
@@ -29,8 +30,8 @@ import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceTy
 public class SmartGlove extends TexTronicsDevice {
     private TexTronicsData mData;
 
-    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode) {
-        super(deviceAddress, exerciseMode);
+    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice) {
+        super(deviceAddress, exerciseMode, choice);
 
         mDeviceAddress = deviceAddress;
 
