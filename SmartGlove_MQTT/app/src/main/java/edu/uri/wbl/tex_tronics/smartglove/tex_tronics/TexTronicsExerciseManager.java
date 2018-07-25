@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,7 @@ public class TexTronicsExerciseManager
     private static String[] mDeviceTypeList;
     private static String[] mExerciseChoices;
     private static String[] mExerciseModes;
+    private static ArrayDeque<String> mNames;
     private static Intent testIntent;
 
     public static void setManager(String[] deviceAddressList, String[] deviceTypeList,
@@ -34,6 +36,7 @@ public class TexTronicsExerciseManager
         mDeviceTypeList = deviceTypeList;
         mExerciseChoices = exerciseChoices;
         mExerciseModes = exerciseModes;
+        mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
     }
 
     public static void clearManager()
@@ -45,17 +48,12 @@ public class TexTronicsExerciseManager
         mExerciseModes = null;
     }
 
-
     public static void startExercise(Context mContext)
     {
-<<<<<<< HEAD
         Log.v(TAG, "Starting T.T Exercise...");
-=======
->>>>>>> parent of 6d2b3a4... Added MQTT Reattempt send and added exercise type to json ouput
-        if(mExerciseChoices.length > 0)
+        if(mNames.size() > 0)
         {
-            String nextExercise = mExerciseChoices[0];
-            mExerciseChoices = Arrays.copyOfRange(mExerciseChoices, 1, mExerciseChoices.length);
+            String nextExercise = mNames.pop();
 
             Intent intent = new Intent(mContext, ExerciseInstructions.class);
             intent.putExtra(EXERCISE_NAME, nextExercise);
