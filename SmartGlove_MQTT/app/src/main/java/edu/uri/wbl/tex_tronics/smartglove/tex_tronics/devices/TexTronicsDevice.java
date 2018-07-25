@@ -14,7 +14,6 @@ import java.util.Locale;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.data_types.TexTronicsData;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceType;
-import edu.uri.wbl.tex_tronics.smartglove.visualize.Choice;
 
 /**
  * Created by mcons on 2/28/2018.
@@ -23,7 +22,6 @@ import edu.uri.wbl.tex_tronics.smartglove.visualize.Choice;
 public abstract class TexTronicsDevice {
     protected final String DEVICE_ADDRESS;
     protected final ExerciseMode EXERCISE_MODE;
-    protected final Choice CHOICE;
 
     protected String mHeader;
     protected File mCsvFile;
@@ -31,7 +29,7 @@ public abstract class TexTronicsDevice {
 
     protected String mDeviceAddress;
 
-    public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode, @NonNull Choice choice) throws IllegalArgumentException {
+    public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode) throws IllegalArgumentException {
         // Validate Bluetooth Device Address Provided
         if(!BluetoothAdapter.checkBluetoothAddress(deviceAddress)) {
             throw new IllegalArgumentException("Invalid Device Address");
@@ -40,7 +38,6 @@ public abstract class TexTronicsDevice {
         // Initialize Constant Data Members
         DEVICE_ADDRESS = deviceAddress;
         EXERCISE_MODE = exerciseMode;
-        CHOICE = choice;
 
         // Initialize CSV File to NULL
         mCsvFile = null;
@@ -67,10 +64,6 @@ public abstract class TexTronicsDevice {
 
     public ExerciseMode getExerciseMode() {
         return EXERCISE_MODE;
-    }
-
-    public Choice getChoice() {
-        return CHOICE;
     }
 
     public void logData(Context context) throws IOException {

@@ -30,7 +30,6 @@ import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.Action;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.exceptions.IllegalDeviceType;
-import edu.uri.wbl.tex_tronics.smartglove.visualize.Choice;
 
 /**
  * Created by mcons on 2/27/2018.
@@ -73,9 +72,6 @@ public class TexTronicsManagerService extends Service {
      *
      * @since 1.0
      */
-
-    private static final String EXTRA_CHOICE = "tex_tronics.wbl.uri.ble.choice";
-
     private static final byte PACKET_ID_1 = 0x01;
     /**
      * The packet ID for the second packet transmitted when communicating in Flex+IMU mode.
@@ -93,11 +89,6 @@ public class TexTronicsManagerService extends Service {
      * @since 1.0
      */
     private static final int INTENT_RETURN_POLICY = START_STICKY;
-    private static Context context;
-    private static String deviceAddress;
-    private static Choice choice;
-    private static ExerciseMode exerciseMode;
-    private static DeviceType deviceType;
 
     /**
      * This static method is provided for other components to use in order to interact with this
@@ -111,17 +102,11 @@ public class TexTronicsManagerService extends Service {
      *
      * @since 1.0
      */
-    public static void connect(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType) {
-        TexTronicsManagerService.context = context;
-        TexTronicsManagerService.deviceAddress = deviceAddress;
-        TexTronicsManagerService.choice = choice;
-        TexTronicsManagerService.exerciseMode = exerciseMode;
-        TexTronicsManagerService.deviceType = deviceType;
+    public static void connect(Context context, String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType) {
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.putExtra(EXTRA_DEVICE, deviceAddress);
         intent.putExtra(EXTRA_MODE, exerciseMode);
         intent.putExtra(EXTRA_TYPE, deviceType);
-        intent.putExtra(EXTRA_CHOICE, choice);
         intent.setAction(Action.connect.toString());
         context.startService(intent);
     }
@@ -255,8 +240,7 @@ public class TexTronicsManagerService extends Service {
                 }
                 ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
                 DeviceType deviceType = (DeviceType) intent.getSerializableExtra(EXTRA_TYPE);
-                Choice choice = (Choice) intent.getSerializableExtra(EXTRA_CHOICE);
-                connect(deviceAddress, exerciseMode, deviceType, choice);
+                connect(deviceAddress, exerciseMode, deviceType);
             }
             break;
             case disconnect:
@@ -289,20 +273,20 @@ public class TexTronicsManagerService extends Service {
         super.onDestroy();
     }
 
-    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice) {
+    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType) {
         if (mBleServiceBound) {
             SmartGlove smartGlove;
             // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
             switch (deviceType) {
                 case SMART_GLOVE:
                     // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice);
+                    smartGlove = new SmartGlove(deviceAddress, exerciseMode);
                     mTexTronicsList.put(deviceAddress, smartGlove);
                     break;
                 // Add Different Devices Here
                 case SMART_SOCK:
                     // Added the Smart Sock code, just copied from above
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice);
+                    smartGlove = new SmartGlove(deviceAddress, exerciseMode);
                     mTexTronicsList.put(deviceAddress, smartGlove);
                     break;
                 default:
@@ -374,7 +358,7 @@ public class TexTronicsManagerService extends Service {
                     if(mMqttServiceBound) {
                         try {
                             byte[] buffer = IOUtil.readFile(disconnectingDevice.getCsvFile());
-                            String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(), disconnectingDevice.getDeviceAddress(), Choice.toString(disconnectingDevice.getChoice()) , new String(buffer));
+                            String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(), disconnectingDevice.getDeviceAddress(), new String(buffer));
                             Log.d("SmartGlove", "JSON: " + json);
                             mMqttService.publishMessage(json);
                         } catch (IOException e) {

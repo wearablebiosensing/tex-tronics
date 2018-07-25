@@ -1,7 +1,5 @@
 package edu.uri.wbl.tex_tronics.smartglove.visualize;
 
-import java.util.List;
-
 import edu.uri.wbl.tex_tronics.smartglove.io.SmartGloveInterface;
 
 public enum Choice implements SmartGloveInterface{
@@ -15,30 +13,10 @@ public enum Choice implements SmartGloveInterface{
     FOOT_STOMP(InstructionsText.FOOT_STOMP_TEXT),
     WALK_STEPS(InstructionsText.WALK_STEPS_TEXT);
 
-    static ExerciseList exercises = ExerciseList.get();
-
     private String displayName;
 
     Choice(String displayName) {
         this.displayName = displayName;
-    }
-
-    public static Choice getChoice(String choice) {
-        for (Exercise exercise : exercises.getExercises()) {
-            if (exercise.getExerciseName().equals(choice)) {
-                return exercise.getChoice();
-            }
-        }
-        return null;
-    }
-
-    public static String toString(Choice choice) {
-        for (Exercise exercise : exercises.getExercises()) {
-            if (exercise.getChoice().equals(choice)) {
-                return exercise.getExerciseName();
-            }
-        }
-        return null;
     }
 
     public String getDisplayName() {

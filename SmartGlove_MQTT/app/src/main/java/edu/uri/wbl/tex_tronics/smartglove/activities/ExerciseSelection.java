@@ -43,6 +43,7 @@ public class ExerciseSelection extends AppCompatActivity implements
     private String[] deviceAddressList;
     private String[] deviceTypeList;
     private List<String> exerciseModes;
+    private static int exerciseSelection;
     private Context context;
     private List<Exercise> possibleExercises;
     private Exercise current;
