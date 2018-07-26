@@ -41,8 +41,8 @@ public class MqttConnectionService extends Service {
         context.stopService(intent);
     }
 
-    public static String generateJson(String date, String sensorId, String data) {
-        JsonData jsonData = new JsonData(date, sensorId, data);
+    public static String generateJson(String date, String sensorId, String exerciseId, String data) {
+        JsonData jsonData = new JsonData(date, sensorId, exerciseId, data);
         Log.d(TAG,"JSON Data: " + jsonData.toString());
         return jsonData.toString();
     }
@@ -51,7 +51,6 @@ public class MqttConnectionService extends Service {
     private final String PUBLISH_TOPIC = "kaya/patient/data";
 
     private MqttAndroidClient mMqttAndroidClient;
-    private boolean mConnected;
     private String mClientId;
 
     private IBinder mBinder = new MqttConnectionBinder();
@@ -62,14 +61,13 @@ public class MqttConnectionService extends Service {
 
         Log.d(TAG, "Service Created");
 
-        mConnected = false;
         mClientId = "Patient";
 
         mMqttAndroidClient = new MqttAndroidClient(getApplicationContext(), SERVER_URI, mClientId);
         mMqttAndroidClient.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
-                // Lost connection to Server
+                connectClient();
             }
 
             @Override
@@ -83,6 +81,14 @@ public class MqttConnectionService extends Service {
             }
         });
 
+        connectClient();
+
+    }
+
+    /**
+     * creates mqtt options and connects client
+     */
+    public void connectClient() {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
         mqttConnectOptions.setCleanSession(false);
@@ -93,14 +99,12 @@ public class MqttConnectionService extends Service {
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d(TAG, "Successfully Connected");
                     sendUpdate(UpdateType.connected);
-                    mConnected = true;
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     Log.d(TAG, "Failed to Connect (" + exception.toString() + ")");
                     sendUpdate(UpdateType.disconnected);
-                    mConnected = false;
                 }
             });
         } catch (MqttException e) {
@@ -131,8 +135,8 @@ public class MqttConnectionService extends Service {
         }
     }
 
-    public void publishMessage(String data){
-        if(mConnected) {
+    public void publishMessage(final String data) {
+        if(mMqttAndroidClient.isConnected()) {
             try {
                 MqttMessage message = new MqttMessage();
                 message.setPayload(data.getBytes());
@@ -149,6 +153,21 @@ public class MqttConnectionService extends Service {
             }
         } else {
             Log.w(TAG, "Not Connected Yet!");
+            try {
+                mMqttAndroidClient.connect(getApplicationContext(), new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        publishMessage(data);
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                        exception.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

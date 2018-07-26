@@ -34,6 +34,7 @@ import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdate;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.TexTronicsUpdateReceiver;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.DeviceType;
 import edu.uri.wbl.tex_tronics.smartglove.tex_tronics.enums.ExerciseMode;
+import edu.uri.wbl.tex_tronics.smartglove.visualize.Choice;
 import edu.uri.wbl.tex_tronics.smartglove.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -68,6 +69,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     private String[] deviceAddresses;
     private String[] deviceTypes;
     private String[] exerciseModes;
+    private String[] exerciseChoices;
 
     private Button disconnectBtn, nextButton;
     private TextView sideInstructionsText;
@@ -104,6 +106,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         deviceAddresses = TexTronicsExerciseManager.getmDeviceAddressList();
         deviceTypes = TexTronicsExerciseManager.getmDeviceTypeList();
         exerciseModes = TexTronicsExerciseManager.getmExerciseModes();
+        exerciseChoices = TexTronicsExerciseManager.getmExerciseChoices();
 
 //        deviceAddresses = intent.getStringArrayExtra(EXTRA_DEVICE_ADDRS);
 //        deviceTypes = intent.getStringArrayExtra(EXTRA_DEVICE_TYPES);
@@ -116,7 +119,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         // Sets up the repetition counter on the GUI
         count = 0;
         graph = findViewById(R.id.graph);
-        graph = GenerateGraph.makeGraph(graph);
+        graph = GenerateGraph.makeRTGraph(graph);
         series1 = new LineGraphSeries<>();
         // Thumb
         series1.setColor(Color.RED);
@@ -376,7 +379,10 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                         // Connect to Each Device
                         Log.d(TAG, "Connecting to " + deviceAddresses[i]);
                         //TODO: Exercise Modes is hard coded and this is wrong
-                        TexTronicsManagerService.connect(mContext, deviceAddresses[i], ExerciseMode.getExercise(exerciseModes[0]), DeviceType.getDevicetype(deviceTypes[i]));
+                        Log.e("Length Test",Integer.toString(deviceAddresses.length));
+                        Log.e("Length Test",Integer.toString(exerciseChoices.length));
+                        Log.e("Length Test",Integer.toString(exerciseModes.length));
+                        TexTronicsManagerService.connect(mContext, deviceAddresses[i], Choice.getChoice(exerciseChoices[0]), ExerciseMode.getExercise(exerciseModes[0]), DeviceType.getDevicetype(deviceTypes[i]));
                     }
 
                     break;
