@@ -119,7 +119,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         // Sets up the repetition counter on the GUI
         count = 0;
         graph = findViewById(R.id.graph);
-        graph = GenerateGraph.makeGraph(graph);
+        graph = GenerateGraph.makeRTGraph(graph);
         series1 = new LineGraphSeries<>();
         // Thumb
         series1.setColor(Color.RED);

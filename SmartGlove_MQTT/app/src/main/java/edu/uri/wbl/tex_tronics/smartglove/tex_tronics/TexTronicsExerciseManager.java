@@ -36,7 +36,6 @@ public class TexTronicsExerciseManager
         mDeviceTypeList = deviceTypeList;
         mExerciseChoices = exerciseChoices;
         mExerciseModes = exerciseModes;
-
         mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
     }
 
@@ -49,14 +48,12 @@ public class TexTronicsExerciseManager
         mExerciseModes = null;
     }
 
-
     public static void startExercise(Context mContext)
     {
         Log.v(TAG, "Starting T.T Exercise...");
-        if(mExerciseChoices.length > 0)
+        if(mNames.size() > 0)
         {
-            String nextExercise = mExerciseChoices[0];
-            mExerciseChoices = Arrays.copyOfRange(mExerciseChoices, 1, mExerciseChoices.length);
+            String nextExercise = mNames.pop();
 
             Intent intent = new Intent(mContext, ExerciseInstructions.class);
             intent.putExtra(EXERCISE_NAME, nextExercise);
@@ -110,7 +107,8 @@ public class TexTronicsExerciseManager
         return mExerciseModes;
     }
 
-    public static String[] getmExerciseChoices() {
+    public static String[] getmExerciseChoices()
+    {
         return mExerciseChoices;
     }
 }
