@@ -252,13 +252,13 @@ public class MainActivity extends AppCompatActivity implements SmartGloveInterfa
         switch (item.getItemId())
         {
             // Connects to a device
-            case R.id.reconnect:
-                // Attempts to reconnect to device
-                return true;
-            // Reveals disconnect options via a dialog box
-            case R.id.ble_disconnect:
-                confirmDisconnect();
-                return true;
+//            case R.id.reconnect:
+//                // Attempts to reconnect to device
+//                return true;
+//            // Reveals disconnect options via a dialog box
+//            case R.id.ble_disconnect:
+//                confirmDisconnect();
+//                return true;
             // Reveals username options via a dialog box
             case R.id.change_name:
                 confirmPatient();

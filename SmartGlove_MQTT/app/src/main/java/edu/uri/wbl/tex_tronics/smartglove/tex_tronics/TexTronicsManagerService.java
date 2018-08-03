@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
+import edu.uri.wbl.tex_tronics.smartglove.activities.GloveExerciseActivity;
 import edu.uri.wbl.tex_tronics.smartglove.ble.BluetoothLeConnectionService;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattCharacteristics;
 import edu.uri.wbl.tex_tronics.smartglove.ble.GattServices;
@@ -141,6 +142,7 @@ public class TexTronicsManagerService extends Service {
      * @since 1.0
      */
     public static void disconnect(Context context, String deviceAddress) {
+        Log.v(TAG, "Disconnecting!!");
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.putExtra(EXTRA_DEVICE, deviceAddress);
         intent.setAction(Action.disconnect.toString());
@@ -155,6 +157,7 @@ public class TexTronicsManagerService extends Service {
     }
 
     public static void stop(Context context) {
+        Log.v(TAG, "Stopping!!");
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.setAction(Action.stop.toString());
         context.startService(intent);
@@ -284,7 +287,7 @@ public class TexTronicsManagerService extends Service {
         unbindService(mBleServiceConnection);
         unbindService(mMqttServiceConnection);
 
-        Log.d(TAG,"Service Destroyed");
+        Log.d(TAG,"Manager Service Destroyed");
 
         super.onDestroy();
     }
@@ -438,7 +441,8 @@ public class TexTronicsManagerService extends Service {
                                             device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
-                                            device.logData(mContext);
+                                            if(GloveExerciseActivity.startLog)
+                                                device.logData(mContext);
                                         } else {
                                             Log.w(TAG, "Invalid Data Packet");
                                             return;
@@ -450,21 +454,24 @@ public class TexTronicsManagerService extends Service {
                                         device.setThumbFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
                                         device.setIndexFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
 
-                                        device.logData(mContext);
+                                        if(GloveExerciseActivity.startLog)
+                                            device.logData(mContext);
 
                                         // Second Data Set
                                         device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
                                         device.setThumbFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
                                         device.setIndexFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
 
-                                        device.logData(mContext);
+                                        if(GloveExerciseActivity.startLog)
+                                            device.logData(mContext);
 
                                         // Third Data Set
                                         device.setTimestamp((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
                                         device.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
                                         device.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
 
-                                        device.logData(mContext);
+                                        if(GloveExerciseActivity.startLog)
+                                            device.logData(mContext);
                                         break;
                                 }
                             } catch (IllegalDeviceType | IOException e) {

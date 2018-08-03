@@ -96,7 +96,6 @@ public class ExerciseSelection extends AppCompatActivity implements
 
         exerciseView.setChoice(possibleExercises.get(0));
         listView = findViewById(R.id.listView);
-        //TODO: Needs fixing. Does not work
         if(TexTronicsExerciseManager.getExerciseCount() >= 1)
         {
             String[] choices = TexTronicsExerciseManager.getmExerciseChoices();

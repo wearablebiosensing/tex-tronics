@@ -52,7 +52,7 @@ public class ConnectionSelection extends AppCompatActivity
         leftGloveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "Clicked on Left Glove Btn");
+                Log.v(TAG, "Clicked on Left Glove Btn");
                 selectedLG = !selectedLG;
                 if(selectedLG)
                     leftGloveBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -64,7 +64,7 @@ public class ConnectionSelection extends AppCompatActivity
         rightGloveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "Clicked on Right Glove Btn");
+                Log.v(TAG, "Clicked on Right Glove Btn");
                 selectedRG = !selectedRG;
                 if(selectedRG)
                     rightGloveBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -76,7 +76,7 @@ public class ConnectionSelection extends AppCompatActivity
         leftShoeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "Clicked on Left Shoe Btn");
+                Log.v(TAG, "Clicked on Left Shoe Btn");
                 selectedLS = !selectedLS;
                 if(selectedLS)
                     leftShoeBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -88,7 +88,7 @@ public class ConnectionSelection extends AppCompatActivity
         rightShoeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "Clicked on Right Shoe Btn");
+                Log.v(TAG, "Clicked on Right Shoe Btn");
                 selectedRS = !selectedRS;
                 if(selectedRS)
                     rightShoeBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -134,7 +134,7 @@ public class ConnectionSelection extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        Log.e(TAG, "Back pressed. Navigating to " + getParentActivityIntent());
+        Log.v(TAG, "Back pressed. Navigating to " + getParentActivityIntent());
         Intent intent = this.getParentActivityIntent();
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

@@ -66,6 +66,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     private boolean recording = false;
     private long startTime;
 
+    private String exerciseName;
     private String[] deviceAddresses;
     private String[] deviceTypes;
     private String[] exerciseModes;
@@ -74,8 +75,11 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     private Button disconnectBtn, nextButton;
     private TextView sideInstructionsText;
     private GifImageView sideImage;
+    private TextView loadingText;
 
     private Context mContext;
+    int connectCount = 0;
+    public static boolean startLog = false;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -95,13 +99,13 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
             setTitle("Exercise");
             return;
         }
-        String name = intent.getStringExtra(EXERCISE_NAME);
-        setTitle(name);
+        exerciseName = intent.getStringExtra(EXERCISE_NAME);
+        setTitle(exerciseName);
 
         sideInstructionsText = findViewById(R.id.instructions_text);
         sideImage = findViewById(R.id.stexercise_side_image);
         if(intent != null)
-            setSideViews(name);
+            setSideViews(exerciseName);
 
         deviceAddresses = TexTronicsExerciseManager.getmDeviceAddressList();
         deviceTypes = TexTronicsExerciseManager.getmDeviceTypeList();
@@ -128,6 +132,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         // Index
         series2.setColor(Color.GREEN);
         graph.addSeries(series2);
+        graph.setVisibility(View.INVISIBLE);
 
         // Gets the current time for graph timer
         startTime = System.currentTimeMillis();
@@ -163,6 +168,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                 {
                     TexTronicsManagerService.disconnect(mContext, address);
                 }
+                startLog = false;
             }
         });
 
@@ -183,6 +189,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
 //                finish();
             }
         });
+        loadingText = findViewById(R.id.loadingText);
     }
 
     /** setSideViews
@@ -339,18 +346,21 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                     // First Data Set
                     int thumb = (((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF)));
                     int index = (((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
-                    addEntry(thumb, index);
+                    if(startLog)
+                        addEntry(thumb, index);
 
                     // Second Data Set
                     thumb = (((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
                     index = (((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
-                    addEntry(thumb, index);
+                    if(startLog)
+                        addEntry(thumb, index);
 
 
                     // Third Data Set
                     thumb = (((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
                     index = (((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF)));
-                    addEntry(thumb, index);
+                    if(startLog)
+                        addEntry(thumb, index);
                 }
             }
         }
@@ -378,11 +388,11 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                     {
                         // Connect to Each Device
                         Log.d(TAG, "Connecting to " + deviceAddresses[i]);
-                        //TODO: Exercise Modes is hard coded and this is wrong
+                        //TODO: Exercise Modes and Choices is hard coded and this is wrong
                         Log.e("Length Test",Integer.toString(deviceAddresses.length));
                         Log.e("Length Test",Integer.toString(exerciseChoices.length));
                         Log.e("Length Test",Integer.toString(exerciseModes.length));
-                        TexTronicsManagerService.connect(mContext, deviceAddresses[i], Choice.getChoice(exerciseChoices[0]), ExerciseMode.getExercise(exerciseModes[0]), DeviceType.getDevicetype(deviceTypes[i]));
+                        TexTronicsManagerService.connect(mContext, deviceAddresses[i], Choice.getChoice(exerciseName), ExerciseMode.getExercise(exerciseModes[0]), DeviceType.getDevicetype(deviceTypes[i]));
                     }
 
                     break;
@@ -393,6 +403,14 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                 case ble_connected:
                     // Device <deviceAddress> Has Been Connected
                     Log.d(TAG, "Connected to " + deviceAddress);
+                    connectCount++;
+                    if(connectCount >= deviceAddresses.length)
+                    {
+                        Log.d(TAG, "Starting data logging.");
+                        startLog = true;
+                        graph.setVisibility(View.VISIBLE);
+                        loadingText.setVisibility(View.INVISIBLE);
+                    }
                     break;
                 case ble_disconnecting:
                     // Disconnecting from Device <deviceAddress>

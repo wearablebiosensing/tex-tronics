@@ -12,7 +12,7 @@ public enum ExerciseMode {
 
     private final String mExercise;
 
-    private ExerciseMode(String exercise) {
+    ExerciseMode(String exercise) {
         mExercise = exercise;
     }
 

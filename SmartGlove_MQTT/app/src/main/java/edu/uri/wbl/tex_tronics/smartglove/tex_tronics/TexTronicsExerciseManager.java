@@ -51,6 +51,10 @@ public class TexTronicsExerciseManager
     public static void startExercise(Context mContext)
     {
         Log.v(TAG, "Starting T.T Exercise...");
+        Log.e(TAG, "Address Size: " + mDeviceAddressList.length);
+        Log.e(TAG, "Types Size: " + mDeviceTypeList.length);
+        Log.e(TAG, "Choices Size: " + mExerciseChoices.length);
+        Log.e(TAG, "Modes Size: " + mExerciseModes.length);
         if(mNames.size() > 0)
         {
             String nextExercise = mNames.pop();

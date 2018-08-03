@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -19,6 +20,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import edu.uri.wbl.tex_tronics.smartglove.R;
+import edu.uri.wbl.tex_tronics.smartglove.io.SmartGloveInterface;
 
 /**
  * Created by mcons on 2/28/2018.
@@ -124,7 +126,7 @@ public class MqttConnectionService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "Service Destroyed");
+        Log.d(TAG, "MQTT Service Destroyed");
 
         super.onDestroy();
     }
