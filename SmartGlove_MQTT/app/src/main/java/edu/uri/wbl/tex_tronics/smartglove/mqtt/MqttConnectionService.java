@@ -49,7 +49,7 @@ public class MqttConnectionService extends Service {
         return jsonData.toString();
     }
 
-    private final String SERVER_URI = "tcp://131.128.51.42:1883"; //tcp://131.128.51.42:1883
+    private final String SERVER_URI = "tcp://131.128.51.213:1883"; //tcp://131.128.51.42:1883
     private final String PUBLISH_TOPIC = "kaya/patient/data";
 
     private MqttAndroidClient mMqttAndroidClient;
