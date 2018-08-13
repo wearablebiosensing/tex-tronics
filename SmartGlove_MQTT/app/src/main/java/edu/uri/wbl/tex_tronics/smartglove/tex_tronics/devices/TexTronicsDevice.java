@@ -24,6 +24,8 @@ public abstract class TexTronicsDevice {
     protected final String DEVICE_ADDRESS;
     protected final ExerciseMode EXERCISE_MODE;
     protected final Choice CHOICE;
+    protected final String EXERCISE_ID;
+    protected final String ROUTINE_ID;
 
     protected String mHeader;
     protected File mCsvFile;
@@ -31,7 +33,7 @@ public abstract class TexTronicsDevice {
 
     protected String mDeviceAddress;
 
-    public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode, @NonNull Choice choice) throws IllegalArgumentException {
+    public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode, @NonNull Choice choice, String exerciseID, String routineID) throws IllegalArgumentException {
         // Validate Bluetooth Device Address Provided
         if(!BluetoothAdapter.checkBluetoothAddress(deviceAddress)) {
             throw new IllegalArgumentException("Invalid Device Address");
@@ -41,6 +43,8 @@ public abstract class TexTronicsDevice {
         DEVICE_ADDRESS = deviceAddress;
         EXERCISE_MODE = exerciseMode;
         CHOICE = choice;
+        EXERCISE_ID = exerciseID;
+        ROUTINE_ID = routineID;
 
         // Initialize CSV File to NULL
         mCsvFile = null;

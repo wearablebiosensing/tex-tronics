@@ -75,7 +75,20 @@ public class TexTronicsManagerService extends Service {
      * @since 1.0
      */
 
+    /**
+     * The choice of exercise being done
+     */
     private static final String EXTRA_CHOICE = "tex_tronics.wbl.uri.ble.choice";
+
+    /**
+     * The UUID of the current exercise
+     */
+    private static final String EXTRA_EX_ID = "tex_tronics.wbl.uri.ble.ex_id";
+
+    /**
+     * The UUID of the routine
+     */
+    private static final String EXTRA_ROUTINE_ID  = "tex_tronics.wbl.uri.ble.routine_id";
 
     private static final byte PACKET_ID_1 = 0x01;
     /**
@@ -112,7 +125,7 @@ public class TexTronicsManagerService extends Service {
      *
      * @since 1.0
      */
-    public static void connect(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType) {
+    public static void connect(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType, UUID exerciseID, UUID routineID) {
         TexTronicsManagerService.context = context;
         TexTronicsManagerService.deviceAddress = deviceAddress;
         TexTronicsManagerService.choice = choice;
@@ -123,6 +136,8 @@ public class TexTronicsManagerService extends Service {
         intent.putExtra(EXTRA_MODE, exerciseMode);
         intent.putExtra(EXTRA_TYPE, deviceType);
         intent.putExtra(EXTRA_CHOICE, choice);
+        intent.putExtra(EXTRA_EX_ID, exerciseID.toString());
+        intent.putExtra(EXTRA_ROUTINE_ID, routineID.toString());
         intent.setAction(Action.connect.toString());
         context.startService(intent);
     }
@@ -259,7 +274,9 @@ public class TexTronicsManagerService extends Service {
                 ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
                 DeviceType deviceType = (DeviceType) intent.getSerializableExtra(EXTRA_TYPE);
                 Choice choice = (Choice) intent.getSerializableExtra(EXTRA_CHOICE);
-                connect(deviceAddress, exerciseMode, deviceType, choice);
+                String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
+                String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
+                connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
             }
             break;
             case disconnect:
@@ -292,20 +309,20 @@ public class TexTronicsManagerService extends Service {
         super.onDestroy();
     }
 
-    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice) {
+    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID) {
         if (mBleServiceBound) {
             SmartGlove smartGlove;
             // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
             switch (deviceType) {
                 case SMART_GLOVE:
                     // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice);
+                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
                     mTexTronicsList.put(deviceAddress, smartGlove);
                     break;
                 // Add Different Devices Here
                 case SMART_SOCK:
                     // Added the Smart Sock code, just copied from above
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice);
+                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
                     mTexTronicsList.put(deviceAddress, smartGlove);
                     break;
                 default:

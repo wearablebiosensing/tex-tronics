@@ -9,6 +9,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import edu.uri.wbl.tex_tronics.smartglove.activities.ExerciseInstructions;
 import edu.uri.wbl.tex_tronics.smartglove.activities.ExerciseSelection;
@@ -27,6 +28,7 @@ public class TexTronicsExerciseManager
     private static String[] mExerciseModes;
     private static ArrayDeque<String> mNames;
     private static Intent testIntent;
+    private static UUID mRoutineID;
 
     public static void setManager(String[] deviceAddressList, String[] deviceTypeList,
                                   String[] exerciseChoices, String[] exerciseModes)
@@ -37,6 +39,7 @@ public class TexTronicsExerciseManager
         mExerciseChoices = exerciseChoices;
         mExerciseModes = exerciseModes;
         mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
+        mRoutineID = UUID.randomUUID();
     }
 
     public static void clearManager()
@@ -115,4 +118,6 @@ public class TexTronicsExerciseManager
     {
         return mExerciseChoices;
     }
+
+    public static UUID getmID() { return mRoutineID; }
 }

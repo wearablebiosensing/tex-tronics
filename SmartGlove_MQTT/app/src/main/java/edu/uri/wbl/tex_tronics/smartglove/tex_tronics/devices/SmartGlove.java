@@ -30,8 +30,8 @@ import edu.uri.wbl.tex_tronics.smartglove.visualize.Choice;
 public class SmartGlove extends TexTronicsDevice {
     private TexTronicsData mData;
 
-    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice) {
-        super(deviceAddress, exerciseMode, choice);
+    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
+        super(deviceAddress, exerciseMode, choice, exerciseID, routineID);
 
         mDeviceAddress = deviceAddress;
 
@@ -43,13 +43,11 @@ public class SmartGlove extends TexTronicsDevice {
                 break;
             case FLEX_ONLY:
                 mData = new FlexOnlyData();
-                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
+                mHeader = "Device Address,Exercise,exerciseID,routineID,Timestamp,Thumb,Index,Middle,Ring,Pinky";
                 break;
         }
 
         Date date = Calendar.getInstance().getTime();
-
-
 
         // Set Default Output File
         String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
@@ -66,7 +64,7 @@ public class SmartGlove extends TexTronicsDevice {
 
         // Store in CSV File
         String data = mData.toString();
-        String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + data;
+        String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + EXERCISE_ID + "," + ROUTINE_ID + "," + data;
         DataLogService.log(context, mCsvFile, logString, mHeader);
     }
 

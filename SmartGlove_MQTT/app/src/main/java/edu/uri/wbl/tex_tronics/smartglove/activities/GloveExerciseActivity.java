@@ -72,6 +72,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     private String[] deviceTypes;
     private String[] exerciseModes;
     private String[] exerciseChoices;
+    private UUID routineID;
 
     private Button disconnectBtn, nextButton;
     private TextView sideInstructionsText;
@@ -112,6 +113,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         deviceTypes = TexTronicsExerciseManager.getmDeviceTypeList();
         exerciseModes = TexTronicsExerciseManager.getmExerciseModes();
         exerciseChoices = TexTronicsExerciseManager.getmExerciseChoices();
+        routineID = TexTronicsExerciseManager.getmID();
 
 //        deviceAddresses = intent.getStringArrayExtra(EXTRA_DEVICE_ADDRS);
 //        deviceTypes = intent.getStringArrayExtra(EXTRA_DEVICE_TYPES);
@@ -387,13 +389,19 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
 
             switch (updateType) {
                 case started:
+                    UUID exerciseID = UUID.randomUUID();
                     for(int i = 0; i < deviceAddresses.length; i++)
                     {
                         // Connect to Each Device
                         Log.d(TAG, "Connecting to " + deviceAddresses[i]);
                         //TODO: Exercise Modes is hard coded and this is wrong
                         Log.e("Length Test",Integer.toString(exerciseModes.length));
-                        TexTronicsManagerService.connect(mContext, deviceAddresses[i], Choice.getChoice(exerciseName), ExerciseMode.getExercise(exerciseModes[0]), DeviceType.getDevicetype(deviceTypes[i]));
+                        //TODO: this function has a lot of arguments, maybe make some kind of exercise abstraction?
+                        TexTronicsManagerService.connect(mContext,
+                                deviceAddresses[i],
+                                Choice.getChoice(exerciseName),
+                                ExerciseMode.getExercise(exerciseModes[0]),
+                                DeviceType.getDevicetype(deviceTypes[i]),exerciseID,routineID);
                     }
 
                     break;
