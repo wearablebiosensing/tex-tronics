@@ -394,7 +394,12 @@ public class TexTronicsManagerService extends Service {
                     if(mMqttServiceBound) {
                         try {
                             byte[] buffer = IOUtil.readFile(disconnectingDevice.getCsvFile());
-                            String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(), disconnectingDevice.getDeviceAddress(), Choice.toString(disconnectingDevice.getChoice()) , new String(buffer));
+                            String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(),
+                                    disconnectingDevice.getDeviceAddress(),
+                                    Choice.toString(disconnectingDevice.getChoice()) ,
+                                    disconnectingDevice.getExerciseID(),
+                                    disconnectingDevice.getRoutineID(),
+                                    new String(buffer));
                             Log.d("SmartGlove", "JSON: " + json);
                             mMqttService.publishMessage(json);
                         } catch (IOException e) {

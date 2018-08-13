@@ -43,8 +43,8 @@ public class MqttConnectionService extends Service {
         context.stopService(intent);
     }
 
-    public static String generateJson(String date, String sensorId, String exerciseId, String data) {
-        JsonData jsonData = new JsonData(date, sensorId, exerciseId, data);
+    public static String generateJson(String date, String sensorId, String choice, String exerciseID, String routineID, String data) {
+        JsonData jsonData = new JsonData(date, sensorId, choice, exerciseID, routineID, data);
         Log.d(TAG,"JSON Data: " + jsonData.toString());
         return jsonData.toString();
     }

@@ -5,17 +5,24 @@ package edu.uri.wbl.tex_tronics.smartglove.mqtt;
  */
 
 public class JsonData {
-    private String mDate, mSensorId, mExerciseId, mData;
+    private String mDate, mSensorId, mChoiceId, mExerciseID, mRoutineID, mData;
 
-    public JsonData(String date, String sensorId, String exerciseId, String data) {
+    public JsonData(String date, String sensorId, String choiceID, String exerciseID, String routrineID, String data) {
         mDate = date;
         mSensorId = sensorId;
-        mExerciseId = exerciseId;
+        mChoiceId = choiceID;
+        mExerciseID = exerciseID;
+        mRoutineID = routrineID;
         mData = data;
     }
 
     @Override
     public String toString() {
-        return "{\"Date\": \"" + mDate + "\", \"Sensor_ID\": \"" + mSensorId + "\", \"Exercise_ID\": \"" + mExerciseId + "\", \"Data\": " + "\"" + mData + "\"" + "}";
+        return "{\"Date\": \"" + mDate + "\", " +
+                "\"Sensor_ID\": \"" + mSensorId + "\", " +
+                "\"Exercise_ID\": \"" + mChoiceId + "\", " +
+                "\"Exercise_UUID\": \"" + mExerciseID + "\", " +
+                "\"Routine_UUID\": \"" + mRoutineID + "\", " +
+                "\"Data\": " + "\"" + mData + "\"" + "}";
     }
 }

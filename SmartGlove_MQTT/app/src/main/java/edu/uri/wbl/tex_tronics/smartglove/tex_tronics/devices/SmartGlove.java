@@ -43,7 +43,7 @@ public class SmartGlove extends TexTronicsDevice {
                 break;
             case FLEX_ONLY:
                 mData = new FlexOnlyData();
-                mHeader = "Device Address,Exercise,exerciseID,routineID,Timestamp,Thumb,Index,Middle,Ring,Pinky";
+                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
                 break;
         }
 
@@ -64,7 +64,7 @@ public class SmartGlove extends TexTronicsDevice {
 
         // Store in CSV File
         String data = mData.toString();
-        String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + EXERCISE_ID + "," + ROUTINE_ID + "," + data;
+        String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + data;
         DataLogService.log(context, mCsvFile, logString, mHeader);
     }
 

@@ -77,6 +77,10 @@ public abstract class TexTronicsDevice {
         return CHOICE;
     }
 
+    public String getExerciseID() {return EXERCISE_ID;}
+
+    public String getRoutineID() {return ROUTINE_ID;}
+
     public void logData(Context context) throws IOException {
         if(mCsvFile == null) {
             throw new IOException("CSV File Must be Specified");
