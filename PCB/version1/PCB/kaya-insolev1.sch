@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.5.0">
+<eagle version="9.1.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -10357,24 +10357,6 @@ Source: www.kingbright.com</description>
 <pinref part="SV2" gate="G$1" pin="3"/>
 <wire x1="-93.98" y1="-40.64" x2="-91.44" y2="-40.64" width="0.1524" layer="91"/>
 </segment>
-</net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="C1"/>
-<pinref part="C4" gate="G$1" pin="1"/>
-<wire x1="-43.18" y1="96.52" x2="-58.42" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="-58.42" y1="96.52" x2="-58.42" y2="81.28" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$6" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="CAP"/>
-<pinref part="C5" gate="G$1" pin="1"/>
-<wire x1="-43.18" y1="99.06" x2="-68.58" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="-68.58" y1="99.06" x2="-68.58" y2="81.28" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$7" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="VDDIO"/>
 <pinref part="C3" gate="G$1" pin="1"/>
@@ -10396,6 +10378,22 @@ Source: www.kingbright.com</description>
 <wire x1="15.24" y1="104.46" x2="15.24" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="15.24" y1="119.38" x2="-43.18" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="-43.18" y1="119.38" x2="-43.18" y2="106.68" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$5" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="C1"/>
+<pinref part="C4" gate="G$1" pin="1"/>
+<wire x1="-43.18" y1="96.52" x2="-58.42" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="-58.42" y1="96.52" x2="-58.42" y2="81.28" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="CAP"/>
+<pinref part="C5" gate="G$1" pin="1"/>
+<wire x1="-43.18" y1="99.06" x2="-68.58" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="-68.58" y1="99.06" x2="-68.58" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$13" class="0">
@@ -10461,7 +10459,7 @@ Source: www.kingbright.com</description>
 <wire x1="-55.88" y1="35.56" x2="-53.34" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$12" class="0">
+<net name="VBAT" class="0">
 <segment>
 <pinref part="C2" gate="A" pin="11"/>
 <pinref part="U2" gate="G$1" pin="VBAT"/>

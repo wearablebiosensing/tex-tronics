@@ -9,7 +9,7 @@
 <grid distance="5" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="SIGNAL" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="2" name="GND" color="16" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="GND" color="16" fill="1" visible="no" active="yes"/>
 <layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
 <layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
 <layer number="5" name="Route5" color="19" fill="1" visible="no" active="no"/>
@@ -22,11 +22,11 @@
 <layer number="12" name="Route12" color="20" fill="1" visible="no" active="no"/>
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
-<layer number="15" name="VDD" color="23" fill="1" visible="yes" active="yes"/>
+<layer number="15" name="VDD" color="23" fill="1" visible="no" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
@@ -2039,8 +2039,7 @@ design rules under a new name.</description>
 <wire x1="110.3753125" y1="58.1894" x2="110.6286" y2="58.1894" width="0.254" layer="1"/>
 <wire x1="110.6286" y1="58.1894" x2="110.6442" y2="58.205" width="0.254" layer="1"/>
 <wire x1="110.6442" y1="58.205" x2="110.695" y2="58.205" width="0.254" layer="1"/>
-<wire x1="112.3426" y1="56.908675" x2="133.35" y2="52.07" width="0" layer="19" extent="1-15"/>
-<wire x1="111.76" y1="60.96" x2="111.76" y2="61.38" width="0" layer="19" extent="1-1"/>
+<wire x1="111.76" y1="61.38" x2="111.76" y2="60.96" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$5">
 <contactref element="U1" pad="24"/>
@@ -2244,11 +2243,6 @@ design rules under a new name.</description>
 <wire x1="128.687203125" y1="44.867203125" x2="128.687203125" y2="45.72" width="0.254" layer="1"/>
 <wire x1="128.687203125" y1="43.18" x2="128.687203125" y2="44.032796875" width="0.254" layer="1"/>
 <wire x1="128.687203125" y1="44.032796875" x2="128.27" y2="44.45" width="0.254" layer="1"/>
-<wire x1="114.717203125" y1="45.72" x2="127" y2="44.45" width="0" layer="19" extent="1-1"/>
-<wire x1="114.264" y1="43.18" x2="114.717203125" y2="45.72" width="0" layer="19" extent="1-1"/>
-<wire x1="110.49" y1="50.8" x2="114.17" y2="49.84" width="0" layer="19" extent="1-1"/>
-<wire x1="107.715" y1="57.195" x2="107.95" y2="53.76" width="0" layer="19" extent="1-1"/>
-<wire x1="106.68" y1="63.08" x2="107.745" y2="59.065" width="0" layer="19" extent="1-1"/>
 <polygon width="0.254" layer="2">
 <vertex x="105.41" y="48.26"/>
 <vertex x="105.41" y="43.18"/>
@@ -2267,6 +2261,17 @@ design rules under a new name.</description>
 <vertex x="114.3" y="52.07"/>
 <vertex x="114.3" y="63.5"/>
 <vertex x="105.41" y="63.5"/>
+</polygon>
+<polygon width="0.254" layer="1">
+<vertex x="104.013" y="64.516"/>
+<vertex x="104.013" y="37.846"/>
+<vertex x="103.886" y="37.719"/>
+<vertex x="137.287" y="37.719"/>
+<vertex x="137.541" y="37.973"/>
+<vertex x="137.541" y="64.643"/>
+<vertex x="137.414" y="64.77"/>
+<vertex x="104.267" y="64.77"/>
+<vertex x="104.14" y="64.643"/>
 </polygon>
 </signal>
 <signal name="VIN">
