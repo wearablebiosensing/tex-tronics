@@ -87,6 +87,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     @Override
     protected void onCreate(Bundle savedInstanceBundle)
     {
+        Log.v(TAG, "Creating Glove Exercise...");
         // Sets up screen
         super.onCreate(savedInstanceBundle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -140,28 +141,28 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
         // Gets the current time for graph timer
         startTime = System.currentTimeMillis();
 
-        // Initializes the data processing, which allows the GATT notification to start
-        // displaying the GATT values on the graph
-        handler = new Handler()
-        {
-            public void handleMessage(Message message)
-            {
-                switch (message.what)
-                {
-                    case Graph.READY2:
-                        // Receives values from the ProcessData class
-                        if(recording)
-                        {
-//                            gatherCSVData.logJunkData(new float[]{processData.returnXVal(), processData.returnYVal()},"junk_data");
-                        }
-                        // Updates the graph with those values
-                        break;
-                    default:
-                        Log.v(TAG, "Message handle error");
-                }
-            }
-        };
-//        processData = new ProcessData(handler);
+//        // Initializes the data processing, which allows the GATT notification to start
+//        // displaying the GATT values on the graph
+//        handler = new Handler()
+//        {
+//            public void handleMessage(Message message)
+//            {
+//                switch (message.what)
+//                {
+//                    case Graph.READY2:
+//                        // Receives values from the ProcessData class
+//                        if(recording)
+//                        {
+////                            gatherCSVData.logJunkData(new float[]{processData.returnXVal(), processData.returnYVal()},"junk_data");
+//                        }
+//                        // Updates the graph with those values
+//                        break;
+//                    default:
+//                        Log.v(TAG, "Message handle error");
+//                }
+//            }
+//        };
+////        processData = new ProcessData(handler);
 
         disconnectBtn = findViewById(R.id.disconnectBtn);
         disconnectBtn.setOnClickListener(new View.OnClickListener() {
@@ -341,6 +342,8 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
             Log.d(TAG, "Received BLE Update");
             String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
             String action = intent.getStringExtra(BluetoothLeConnectionService.INTENT_EXTRA);
+            Log.v(TAG, "DeviceAddress: " + deviceAddress);
+            Log.v(TAG, "BLE Action: " + action);
 
             if(action.equals(BluetoothLeConnectionService.GATT_CHARACTERISTIC_NOTIFY)) {
                 UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
@@ -393,7 +396,6 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
                     for(int i = 0; i < deviceAddresses.length; i++)
                     {
                         // Connect to Each Device
-                        Log.d(TAG, "Connecting to " + deviceAddresses[i]);
                         //TODO: Exercise Modes is hard coded and this is wrong
                         Log.e("Length Test",Integer.toString(exerciseModes.length));
                         //TODO: this function has a lot of arguments, maybe make some kind of exercise abstraction?
@@ -474,6 +476,7 @@ public class GloveExerciseActivity extends AppCompatActivity implements SmartGlo
     @Override
     protected void onStart()
     {
+        Log.v(TAG, "Starting Glove Exercise...");
         super.onStart();
 
         registerReceiver(mBLEUpdateReceiver, new IntentFilter(BluetoothLeConnectionService.INTENT_FILTER_STRING));

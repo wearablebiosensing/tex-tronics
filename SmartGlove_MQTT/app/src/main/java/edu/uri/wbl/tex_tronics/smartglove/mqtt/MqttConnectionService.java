@@ -32,6 +32,7 @@ import edu.uri.wbl.tex_tronics.smartglove.io.SmartGloveInterface;
 public class MqttConnectionService extends Service {
     private static final String TAG = "MQTT Service";
     private static final String EXTRA_DATA = "uri.wbl.tex_tronics.mqtt.data";
+    int counter = 0;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MqttConnectionService.class);
@@ -69,6 +70,7 @@ public class MqttConnectionService extends Service {
         mMqttAndroidClient.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
+                Log.d(TAG, "Connection Lost!");
                 connectClient();
             }
 
@@ -91,6 +93,9 @@ public class MqttConnectionService extends Service {
      * creates mqtt options and connects client
      */
     public void connectClient() {
+        Log.v(TAG, "Connect client envoked...");
+        counter++;
+        Log.v(TAG, "Counter: " + counter);
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
         mqttConnectOptions.setCleanSession(false);
@@ -98,9 +103,13 @@ public class MqttConnectionService extends Service {
         try {
             mMqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, "Successfully Connected");
-                    sendUpdate(UpdateType.connected);
+                public void onSuccess(IMqttToken asyncActionToken)
+                {
+                    if(mMqttAndroidClient != null)
+                    {
+                        Log.d(TAG, "Successfully Connected");
+                        sendUpdate(UpdateType.connected);
+                    }
                 }
 
                 @Override
@@ -128,6 +137,7 @@ public class MqttConnectionService extends Service {
     public void onDestroy() {
         Log.d(TAG, "MQTT Service Destroyed");
 
+        mMqttAndroidClient = null;
         super.onDestroy();
     }
 

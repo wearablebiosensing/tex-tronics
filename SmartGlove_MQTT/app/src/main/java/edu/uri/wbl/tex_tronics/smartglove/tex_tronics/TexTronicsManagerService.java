@@ -309,6 +309,8 @@ public class TexTronicsManagerService extends Service {
         super.onDestroy();
     }
 
+
+
     private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID) {
         if (mBleServiceBound) {
             SmartGlove smartGlove;
