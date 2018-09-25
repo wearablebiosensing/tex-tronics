@@ -1,4 +1,4 @@
-package andrewpeltier.smartglovefragments.fragments;
+package andrewpeltier.smartglovefragments.fragments.patientfrags;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;

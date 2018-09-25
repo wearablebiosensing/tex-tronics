@@ -20,7 +20,7 @@ import java.util.UUID;
 import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
 import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
 import andrewpeltier.smartglovefragments.ble.GattServices;
-import andrewpeltier.smartglovefragments.fragments.DeviceExerciseFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.DeviceExerciseFragment;
 import andrewpeltier.smartglovefragments.io.IOUtil;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.mqtt.MqttConnectionService;

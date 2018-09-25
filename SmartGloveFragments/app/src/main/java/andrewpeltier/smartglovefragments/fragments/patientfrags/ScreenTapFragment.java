@@ -1,4 +1,4 @@
-package andrewpeltier.smartglovefragments.fragments;
+package andrewpeltier.smartglovefragments.fragments.patientfrags;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -12,6 +12,9 @@
     <string name="title_devices">BLE Device Scan</string>
     <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
     <string name="finish_return">Return</string>
+    <string name="begin">Begin</string>
+    <string name="button_continue">Continue</string>
+    <string name="button_set_routine">Set Routine</string>
 
     <!-- Unknown Attributes -->
     <string name="unknown_device">Unknown device</string>
@@ -23,12 +26,8 @@
     <string name="ab_exercise_select">Select Your Exercises</string>
 
     <!-- Menu items -->
-    <string name="menu_connect">Connect</string>
-    <string name="menu_disconnect">Disconnect</string>
-    <string name="menu_scan">Scan</string>
-    <string name="menu_stop">Stop</string>
-    <string name="reconnect">Try to reconnect</string>
-    <string name="ble_disconnect">Disconnect</string>
-    <string name="change_name">Change Name</string>
-    <string name="begin">Begin</string>
+    <string name="patient_feed">Patient Feed</string>
+    <string name="create_pat_pro">Create Patient Profile</string>
+    <string name="create_routine">Create Routine</string>
+    <string name="patient_mode">Patient Mode</string>
 </resources>

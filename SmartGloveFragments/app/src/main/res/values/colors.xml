@@ -101,4 +101,11 @@
         <item>@color/gradientWalkSteps_c2</item>
         <item>@color/gradientWalkSteps_c3</item>
     </array>
+
+    <!-- News Feed Colors -->
+    <color name="feed_bg">#d3d6db</color>
+    <color name="feed_item_bg">#ffffff</color>
+    <color name="feed_item_border">#c2c3c8</color>
+    <color name="link">#0a80d1</color>
+    <color name="timestamp">#a0a3a7</color>
 </resources>

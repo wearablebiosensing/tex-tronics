@@ -11,15 +11,18 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.UUID;
 
 import andrewpeltier.smartglovefragments.R;
-import andrewpeltier.smartglovefragments.fragments.ExerciseInstructionFragment;
-import andrewpeltier.smartglovefragments.fragments.ExerciseSelectionFragment;
-import andrewpeltier.smartglovefragments.fragments.FinishFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseInstructionFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseSelectionFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.FinishFragment;
 import andrewpeltier.smartglovefragments.fragments.HomeFragment;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdate;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     };
     private static final int PERMISSION_CODE = 111;
 
+    private boolean isDoctor = false;
     private static String[] deviceAddressList;
     private String[] deviceTypeList;
     private static String[] exerciseChoices;
@@ -95,6 +99,16 @@ public class MainActivity extends AppCompatActivity
         else {
             addFragment(new FinishFragment(), "FinishFragment");
         }
+    }
+
+    public void setIsDoctor(boolean doctor)
+    {
+        Log.v(TAG, "setIsDoctor: Doctor is set to " + doctor);
+        isDoctor = doctor;
+    }
+    public boolean getIsDoctor()
+    {
+        return isDoctor;
     }
 
     /**
@@ -264,6 +278,10 @@ public class MainActivity extends AppCompatActivity
             addFragment(new HomeFragment(), "HomeFragment");
         else if(mFragmentTag.equals("HomeFragment"))
             super.onBackPressed();
+        else if(mFragmentTag.equals("PatientFeedFragment")||
+                mFragmentTag.equals("RoutineCreateFragment")||
+                mFragmentTag.equals("CreateProfileFragment"))
+            addFragment(new HomeFragment(), "HomeFragment");
         else
         {
             Log.d(TAG, "onBackPressed: navigating back to exercise selection...");

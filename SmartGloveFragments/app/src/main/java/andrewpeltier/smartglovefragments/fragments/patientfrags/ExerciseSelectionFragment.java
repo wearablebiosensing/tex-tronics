@@ -1,4 +1,4 @@
-package andrewpeltier.smartglovefragments.fragments;
+package andrewpeltier.smartglovefragments.fragments.patientfrags;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,6 +47,7 @@ public class ExerciseSelectionFragment extends Fragment implements
     public static ArrayList<String> listItems=new ArrayList<String>();
     public static ArrayAdapter<String> adapter;
     private Button contButton;
+    boolean doctorMode;
 
     @Nullable
     @Override
@@ -100,7 +101,12 @@ public class ExerciseSelectionFragment extends Fragment implements
         });
 
         // Set up continue button
-        contButton = view.findViewById(R.id.continue_button);
+        doctorMode = ((MainActivity)getActivity()).getIsDoctor();
+        contButton = view.findViewById(R.id.rou_cont_btn);
+        if(doctorMode)
+            contButton.setText(R.string.button_set_routine);
+        else
+            contButton.setText(R.string.button_continue);
         contButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,16 +114,23 @@ public class ExerciseSelectionFragment extends Fragment implements
                     Toast.makeText(getActivity(), "Please select at least one exercise", Toast.LENGTH_SHORT).show();
                 else
                 {
-                    // Takes exercises from list and sends them to Main Activity
-                    String[] chosenExercises = new String[adapter.getCount()];
-                    for(int i = 0; i < adapter.getCount(); i++)
+                    if(doctorMode)
                     {
-                        chosenExercises[i] = adapter.getItem(i);
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+
                     }
-                    String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
-                    ((MainActivity)getActivity()).setExercises(chosenExercises, exerciseModeArray);
-                    ((MainActivity)getActivity()).startExercise();
+                    else
+                    {
+                        // Takes exercises from list and sends them to Main Activity
+                        String[] chosenExercises = new String[adapter.getCount()];
+                        for(int i = 0; i < adapter.getCount(); i++)
+                        {
+                            chosenExercises[i] = adapter.getItem(i);
+                            exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        }
+                        String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
+                        ((MainActivity)getActivity()).setExercises(chosenExercises, exerciseModeArray);
+                        ((MainActivity)getActivity()).startExercise();
+                    }
                 }
             }
         });

@@ -1,5 +1,6 @@
 package andrewpeltier.smartglovefragments.fragments;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import andrewpeltier.smartglovefragments.fragments.doctorfrags.PatientFeedFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseSelectionFragment;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.R;
 
@@ -32,7 +35,16 @@ public class HomeFragment extends Fragment
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((MainActivity)getActivity()).setIsDoctor(false);
                 ((MainActivity)getActivity()).addFragment(new ExerciseSelectionFragment(), "ExerciseSelectionFragment");
+            }
+        });
+        startButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ((MainActivity)getActivity()).setIsDoctor(true);
+                ((MainActivity)getActivity()).addFragment(new PatientFeedFragment(), "PatientFeedFragment");
+                return false;
             }
         });
 
