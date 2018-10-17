@@ -1,4 +1,4 @@
-package andrewpeltier.smartglovefragments.tex_tronics;
+package andrewpeltier.smarttrousers.tex_tronics;
 
 import android.app.Notification;
 import android.app.Service;
@@ -17,22 +17,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
-import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
-import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
-import andrewpeltier.smartglovefragments.ble.GattServices;
-import andrewpeltier.smartglovefragments.fragments.patientfrags.DeviceExerciseFragment;
-import andrewpeltier.smartglovefragments.io.IOUtil;
-import andrewpeltier.smartglovefragments.main_activity.MainActivity;
-import andrewpeltier.smartglovefragments.mqtt.MqttConnectionService;
-import andrewpeltier.smartglovefragments.mqtt.MqttUpdateReceiver;
-import andrewpeltier.smartglovefragments.mqtt.UpdateType;
-import andrewpeltier.smartglovefragments.tex_tronics.devices.SmartGlove;
-import andrewpeltier.smartglovefragments.tex_tronics.devices.TexTronicsDevice;
-import andrewpeltier.smartglovefragments.tex_tronics.enums.Action;
-import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
-import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
-import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
-import andrewpeltier.smartglovefragments.visualize.Choice;
+import andrewpeltier.smarttrousers.MainActivity;
+import andrewpeltier.smarttrousers.ble.BluetoothLeConnectionService;
+import andrewpeltier.smarttrousers.ble.GattCharacteristics;
+import andrewpeltier.smarttrousers.ble.GattServices;
+import andrewpeltier.smarttrousers.fragments.DataStreamFrag;
+import andrewpeltier.smarttrousers.io.IOUtil;
+import andrewpeltier.smarttrousers.mqtt.MqttConnectionService;
+import andrewpeltier.smarttrousers.mqtt.MqttUpdateReceiver;
+import andrewpeltier.smarttrousers.mqtt.UpdateType;
+import andrewpeltier.smarttrousers.tex_tronics.devices.SmartGlove;
+import andrewpeltier.smarttrousers.tex_tronics.devices.TexTronicsDevice;
+import andrewpeltier.smarttrousers.tex_tronics.enums.Action;
+import andrewpeltier.smarttrousers.tex_tronics.enums.DeviceType;
+import andrewpeltier.smarttrousers.tex_tronics.enums.ExerciseMode;
+import andrewpeltier.smarttrousers.tex_tronics.exceptions.IllegalDeviceType;
+import andrewpeltier.smarttrousers.visualize.Choice;
 
 
 /**
@@ -299,12 +299,6 @@ public class TexTronicsManagerService extends Service {
                 break;
             case stop:
                 // TODO Check for multiple devices
-                if(MainActivity.getmDeviceAddressList() != null &&
-                        MainActivity.getmDeviceAddressList().length != 0)
-                {
-                    for(String address : MainActivity.getmDeviceAddressList())
-                        disconnect(address);
-                }
                 stopSelf();
         }
 
@@ -435,7 +429,7 @@ public class TexTronicsManagerService extends Service {
                     //TODO: DEBUG ME!!!!!
 
                     // Send to Server via MQTT
-                    if(mMqttServiceBound && DeviceExerciseFragment.START_LOG) {
+                    if(mMqttServiceBound) {
                         try {
                             byte[] buffer = IOUtil.readFile(disconnectingDevice.getCsvFile());
                             String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(),
@@ -446,7 +440,6 @@ public class TexTronicsManagerService extends Service {
                                     new String(buffer));
                             Log.d("SmartGlove", "JSON: " + json);
                             mMqttService.publishMessage(json);
-                            DeviceExerciseFragment.START_LOG = false;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -508,7 +501,7 @@ public class TexTronicsManagerService extends Service {
                                             device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
-                                            if(DeviceExerciseFragment.START_LOG)
+                                            if(DataStreamFrag.START_LOG)
                                                 device.logData(mContext);
                                         } else {
                                             Log.w(TAG, "Invalid Data Packet");
@@ -521,7 +514,7 @@ public class TexTronicsManagerService extends Service {
                                         device.setThumbFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
                                         device.setIndexFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
 
-                                        if(DeviceExerciseFragment.START_LOG)
+                                        if(DataStreamFrag.START_LOG)
                                             device.logData(mContext);
 
                                         // Second Data Set
@@ -529,7 +522,7 @@ public class TexTronicsManagerService extends Service {
                                         device.setThumbFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
                                         device.setIndexFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
 
-                                        if(DeviceExerciseFragment.START_LOG)
+                                        if(DataStreamFrag.START_LOG)
                                             device.logData(mContext);
 
                                         // Third Data Set
@@ -537,7 +530,7 @@ public class TexTronicsManagerService extends Service {
                                         device.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
                                         device.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
 
-                                        if(DeviceExerciseFragment.START_LOG)
+                                        if(DataStreamFrag.START_LOG)
                                             device.logData(mContext);
                                         break;
                                 }

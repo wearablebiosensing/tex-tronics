@@ -10,18 +10,65 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 
 public class CreateProfileFragment extends Fragment
 {
+    private TextView instrText, nameText, ageText, heightText, weightText, diagText;
+    private Button nextAttrBtn;
+    private EditText editName;
+
+    private int state = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_profile_creation, container, false);
         setHasOptionsMenu(true);
+
+        instrText = view.findViewById(R.id.instrText);
+        nameText = view.findViewById(R.id.nameText);
+        ageText = view.findViewById(R.id.ageText);
+        heightText = view.findViewById(R.id.heightText);
+        weightText = view.findViewById(R.id.weightText);
+        diagText = view.findViewById(R.id.diagText);
+        nextAttrBtn = view.findViewById(R.id.nextAttrBtn);
+        editName = view.findViewById(R.id.editName);
+
+        nextAttrBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                // Check to see what state
+                switch(state)
+                {
+                    case 0:
+                        if(!editName.getText().toString().equals("Name") && !editName.getText().toString().equals(""))
+                        {
+                            nameText.setText(editName.getText().toString());
+                            // Move view
+                            state++;
+                        }
+                        else
+                            Toast.makeText(getActivity(),"Please enter a valid name", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                }
+            }
+        });
 
         return view;
     }

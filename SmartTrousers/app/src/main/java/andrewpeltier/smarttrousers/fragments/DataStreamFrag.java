@@ -1,5 +1,4 @@
-package andrewpeltier.smartglovefragments.fragments.patientfrags;
-
+package andrewpeltier.smarttrousers.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -22,15 +23,15 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.UUID;
 
-import andrewpeltier.smartglovefragments.R;
-import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
-import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
-import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
-import andrewpeltier.smartglovefragments.main_activity.MainActivity;
-import andrewpeltier.smartglovefragments.visualize.GenerateGraph;
+import andrewpeltier.smarttrousers.MainActivity;
+import andrewpeltier.smarttrousers.R;
+import andrewpeltier.smarttrousers.ble.BluetoothLeConnectionService;
+import andrewpeltier.smarttrousers.ble.GattCharacteristics;
+import andrewpeltier.smarttrousers.io.SmartGloveInterface;
+import andrewpeltier.smarttrousers.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
 
-public class DeviceExerciseFragment extends Fragment implements SmartGloveInterface
+public class DataStreamFrag extends Fragment implements SmartGloveInterface
 {
     private static final String TAG = "DeviceExerciseFragment";
 
@@ -38,18 +39,17 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     private LineGraphSeries<DataPoint> series1, series2;
     private int count;
     private String exerciseName;
-    private Button disconnectBtn, nextButton;
+    private Button disconnectBtn, connectButton, startButton;
+    private TextView loadingText;
+    public static boolean START_LOG;
+    private boolean started = false;
     private GifImageView sideImage;
-    public static boolean START_LOG = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
-
-        if(MainActivity.connected)
-            START_LOG = true;
+        View view = inflater.inflate(R.layout.fragment_data_stream, container, false);
 
         if(MainActivity.exercise_name != null)
             exerciseName = MainActivity.exercise_name;
@@ -58,14 +58,12 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         if(MainActivity.exercise_name != null)
             setSideViews(exerciseName);
 
-        nextButton = view.findViewById(R.id.next_button);
-        nextButton.setOnClickListener(new View.OnClickListener()
+        connectButton = view.findViewById(R.id.connect_button);
+        connectButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
-                START_LOG = false;
-                ((MainActivity)getActivity()).publish();
-                ((MainActivity)getActivity()).startExercise();
+                ((MainActivity)getActivity()).connect();
             }
         });
 
@@ -74,6 +72,48 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).disconnect();
+            }
+        });
+
+        loadingText = view.findViewById(R.id.loadingText);
+
+        startButton = view.findViewById(R.id.start_btn);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!started)
+                {
+                    Log.d(TAG, "Starting data logging.");
+                    final CountDownTimer startTimer = new CountDownTimer(3000, 980) {
+                        int countdown = 3;
+
+                        @Override
+                        public void onTick(long l)
+                        {
+                            Log.v(TAG, "Tick: " + countdown);
+                            loadingText.setText("" + countdown);
+                            countdown--;
+                        }
+
+                        @Override
+                        public void onFinish()
+                        {
+                            START_LOG = true;
+                            loadingText.setVisibility(View.INVISIBLE);
+                        }
+                    };
+                    startTimer.start();
+                    startButton.setText("Stop");
+                    started = true;
+                }
+                else
+                {
+                    startButton.setText("Stop");
+                    START_LOG = false;
+                    loadingText.setText("Waiting...");
+                    loadingText.setVisibility(View.VISIBLE);
+                    ((MainActivity)getActivity()).publish();
+                }
             }
         });
 
@@ -97,34 +137,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
     private void setSideViews(String name)
     {
-        if (name.equals("Finger Tap"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.FINGER_TAP_GIF);
-        }
-        else if (name.equals("Closed Grip"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.CLOSED_GRIP_GIF);
-        }
-        else if (name.equals("Hand Flip"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.HAND_FLIP_GIF);
-        }
-        else if (name.equals("Heel Tap"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.HEEL_TAP_GIF);
-        }
-        else if (name.equals("Toe Tap"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.TOE_TAP_GIF);
-        }
-        else if (name.equals("Foot Stomp"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.FOOT_STOMP_GIF);
-        }
-        else if (name.equals("Walk Steps"))
-        {
-            sideImage.setBackgroundResource(InstructionsImage.WALK_STEPS_GIF);
-        }
+
     }
 
     private BroadcastReceiver mBLEUpdateReceiver = new BroadcastReceiver() {
