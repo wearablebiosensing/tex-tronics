@@ -187,6 +187,8 @@
 <rectangle x1="115.57" y1="49.657" x2="128.397" y2="63.881" layer="41"/>
 <rectangle x1="115.57" y1="49.53" x2="128.397" y2="63.881" layer="42"/>
 <rectangle x1="115.57" y1="49.53" x2="128.397" y2="63.881" layer="45"/>
+<dimension x1="104.267" y1="43.434" x2="136.652" y2="43.434" x3="120.4595" y3="35.941" textsize="0.254" layer="45"/>
+<dimension x1="110.236" y1="64.516" x2="110.617" y2="38.354" x3="100.203" y3="51.435" textsize="0.254" layer="45" dtype="vertical"/>
 </plain>
 <libraries>
 <library name="con-lstb" urn="urn:adsk.eagle:library:162">

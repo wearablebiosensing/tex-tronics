@@ -10898,7 +10898,7 @@ Source: www.kingbright.com</description>
 </classes>
 <parts>
 <part name="U1" library="SparkFun-Sensors" deviceset="LSM9DS1" device=""/>
-<part name="U2" library="MCP73832T-2ACI_OT" deviceset="MCP73832T-2ACI/OT" device=""/>
+<part name="U2" library="MCP73832T-2ACI_OT" deviceset="MCP73832T-2ACI/OT" device="" value="MCP"/>
 <part name="R1" library="Panasonic 20K Res" deviceset="ERJ-6GEYJ203V" device=""/>
 <part name="C1" library="Yageo 4.7uF Cap" deviceset="CC0805ZRY5V6BB475" device=""/>
 <part name="C2" library="Yageo 4.7uF Cap" deviceset="CC0805ZRY5V6BB475" device=""/>

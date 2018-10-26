@@ -158,10 +158,6 @@
 </layers>
 <board>
 <plain>
-<wire x1="0" y1="0" x2="160" y2="0" width="0" layer="20"/>
-<wire x1="160" y1="0" x2="160" y2="100" width="0" layer="20"/>
-<wire x1="160" y1="100" x2="0" y2="100" width="0" layer="20"/>
-<wire x1="0" y1="100" x2="0" y2="0" width="0" layer="20"/>
 <text x="130.81" y="46.99" size="1.778" layer="22" rot="MR0">KAYAWEARv1.2</text>
 <text x="121.92" y="40.64" size="1.778" layer="21">WBL</text>
 <wire x1="104.648" y1="62.738" x2="104.648" y2="43.57905" width="0.127" layer="20"/>
