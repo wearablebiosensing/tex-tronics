@@ -1,6 +1,5 @@
 package andrewpeltier.smartglovefragments.fragments;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,7 +48,7 @@ public class HomeFragment extends Fragment
         });
 
         logo = view.findViewById(R.id.logo);
-        Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logofadein);
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
         logo.startAnimation(fadeInAnimation);
 
         Log.d(TAG, "onCreateView: Started.");
