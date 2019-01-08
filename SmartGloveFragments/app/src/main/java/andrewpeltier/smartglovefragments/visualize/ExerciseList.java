@@ -5,6 +5,19 @@ import java.util.List;
 
 import andrewpeltier.smartglovefragments.R;
 
+/** ======================================
+ *
+ *          ExerciseList Class
+ *
+ *  ======================================
+ *
+ *  Creates and returns a list of exercise objects. Each exercise contains all of the information needed to
+ *  create the ExerciseView.
+ *
+ *  @author Andrew Peltier
+ *  @version 1.0
+ *
+ */
 public class ExerciseList
 {
     public static ExerciseList get() {
@@ -14,7 +27,8 @@ public class ExerciseList
     private ExerciseList() {
     }
 
-    public List<Exercise> getExercises() {
+    public List<Exercise> getExercises()
+    {
         return Arrays.asList(
                 new Exercise("Finger Tap", R.drawable.fingertap_animate, "Finger Tap", Choice.FINGER_TAP, "Glove"),
                 new Exercise("Closed Grip", R.drawable.closed_grip_icon, "Closed Grip", Choice.CLOSED_GRIP, "Glove"),

@@ -19,11 +19,27 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.UUID;
 
-/**
+/** ======================================
+ *
+ *   BluetoothLeConnectionService Class
+ *
+ *  ======================================
+ *
+ *  This service allows for our BLE connections to run smoothly as a background service
+ *  while the application is writing. Here we provide the means to connect, disconnect, read, and enable
+ *  notifications from our BLE devices.
+ *
  * Created by mcons on 2/8/2018.
+ * @version 1.0
  */
 
-public class BluetoothLeConnectionService extends Service {
+public class BluetoothLeConnectionService extends Service
+{
+    /**
+     * Each String is a tag used to identify when the corresponding BLE update has occured.
+     * These are mainly used in this class, the TexTronics Manager, and the Device Exercise
+     * Fragment.
+     */
     public static final String INTENT_DEVICE = "uri.egr.biosensign.intent_device";
     public static final String INTENT_EXTRA = "uri.egr.biosensing.intent_extra";
     public static final String INTENT_DATA = "uri.egr.biosensing.intent_data";
@@ -42,42 +58,72 @@ public class BluetoothLeConnectionService extends Service {
     public static final String GATT_DEVICE_INFO_READ = "gatt_device_info_read";
     public static final String GATT_INFORMATION_STORE = "gatt_information_store";
 
+    /**
+     * Tag used to debug connection process
+     */
     private static final String DEBUG_LOG_TAG = BluetoothLeConnectionService.class.getSimpleName();
 
     private IBinder mBinder = new BLEConnectionBinder();
-    private BluetoothManager mBluetoothManager;
-    private BluetoothAdapter mBluetoothAdapter;
-    private HashMap<String,BluetoothGatt> mBluetoothGattList;
+    private BluetoothManager mBluetoothManager;                 // Manages Bluetooth connections
+    private BluetoothAdapter mBluetoothAdapter;                 // Adapter used to connect to devices
+    private HashMap<String,BluetoothGatt> mBluetoothGattList;   // List of gatt devices to connect to
 
-    private BluetoothGattCallback mBluetoothGattCallback = new BluetoothGattCallback() {
+    /** BluetoothGattCallback
+     *
+     * For our purposes, our gatt callback is used to detect a change in connection
+     * with any of our devices.
+     *
+     */
+    private BluetoothGattCallback mBluetoothGattCallback = new BluetoothGattCallback()
+    {
+        /** onConnectionStateChange()
+         *
+         * Handles a change in connection
+         *
+         * @param gatt              -Device that has a change in state
+         * @param status            -Whether or not the change is successful
+         * @param newState          -The new state, either being connected or disconnected
+         */
         @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState)
+        {
+            // Error occurs when the status is unsuccessful
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 log("Bluetooth Gatt Error (" + status + ")");
                 return;
             }
-
-            switch (newState) {
+            // Handles the change in connection
+            switch (newState)
+            {
                 case BluetoothProfile.STATE_CONNECTED:
                     log("Connected to " + gatt.getDevice().getName());
+                    // Put the newly connected device in our list of connected gatts
                     mBluetoothGattList.put(gatt.getDevice().getAddress(), gatt);
+                    // Broadcast to TexTronics manager that we've connected to this device
                     sendBroadcast(generateIntent(gatt.getDevice().getAddress(), GATT_STATE_CONNECTED));
+                    // Send a broadcast looking to read data from this device
                     String[] deviceInfo = {gatt.getDevice().getName(), gatt.getDevice().getAddress()};
-
-                    // Two devices
-//                    if(mBluetoothGattList.size() < 2)
-//                        connect();
                     sendBroadcast(generateIntent(gatt.getDevice().getAddress(), GATT_DEVICE_INFO_READ, deviceInfo));
                     break;
                 case BluetoothProfile.STATE_DISCONNECTED:
                     log("Disconnected from " + gatt.getDevice().getName());
+                    // Remove the gatt from our connected gatt list
                     mBluetoothGattList.remove(gatt.getDevice().getAddress());
+                    // Notify the TexTronics manager that we've disconnected from this device
                     sendBroadcast(generateIntent(gatt.getDevice().getAddress(), GATT_STATE_DISCONNECTED));
                     gatt.close();
                     break;
             }
         }
 
+        /** onServicesDiscovered()
+         *
+         * Discovers the services in our bluetooth gatt, which are sets of similar
+         * characteristics. It then broadcasts that our services have been discovered
+         *
+         * @param gatt              -Gatt which services have just been discovered
+         * @param status            -Determines whether or not the gatt is successful
+         */
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
@@ -96,6 +142,18 @@ public class BluetoothLeConnectionService extends Service {
                 log("Bluetooth Gatt Error (" + status + ")");
             }
         }
+
+        /** The following are simple operation notifications that are launched when
+         * we read and write from a characteristic, which is a component
+         * inside of a bluetooth gatt service that holds a value. In our case, this value could be the data we
+         * receive from our devices.
+         *
+         * We simply log our information to the console and broadcast the change
+         *
+         * @param gatt                  -Gatt device that notifies an operation
+         * @param characteristic        -Characteristic that triggered event
+         * @param status                -Status of the gatt
+         */
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
@@ -126,6 +184,15 @@ public class BluetoothLeConnectionService extends Service {
             super.onDescriptorRead(gatt, descriptor, status);
         }
 
+        /** onDescriptorWrite()
+         *
+         * We need to write to the notification descriptor in order to be notified when our data
+         * characteristics change.
+         *
+         * @param gatt                  -Gatt device that notifies an operation
+         * @param descriptor            -Descriptor that triggered event
+         * @param status                -Status of the gatt
+         */
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status)
         {
@@ -140,6 +207,12 @@ public class BluetoothLeConnectionService extends Service {
                 log("Error Writing Descriptor (" + descriptor.getUuid() + ")");
             }
         }
+
+        /** Unchanged methods that are a part of implementation
+         *
+         * @param gatt
+         * @param status
+         */
 
         @Override
         public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
@@ -157,6 +230,12 @@ public class BluetoothLeConnectionService extends Service {
         }
     };
 
+    /** onCreate()
+     *
+     * When this service is created, we just need to set up our Bluetooth manager, adapter
+     * and gatt list which will store up to 7 bluetooth devices.
+     *
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -167,11 +246,13 @@ public class BluetoothLeConnectionService extends Service {
             stopSelf();
         }
 
+        // Get our system's Bluetooth manager
         mBluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         if(mBluetoothManager == null) {
             log("Stopping Service (Could not retrieve Bluetooth Manager");
             stopSelf();
         }
+        // Get our system's Bluetooth adapter that allows us to connect to devices
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
             log("Stopping Service (Could not retrieve Bluetooth Adapter");
@@ -179,6 +260,7 @@ public class BluetoothLeConnectionService extends Service {
         } else {
             log("Successfully Initialized Bluetooth Adapter");
         }
+
         //Initialize Hash Map of Connected Gatt Servers (Currently, only 7 BLE peripheral devices can be connected to a single Central device at a time
         mBluetoothGattList = new HashMap<>(7);
     }
@@ -211,51 +293,85 @@ public class BluetoothLeConnectionService extends Service {
     }
 
 
-    public boolean connect(String bluetoothDeviceAddress) {
+    /** connect()
+     *
+     * Adds a new gatt to our list if we can connect to another device. We use our bluetooth adapter
+     * to connect to the new device.
+     *
+     * @param bluetoothDeviceAddress        -MAC address of device to connect to
+     * @return                          Whether or not we have connected to the new device
+     */
+    public boolean connect(String bluetoothDeviceAddress)
+    {
+        // Make sure we have a functioning bluetooth adapter
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
             return false;
         }
 
-        if(mBluetoothGattList.size() >= 7) {
+        if(mBluetoothGattList.size() >= 7)
+        {
             // Too many devices connected
             log("Too many Devices connected");
             return false;
         }
 
+        // Get the device from our bluetooth adapter using its MAC address
         BluetoothDevice bluetoothDevice = mBluetoothAdapter.getRemoteDevice(bluetoothDeviceAddress);
         if (bluetoothDevice == null) {
             log("Could not find device");
             return false;
         }
+
+        // Connect to the gatt, and send with it our callback
         BluetoothGatt bluetoothGatt = bluetoothDevice.connectGatt(this, true, mBluetoothGattCallback);
         if (bluetoothGatt == null) {
             log("Could not connect to device's Gatt Server");
             return false;
         }
+
+        // If it hasn't returned false at this point, we can assume that the connection was successful
         log("Establishing connection to " + bluetoothDeviceAddress + "...");
         sendBroadcast(generateIntent(bluetoothDeviceAddress, GATT_STATE_CONNECTING));
         return true;
     }
 
+    /** disconnect()
+     *
+     * Disconnects from the input device. We simply get the device from our list by looking for its
+     * MAC address, then we disconnect from it.
+     *
+     * @param bluetoothDeviceAddress        -MAC address of device to disconnect from
+     * @return                          Whether or not we have disconnected from the input device
+     */
     public boolean disconnect(String bluetoothDeviceAddress) {
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
             return false;
         }
 
+        // Get the device to disconnect to
         BluetoothGatt bluetoothGatt = mBluetoothGattList.get(bluetoothDeviceAddress);
         if (bluetoothGatt == null) {
             log("Bluetooth Device's Gatt Server not Connected");
             return false;
         }
 
+        // Disconnect, then broadcast
         bluetoothGatt.disconnect();
         log("Disconnecting from " + bluetoothDeviceAddress + "...");
         sendBroadcast(generateIntent(bluetoothDeviceAddress, GATT_STATE_DISCONNECTING));
         return true;
     }
 
+    /** discoverServices()
+     *
+     * Looks for services in our newly connected gatt. We need to discover the services in
+     * order to read from their characteristics.
+     *
+     * @param bluetoothDeviceAddress        -MAC address of device to discover services from
+     * @return                          Whether or not services have been discovered. Triggers onServicesDiscovered()
+     */
     public boolean discoverServices(String bluetoothDeviceAddress)
     {
         if (mBluetoothAdapter == null) {
@@ -272,6 +388,7 @@ public class BluetoothLeConnectionService extends Service {
         return bluetoothGatt.discoverServices();
     }
 
+    // Not currently used. We get our info from the characteristics through their notifications, not through explicitly reading
     public boolean readCharacteristic(String bluetoothDeviceAddress, BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
@@ -293,6 +410,16 @@ public class BluetoothLeConnectionService extends Service {
         return bluetoothGatt.readCharacteristic(characteristic);
     }
 
+    /** writeCharacteristic()
+     *
+     * Writes a value to a characteristic. In our case, it will only be used to write a value to the
+     * TX characteristic.
+     *
+     * @param bluetoothDeviceAddress        -MAC address of device
+     * @param characteristic                -TX Characteristic
+     * @param value                         -Value to write to the characteristic
+     * @return                          Whether or not we wrote to the characteristic
+     */
     public boolean writeCharacteristic(String bluetoothDeviceAddress, BluetoothGattCharacteristic characteristic, byte[] value) {
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
@@ -318,6 +445,15 @@ public class BluetoothLeConnectionService extends Service {
         return bluetoothGatt.writeCharacteristic(characteristic);
     }
 
+    /** getService()
+     *
+     * Gets a particular service from a bluetooth gatt. This will be used so we can
+     * access a characteristic inside of this service
+     *
+     * @param bluetoothDeviceAddress        -MAC address of the bluetooth gatt
+     * @param serviceUUID                   -UUID or identification name of the service
+     * @return                          The service that we were looking for
+     */
     public BluetoothGattService getService(String bluetoothDeviceAddress, UUID serviceUUID) {
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
@@ -338,6 +474,16 @@ public class BluetoothLeConnectionService extends Service {
         return service;
     }
 
+    /** getCharacteristic()
+     *
+     * Gets a characteristic based on the UUIDs (identifiers) that we pass through the method. This characteristic
+     * needs to be inside of the correct service that the bluetooth gatt contains
+     *
+     * @param bluetoothDeviceAddress            -MAC address of the gatt
+     * @param serviceUUID                       -Service identifier that allows us to get service
+     * @param characteristicUUID                -Characteristic identifier that allows us to get characteristic
+     * @return                              The characteristic that we were looking for
+     */
     public BluetoothGattCharacteristic getCharacteristic(String bluetoothDeviceAddress, UUID serviceUUID, UUID characteristicUUID) {
         BluetoothGattService service = getService(bluetoothDeviceAddress, serviceUUID);
         if (service == null) {
@@ -351,6 +497,16 @@ public class BluetoothLeConnectionService extends Service {
         return characteristic;
     }
 
+    /** enableNotifications()
+     *
+     * Enables a characteristic to notify the application when its value has changed. This is the key feature we
+     * use to collect real-time data from our devices, meaning we enable notifications for every characteristic that
+     * stores collectable sensor information.
+     *
+     * @param bluetoothDeviceAddress            -MAC address of bluetooth gatt
+     * @param characteristic                    -Characteristic that we want to enable notifications for
+     * @return                              Whether or not notifications have been enabled
+     */
     public boolean enableNotifications(String bluetoothDeviceAddress, BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
@@ -368,6 +524,9 @@ public class BluetoothLeConnectionService extends Service {
             return false;
         }
 
+        /* First, we need to enable notifications, then we need to write to the gatt's notification
+         * descriptor in order to make sure that the notifications have been registered.
+         */
         bluetoothGatt.setCharacteristicNotification(characteristic, true);
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(GattDescriptors.NOTIFICATION_DESCRIPTOR);
         if (descriptor == null) {
@@ -385,6 +544,7 @@ public class BluetoothLeConnectionService extends Service {
         return true;
     }
 
+    // We never want to disable notifications once enabled
     public boolean disableNotifications(String bluetoothDeviceAddress, BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null) {
             log("Bluetooth Adapter not initialized");
@@ -419,6 +579,23 @@ public class BluetoothLeConnectionService extends Service {
         return true;
     }
 
+    /** ==========================================
+     *
+     *              Intent Generation
+     *
+     *      The following methods generate and send
+     *   intents, which basically sends an operation
+     *   to another service.
+     *
+     *  ==========================================
+     */
+
+    /** Intent used to broadcast the state of a bluetooth gatt
+     *
+     * @param bluetoothDeviceAddress    -MAC address of the bluetooth gatt
+     * @param action                    -String identifying the state of the gatt
+     * @return
+     */
     private Intent generateIntent(String bluetoothDeviceAddress, String action) {
         Intent intent = new Intent(INTENT_FILTER_STRING);
         intent.putExtra(INTENT_DEVICE, bluetoothDeviceAddress);
@@ -426,6 +603,7 @@ public class BluetoothLeConnectionService extends Service {
         return intent;
     }
 
+    // Not currently in use
     private Intent generateIntent(String bluetoothDeviceAddress, String action, byte[] data) {
         Intent intent = new Intent(INTENT_FILTER_STRING);
         intent.putExtra(INTENT_DEVICE, bluetoothDeviceAddress);
@@ -434,6 +612,13 @@ public class BluetoothLeConnectionService extends Service {
         return intent;
     }
 
+    /** Sends broadcast to TexTronics Manager after a new gatt has been connected
+     *
+     * @param bluetoothDeviceAddress
+     * @param action
+     * @param data
+     * @return
+     */
     private Intent generateIntent(String bluetoothDeviceAddress, String action, String[] data) {
         Intent intent = new Intent(INTENT_FILTER_STRING);
         intent.putExtra(INTENT_DEVICE, bluetoothDeviceAddress);
@@ -442,6 +627,14 @@ public class BluetoothLeConnectionService extends Service {
         return intent;
     }
 
+    /** Sends broadcast to both read from and enable notifications for a characteristic
+     *
+     * @param bluetoothDeviceAddress    -MAC address of bluetooth gatt
+     * @param action                    -Action performed, either READ or NOTIFY
+     * @param data                      -Data packet that contains readable information
+     * @param uuid                      -Identifier of the characteristic
+     * @return
+     */
     private Intent generateIntent(String bluetoothDeviceAddress, String action, byte[] data, UUID uuid) {
         Intent intent = new Intent(INTENT_FILTER_STRING);
         intent.putExtra(INTENT_DEVICE, bluetoothDeviceAddress);

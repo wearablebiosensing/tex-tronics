@@ -20,23 +20,49 @@ import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceTyp
 import andrewpeltier.smartglovefragments.visualize.Choice;
 
 
-/**
- * Created by mcons on 2/28/2018.
+/** ======================================
+ *
+ *            SmartGlove Class
+ *
+ *  ======================================
+ *
+ *  Child of the TexTronicsDevice class
+ *
+ *  Stores all of the data that pertains to a single device, including its name, the name and mode of
+ *  the exercise that it collected data from, the routine ID, etc. This information is used to publish
+ *  data each exercise to the MQTT server.
  *
  * @author Matthew Constant
  * @version 1.0, 02/28/2018
  */
 
-public class SmartGlove extends TexTronicsDevice {
-    private TexTronicsData mData;
+public class SmartGlove extends TexTronicsDevice
+{
+    private TexTronicsData mData;           // CSV Formatted exercise data
 
-    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
+    /** SmartGlove Constructor
+     *
+     * Takes the following parameters as inputs and uses their data to create a CSV file / JSON formatted
+     * MQTT server data entry.
+     *
+     * @param deviceAddress             -MAC address of the Smart Glove device
+     * @param exerciseMode              -Mode of the exercise, being FlexIMU or FlexOnly
+     * @param choice                    -Choice of one of the eight exercises
+     * @param exerciseID                -ID of the chosen exercise
+     * @param routineID                 -ID of the routine
+     */
+    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID)
+    {
+        /*
+         * Calls super method, which sets all shared parent variables given the
+         * input parameters
+         */
         super(deviceAddress, exerciseMode, choice, exerciseID, routineID);
-
         mDeviceAddress = deviceAddress;
 
-        // Set CSV Header and Data Model
-        switch (EXERCISE_MODE) {
+        // Set CSV Header and Data Model depending on exercise mode
+        switch (EXERCISE_MODE)
+        {
             case FLEX_IMU:
                 mData = new FlexImuData();
                 mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
@@ -58,8 +84,17 @@ public class SmartGlove extends TexTronicsDevice {
         setCsvFile(file);
     }
 
+    /** logData()
+     *
+     * Use the data generated from the constructor to create a CSV file. This will include and mainly
+     * consist of the data gathered from a specific exercise.
+     *
+     * @param context               -State of the application
+     * @throws IOException
+     */
     @Override
-    public void logData(Context context) throws IOException {
+    public void logData(Context context) throws IOException
+    {
         super.logData(context); // Validates CSV File
 
         // Store in CSV File
@@ -68,8 +103,15 @@ public class SmartGlove extends TexTronicsDevice {
         DataLogService.log(context, mCsvFile, logString, mHeader);
     }
 
+    /** clear()
+     *
+     * Clears the data so that we can reuse this device to store data from a different
+     * exercise.
+     *
+     */
     @Override
-    public void clear() {
+    public void clear()
+    {
         mData.clear();
     }
 

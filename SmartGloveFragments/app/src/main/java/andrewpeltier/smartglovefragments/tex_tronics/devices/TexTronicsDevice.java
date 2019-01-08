@@ -15,27 +15,51 @@ import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
 import andrewpeltier.smartglovefragments.visualize.Choice;
 
-
-/**
- * Created by mcons on 2/28/2018.
+/** ======================================
+ *
+ *     TexTronicsDevice Abstract Class
+ *
+ *  ======================================
+ *
+ *  Parent class responsible for formatting device data so that it can be published to
+ *  the MQTT server.
+ *
+ * @author mcons on 2/28/2018.
+ * @version 1.0
  */
 
-public abstract class TexTronicsDevice {
+public abstract class TexTronicsDevice
+{
+    /**
+     * Constant for the MAC address of the TexTronics Device
+     */
     protected final String DEVICE_ADDRESS;
+    /**
+     * Constant exercise mode, being either FlexOnly or FlexIMU
+     */
     protected final ExerciseMode EXERCISE_MODE;
+    /**
+     * One of the eight exercises that the device is currently collecting data from
+     */
     protected final Choice CHOICE;
+    /**
+     * ID of the currently collected exercise
+     */
     protected final String EXERCISE_ID;
+    /**
+     * ID of the routine currently in session
+     */
     protected final String ROUTINE_ID;
 
-    protected String mHeader;
-    protected File mCsvFile;
-    protected String mDate;
-
-    protected String mDeviceAddress;
+    protected String mHeader;               // Header of the CSV file, dependent on device type
+    protected File mCsvFile;                // CSV file to be written
+    protected String mDate;                 // Date that the CSV file has been generated, including time
+    protected String mDeviceAddress;        // MAC address of TexTronics Device
 
     public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode, @NonNull Choice choice, String exerciseID, String routineID) throws IllegalArgumentException {
         // Validate Bluetooth Device Address Provided
-        if(!BluetoothAdapter.checkBluetoothAddress(deviceAddress)) {
+        if(!BluetoothAdapter.checkBluetoothAddress(deviceAddress))
+        {
             throw new IllegalArgumentException("Invalid Device Address");
         }
 

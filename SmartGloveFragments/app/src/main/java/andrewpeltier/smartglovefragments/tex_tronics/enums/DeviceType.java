@@ -1,11 +1,27 @@
 package andrewpeltier.smartglovefragments.tex_tronics.enums;
 
-/**
- * Created by mcons on 2/28/2018.
+/** ======================================
+ *
+ *              DeviceType Enum
+ *
+ *  ======================================
+ *
+ *  Enum that returns one of the two types of devices we can use for data collection,
+ *  being either a Smart Glove or a Smart Sock.
+ *
+ * @author mcons on 2/28/2018.
+ * @version 1.0
  */
 
-public enum DeviceType {
+public enum DeviceType
+{
+    /**
+     * The device is a glove type meant for the user's hands
+     */
     SMART_GLOVE ("smart_glove"),
+    /**
+     * The device is a shoe or sock type meant for the user's feet
+     */
     SMART_SOCK ("smart_sock");
 
     private final String mType;

@@ -19,7 +19,22 @@ import com.bumptech.glide.Glide;
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 
-
+/** ======================================
+ *
+ *           ExerciseView Class
+ *
+ *  ======================================
+ *
+ *  Creates the right side of the exercise selection screen, which holds the carousel, the instructions text, and
+ *  the animated gif for each exercise. This also controls the gradient transformation that occurs when the user
+ *  scrolls between exercises.
+ *
+ *  @author Andrew Peltier
+ *  Heavily inspired by yarolegovich
+ *  https://github.com/yarolegovich/DiscreteScrollView/tree/master/sample/src/main/java/com/yarolegovich/discretescrollview/sample
+ *
+ *  @version 1.0
+ */
 public class ExerciseView extends LinearLayout implements SmartGloveInterface
 {
     private Paint gradientPaint;
@@ -99,7 +114,8 @@ public class ExerciseView extends LinearLayout implements SmartGloveInterface
                 .start();
     }
 
-    public void onScroll(float fraction, Exercise oldF, Exercise newF) {
+    public void onScroll(float fraction, Exercise oldF, Exercise newF)
+    {
         exerciseImage.setScaleX(fraction);
         exerciseImage.setScaleY(fraction);
         currentGradient = mix(fraction,
@@ -109,7 +125,18 @@ public class ExerciseView extends LinearLayout implements SmartGloveInterface
         invalidate();
     }
 
-    private int[] mix(float fraction, int[] c1, int[] c2) {
+    /** mix()
+     *
+     * Mixes two color gradients to provide a smooth transition between two
+     * exercises.
+     *
+     * @param fraction
+     * @param c1
+     * @param c2
+     * @return
+     */
+    private int[] mix(float fraction, int[] c1, int[] c2)
+    {
         return new int[]{
                 (Integer) evaluator.evaluate(fraction, c1[0], c2[0]),
                 (Integer) evaluator.evaluate(fraction, c1[1], c2[1]),
@@ -117,7 +144,16 @@ public class ExerciseView extends LinearLayout implements SmartGloveInterface
         };
     }
 
-    private int[] choiceToGradient(Choice choice) {
+    /** choiceToGradient()
+     *
+     * Returns a color gradient based on the current exercise choice. The colors are
+     * gathered from the colors.xml file
+     *
+     * @param choice            -Exercise choice
+     * @return              int array containing gradient information
+     */
+    private int[] choiceToGradient(Choice choice)
+    {
         switch (choice) {
             case FINGER_TAP:
                 return colors(R.array.gradientFingerTap);
@@ -140,7 +176,16 @@ public class ExerciseView extends LinearLayout implements SmartGloveInterface
         }
     }
 
-    private int choiceToIcon(Choice choice) {
+    /** choiceToIcon()
+     *
+     * Returns the icon corresponding to the current exercise choice. The icon is
+     * gathered by using the SmartGloveInterface.
+     *
+     * @param choice            -Currently selected exercise
+     * @return              GIF corresponding to the current exercise
+     */
+    private int choiceToIcon(Choice choice)
+    {
         switch (choice) {
             case FINGER_TAP:
                 return InstructionsImage.FINGER_TAP_GIF;

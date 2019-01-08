@@ -34,15 +34,32 @@ import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
 import andrewpeltier.smartglovefragments.visualize.Choice;
 
-
-/**
- * Created by mcons on 2/27/2018.
+/** ======================================
+ *
+ *     TexTronicsManagerService Class
+ *
+ *  ======================================
+ *
+ *  Similar to how the Main Activity manages every fragment, the TexTronics Manager Service
+ *  manages each connection service we use, being the BLE Connection Service and the MQTT Connection
+ *  Service. The main components of this manager service are as follows:
+ *
+ *  -Static Intent Methods: Methods that can be called by all other components in the application so that they
+ *  can interact with the manager
+ *
+ *  -Service Methods: Methods that invoke the use of a connection service, being the BLE or MQTT Connection Services
+ *
+ *  -Service Connection Classes: Classes that bind a particular service to this manager service
+ *
+ *  -Update Receivers: Updates this manager service whenever a broadcast is received, allowing it to react to changes
+ *  in connection or receive collected data.
  *
  * @author Matthew Constant
  * @version 1.0, 02/28/2018
  */
 
-public class TexTronicsManagerService extends Service {
+public class TexTronicsManagerService extends Service
+{
     /**
      * The tag used to log messages to the LogCat.
      *
@@ -115,7 +132,16 @@ public class TexTronicsManagerService extends Service {
     private static ExerciseMode exerciseMode;
     private static DeviceType deviceType;
 
-    /**
+
+    /** =====================================================
+     *
+     *                  Static Intent Methods
+     *
+     *  =====================================================
+     */
+
+    /** connect()
+     *
      * This static method is provided for other components to use in order to interact with this
      * service. The connect method requests this service attempts to connect to the BLE device
      * with the given device address.
@@ -144,7 +170,8 @@ public class TexTronicsManagerService extends Service {
         context.startService(intent);
     }
 
-    /**
+    /** disconnect()
+     *
      * This static method is provided for other components to use in order to interact with this
      * service. The disconnect method requests this service attempts to disconnect from the
      * previously connected BLE device with the given device address. This method will only work
@@ -166,6 +193,19 @@ public class TexTronicsManagerService extends Service {
         context.startService(intent);
     }
 
+    /** publish()
+     *
+     * This static method is provided for other components to use in order to interact with this
+     * service. The publish method requests this service to publish the input device's data to
+     * our connected MQTT server.
+     *
+     * TODO Convert Context to WeakReference<Context>
+     *
+     * @param context Context of the calling component
+     * @param deviceAddress Device Address of BLE Device to publish.
+     *
+     * @since 1.0
+     */
     public static void publish(Context context, String deviceAddress)
     {
         Log.w(TAG, "publish: Publishing!!!");
@@ -175,33 +215,65 @@ public class TexTronicsManagerService extends Service {
         context.startService(intent);
     }
 
-    public static void start(Context context) {
+    /** start()
+     *
+     * This static method is provided for other components to use in order to interact with this
+     * service. While the operation to be performed does not explicitly execute anything, it causes
+     * this service to be created. All other
+     *
+     * TODO Convert Context to WeakReference<Context>
+     *
+     * @param context Context of the calling component
+     *
+     * @since 1.0
+     */
+    public static void start(Context context)
+    {
         Log.v(TAG, "Starting!!");
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.setAction(Action.start.toString());
         context.startService(intent);
     }
 
-    public static void stop(Context context) {
+    /** stop()
+     *
+     * This static method is provided for other components to use in order to interact with this
+     * service. The stop method disconnects from all devices and tasks this service to stop itself
+     * and its connected services.
+     *
+     * TODO Convert Context to WeakReference<Context>
+     *
+     * @param context Context of the calling component
+     *
+     * @since 1.0
+     */
+    public static void stop(Context context)
+    {
         Log.v(TAG, "Stopping!!");
         Intent intent = new Intent(context, TexTronicsManagerService.class);
         intent.setAction(Action.stop.toString());
         context.startService(intent);
     }
 
+    /**
+     * ID for this service used for Notification builder
+     */
     private final int SERVICE_ID = 111;
+    /**
+     * ID for this channel used for Notification builder
+     */
     private final String CHANNEL_ID = "uri.wbl.tex_tronics.notification";
 
     /**
      * Used by inner classes to refer to this Service's Context. Weak Reference should not be needed
      * unless this Service implements multi-threading in future.
      */
-    private Context mContext;
-    private boolean mBleServiceBound = false;
-    private boolean mMqttServiceBound = false;
-    private BluetoothLeConnectionService mBleService;
-    private MqttConnectionService mMqttService;
-    private ServiceConnection mBleServiceConnection, mMqttServiceConnection;
+    private Context mContext;                               // State of the component in the application
+    private boolean mBleServiceBound = false;               // Whether or not we have a bounded BLE service
+    private boolean mMqttServiceBound = false;              // Whether or not we have a bounded MQTT servcie
+    private BluetoothLeConnectionService mBleService;       // A service object for BLE connections
+    private MqttConnectionService mMqttService;             // A service object for MQTT connections
+    private ServiceConnection mBleServiceConnection, mMqttServiceConnection; // Each service connection to be managed and bound
 
     /**
      * Contains reference to each connected Tex-Tronics Device.
@@ -209,11 +281,13 @@ public class TexTronicsManagerService extends Service {
     private HashMap<String, TexTronicsDevice> mTexTronicsList;
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
 
         Log.d(TAG, "Service Created");
 
+        // Create and build the notification to appear on the device's screen
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.presence_online)
                 .setContentTitle("TexTronics Service")
@@ -234,7 +308,7 @@ public class TexTronicsManagerService extends Service {
 
         // Initialize the Connection Service to interface to BluetoothLeService
         mBleServiceConnection = new BleServiceConnection();
-
+        // Initialize the Connection Service to interface to MQTT Service
         mMqttServiceConnection = new MqttServiceConnection();
 
         // Initialize Container for Tex-Tronic Connected Devices (set the initial capacity to 4 - 2 gloves, 2 socks)
@@ -249,13 +323,25 @@ public class TexTronicsManagerService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent)
+    {
         // Do not allow binding. All components should interact with this Service via the static methods provided.
         return null;
     }
 
+    /** onStartCommand()
+     *
+     * Called whenever an intent is sent to this service. The action of the intent is gathered, after which
+     * more information is retrieved from the intent based on its action and the required operation is executed.
+     *
+     * @param intent        -Operation to be performed. Also carries the data to perform required action
+     * @param flags
+     * @param startID
+     * @return
+     */
     @Override
-    public int onStartCommand(Intent intent, int flags, int startID) {
+    public int onStartCommand(Intent intent, int flags, int startID)
+    {
         // Initial Check of Action Packet to make sure it contains the device address and Action
         if (intent == null || intent.getAction() == null) {
             Log.w(TAG, "Invalid Action Packet Received");
@@ -275,18 +361,24 @@ public class TexTronicsManagerService extends Service {
         }
 
         // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
-        switch (action) {
-            case connect: {
+        switch (action)
+        {
+            case connect:
+                {
                 // Attempt to connect to BLE Device (Device Type and Transmitting Mode should be obtained during scan)
-                if (!intent.hasExtra(EXTRA_TYPE) || !intent.hasExtra(EXTRA_MODE)) {
+                if (!intent.hasExtra(EXTRA_TYPE) || !intent.hasExtra(EXTRA_MODE))
+                {
                     Log.w(TAG, "Invalid connect Action Packet Received");
                     return INTENT_RETURN_POLICY;
                 }
+                // Get all connection info from the intent
                 ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
                 DeviceType deviceType = (DeviceType) intent.getSerializableExtra(EXTRA_TYPE);
                 Choice choice = (Choice) intent.getSerializableExtra(EXTRA_CHOICE);
                 String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
                 String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
+
+                // Use data to connect to device
                 connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
             }
             break;
@@ -298,7 +390,7 @@ public class TexTronicsManagerService extends Service {
                 publish(deviceAddress);
                 break;
             case stop:
-                // TODO Check for multiple devices
+                // Disconnect from each device, then stop services
                 if(MainActivity.getmDeviceAddressList() != null &&
                         MainActivity.getmDeviceAddressList().length != 0)
                 {
@@ -311,6 +403,12 @@ public class TexTronicsManagerService extends Service {
         return INTENT_RETURN_POLICY;
     }
 
+    /** onDestroy()
+     *
+     * Called when the application gets killed. All receivers are unregistered, and all connection
+     * services are unbound to this before it is destroyed.
+     *
+     */
     @Override
     public void onDestroy() {
         unregisterReceiver(mBLEUpdateReceiver);
@@ -323,13 +421,36 @@ public class TexTronicsManagerService extends Service {
         super.onDestroy();
     }
 
+    /** =====================================================
+     *
+     *                  Service Methods
+     *
+     *  =====================================================
+     */
 
 
-    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID) {
-        if (mBleServiceBound) {
+    /** connect()
+     *
+     * Puts the input device into the device list then uses the BLE connection service to connect to it. Input
+     * parameters are essentially all of the information needed to create a SmartGlove object so that we can
+     * publish the data we collect from this device to the MQTT server.
+     *
+     * @param deviceAddress         -MAC address of connected device
+     * @param exerciseMode          -Type of data that can be collected
+     * @param deviceType            -Type of device, either glove or sock
+     * @param choice                -Choice of exercise
+     * @param exerciseID            -ID of exercise
+     * @param routineID             -ID of exercise routine
+     */
+    private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID)
+    {
+        // Only connects if we have a bounded BLE service, which we should if this service has started
+        if (mBleServiceBound)
+        {
             SmartGlove smartGlove;
             // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
-            switch (deviceType) {
+            switch (deviceType)
+            {
                 case SMART_GLOVE:
                     // TODO Assume connection will be successful, if connection fails we must remove it from list.
                     smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
@@ -347,13 +468,22 @@ public class TexTronicsManagerService extends Service {
             }
 
             mBleService.connect(deviceAddress);
-        } else {
+        }
+        else {
             Log.w(TAG,"Cannot Connect - BLE Connection Service is not bound yet!");
         }
     }
 
-    private void disconnect(String deviceAddress) {
-        if (mBleServiceBound) {
+    /** disconnect()
+     *
+     * Calls the BLE service to disconnect the input device
+     *
+     * @param deviceAddress     MAC address of the device to disconnect from
+     */
+    private void disconnect(String deviceAddress)
+    {
+        if (mBleServiceBound)
+        {
             mBleService.disconnect(deviceAddress);
 
         } else {
@@ -361,14 +491,24 @@ public class TexTronicsManagerService extends Service {
         }
     }
 
+    /** publish()
+     *
+     * Calls the MQTT service to publish the data from the input device's exercise.
+     *
+     * @param deviceAddress    MAC address of the device to publish
+     */
     private void publish(String deviceAddress)
     {
-        if(mMqttServiceBound) {
-            try {
+        if(mMqttServiceBound)
+        {
+            try
+            {
                 TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
                 if(device != null)
                 {
+                    // Get the byte array from the CSV file stored in the device
                     byte[] buffer = IOUtil.readFile(device.getCsvFile());
+                    // Create a new string using device info and new byte array
                     String json = MqttConnectionService.generateJson(device.getDate(),
                             device.getDeviceAddress(),
                             Choice.toString(device.getChoice()),
@@ -376,6 +516,7 @@ public class TexTronicsManagerService extends Service {
                             device.getRoutineID(),
                             new String(buffer));
                     Log.d("SmartGlove", "JSON: " + json);
+                    // Call the service to publish this string, now in JSON format
                     mMqttService.publishMessage(json);
                 }
                 else
@@ -386,9 +527,19 @@ public class TexTronicsManagerService extends Service {
         }
     }
 
-    private class BleServiceConnection implements ServiceConnection {
+    /** =====================================================
+     *
+     *              Service Connection Classes
+     *
+     *  =====================================================
+     */
+
+    // Binds BLE service to the manager
+    private class BleServiceConnection implements ServiceConnection
+    {
         @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder)
+        {
             mBleServiceBound = true;
             mBleService = ((BluetoothLeConnectionService.BLEConnectionBinder) iBinder).getService();
             TexTronicsUpdateReceiver.update(mContext, null, TexTronicsUpdate.started);
@@ -400,43 +551,76 @@ public class TexTronicsManagerService extends Service {
         }
     }
 
-    private class MqttServiceConnection implements ServiceConnection {
+    // Binds MQTT service to the manager
+    private class MqttServiceConnection implements ServiceConnection
+    {
         @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder)
+        {
             mMqttServiceBound = true;
             mMqttService = ((MqttConnectionService.MqttConnectionBinder) iBinder).getService();
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName componentName) {
+        public void onServiceDisconnected(ComponentName componentName)
+        {
             mMqttServiceBound = false;
         }
     }
 
-    private BroadcastReceiver mBLEUpdateReceiver = new BroadcastReceiver() {
+    /** =====================================================
+     *
+     *                   Update Receivers
+     *
+     *  =====================================================
+     */
+
+    private BroadcastReceiver mBLEUpdateReceiver = new BroadcastReceiver()
+    {
+        /** onReceive()
+         *
+         * Called whenever an update occurs in our connected BLE device(s). Because this is a part
+         * of the manager service, we want to keep track of every type of update, since this gives us
+         * information on the connectivity and transferal of data between our Android device and the
+         * Smart Glove device.
+         *
+         * @param context           -State of the application
+         * @param intent            -Operation containing type of update and the data that comes with it
+         */
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent)
+        {
             Log.d(TAG, "Received BLE Update");
+            // Get the MAC address and action from the intent
             String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
             String action = intent.getStringExtra(BluetoothLeConnectionService.INTENT_EXTRA);
-            switch (action) {
+            /*
+             * The action holds what type of update we are dealing with. For each action, we
+             * need to update the TT update receiver.
+             */
+            switch (action)
+            {
                 case BluetoothLeConnectionService.GATT_STATE_CONNECTING:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_connecting);
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_CONNECTED:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_connected);
+                    // Once connected, we need to discover the services to find our characteristics
                     mBleService.discoverServices(deviceAddress);
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTING:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnecting);
 
+                    // Before we disconnect, we need to publish any exercise data. Get the disconnecting device
                     TexTronicsDevice disconnectingDevice = mTexTronicsList.get(deviceAddress);
 
                     //TODO: DEBUG ME!!!!!
 
                     // Send to Server via MQTT
-                    if(mMqttServiceBound && DeviceExerciseFragment.START_LOG) {
-                        try {
+                    if(mMqttServiceBound && DeviceExerciseFragment.START_LOG)
+                    {
+                        try
+                        {
                             byte[] buffer = IOUtil.readFile(disconnectingDevice.getCsvFile());
                             String json = MqttConnectionService.generateJson(disconnectingDevice.getDate(),
                                     disconnectingDevice.getDeviceAddress(),
@@ -455,31 +639,38 @@ public class TexTronicsManagerService extends Service {
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTED:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnected);
 
+                    // It has now been disconnected and we've published the data, now we remove the device from our list
                     TexTronicsDevice disconnectDevice = mTexTronicsList.get(deviceAddress);
                     if(disconnectDevice == null) {
                         Log.w(TAG, "Device not Found");
                         return;
                     }
-
                     mTexTronicsList.remove(deviceAddress);
-
                     break;
                 case BluetoothLeConnectionService.GATT_DISCOVERED_SERVICES:
+                    // Enable notifications on our RX characteristic which sends our data packets
                     BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.RX_CHARACTERISTIC);
                     if (characteristic != null) {
                         mBleService.enableNotifications(deviceAddress, characteristic);
                     }
 
+                    // Write to the txChar to notify the device
                     BluetoothGattCharacteristic txChar = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.TX_CHARACTERISTIC);
                     mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});
 
                     break;
                 case BluetoothLeConnectionService.GATT_CHARACTERISTIC_NOTIFY:
+                    /* Called whenever the value of our RX characteristic is changed, which
+                     * is equal to the sampling rate of our connected device.
+                     */
                     UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
-                    if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC)) {
+                    if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC))
+                    {
+                        // Get the data packet
                         Log.d(TAG, "Data Received");
                         byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
 
+                        // Find out the exercise mode (i.e what type of data we are collecting)
                         TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
                         ExerciseMode exerciseMode = null;
                         if(device != null)
@@ -487,8 +678,10 @@ public class TexTronicsManagerService extends Service {
 
                         if(exerciseMode != null)
                         {
-                            try {
-                                switch (exerciseMode) {
+                            try
+                            {
+                                switch (exerciseMode)
+                                {
                                     case FLEX_IMU:
                                         // Move data processing into Data Model?
                                         if (data[0] == PACKET_ID_1) {
@@ -508,6 +701,7 @@ public class TexTronicsManagerService extends Service {
                                             device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
+                                            // If in exercise, log this data to CSV file
                                             if(DeviceExerciseFragment.START_LOG)
                                                 device.logData(mContext);
                                         } else {
@@ -537,6 +731,7 @@ public class TexTronicsManagerService extends Service {
                                         device.setThumbFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
                                         device.setIndexFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
 
+                                        // If in exercise, log data to CSV
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);
                                         break;
@@ -561,7 +756,16 @@ public class TexTronicsManagerService extends Service {
         }
     };
 
-    private MqttUpdateReceiver mMqttUpdateReceiver = new MqttUpdateReceiver() {
+    private MqttUpdateReceiver mMqttUpdateReceiver = new MqttUpdateReceiver()
+    {
+        /** onReceive()
+         *
+         * Called whenever a change in connection happens. For each change, we simply send an update to
+         * the TexTronics update receiver.
+         *
+         * @param context           -State of the application
+         * @param intent            -Operation to be performed, which holds the update type
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG,"Received MQTT Update");

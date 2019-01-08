@@ -2,17 +2,34 @@ package andrewpeltier.smartglovefragments.tex_tronics.enums;
 
 import android.util.Log;
 
-/**
- * Created by mcons on 2/28/2018.
+/** ======================================
+ *
+ *           ExerciseMode Enum
+ *
+ *  ======================================
+ *
+ *  Enum that returns what mode of collection is used for the particular
+ *  exercise, being Flex IMU or Flex Only.
+ *
+ * @author mcons on 2/28/2018.
+ * @version 1.0
  */
 
-public enum ExerciseMode {
+public enum ExerciseMode
+{
+    /**
+     * Collects data from flex sensors along with IMU data
+     */
     FLEX_IMU ("Flex + IMU"),
+    /**
+     * Only collects data from flex sensors
+     */
     FLEX_ONLY ("Flex Only");
 
     private final String mExercise;
 
-    ExerciseMode(String exercise) {
+    ExerciseMode(String exercise)
+    {
         mExercise = exercise;
     }
 

@@ -19,14 +19,39 @@ import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
 import andrewpeltier.smartglovefragments.visualize.Exercise;
 import pl.droidsonroids.gif.GifImageView;
 
+/** ======================================
+ *
+ *    ExerciseInstructionFragment Class
+ *
+ *  ======================================
+ *
+ *      This fragment loads into the main activity holder before the exercise starts
+ *  and after the exercises have been selected. Along with visually providing the user
+ *  instructions on how to complete the exercise, this fragment is responsible for changing
+ *  the connection between devices depending on the current exercise.
+ *
+ *  @author Andrew Peltier
+ *  @version 1.0
+ */
 public class ExerciseInstructionFragment extends Fragment
 {
     private static final String TAG = "ExerciseInstruction";
-    private String exerciseName;
-    private Button startExerciseButton;
-    private TextView instrText;
-    private GifImageView instrImage;
+    private String exerciseName;                // Name of the current exercise
+    private Button startExerciseButton;         // Button that starts the exercise when the user is ready
+    private TextView instrText;                 // Instructions to the user on how to complete the exercise
+    private GifImageView instrImage;            // Gif image that corresponds to the exercise
 
+    /** onCreateView()
+     *
+     * Called when the view is first created. We use the fragment_exercise_instruction XML file to load the view and its
+     * properties into the fragment, which is then given to the Main Activity. For the instruction fragment, we set up the
+     * button, image, and text views, as well as compare the currently connected devices to the current exercise.
+     *
+     * @param inflater                      -Used to "inflate" or load the layout inside the main activity
+     * @param container                     -Object containing the fragment layout (from MainActivity XML)
+     * @param savedInstanceState            -State of the application
+     * @return                          The intractable instruction fragment view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -36,22 +61,28 @@ public class ExerciseInstructionFragment extends Fragment
         instrImage = view.findViewById(R.id.stexercise_side_image);
         instrText = view.findViewById(R.id.instructions_text);
 
-        // Sets up the image and
+        // Sets up the image according to the exercise name
         exerciseName = MainActivity.exercise_name;
         if(exerciseName != null)
         {
             setSideViews(exerciseName);
         }
 
+        // Connect to the appropriate device(s)
         checkConnection();
 
+        // Set up the exercise button click method
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
+                // Use the exercise name to determine what exercise fragment to move to
                 if(exerciseName != null)
                 {
                     Log.d(TAG, "onCreateView: Removing in start exercise button");
+                    /*
+                     * Screen Tap exercise requires a different fragment than the other exercises.
+                     */
                     if(exerciseName.equals("Screen Tap"))
                     {
                         ((MainActivity)getActivity()).addFragment(new ScreenTapFragment(), "ScreenTapFragment");
@@ -68,6 +99,13 @@ public class ExerciseInstructionFragment extends Fragment
         return view;
     }
 
+    /** setSideViews
+     *
+     * Just like in the DeviceExerciseFragment, this method uses the name of the exercise to load our
+     * gif image with its corresponding image
+     *
+     * @param name
+     */
     private void setSideViews(String name)
     {
         if (name.equals("Finger Tap"))
@@ -114,6 +152,12 @@ public class ExerciseInstructionFragment extends Fragment
         }
     }
 
+    /** checkConnection()
+     *
+     * Checks to see if we are connected to any BLE device, and if so, whether the
+     * connected device should be used for this particular exercise.
+     *
+     */
     private void checkConnection()
     {
         Log.d(TAG, "checkConnection: Checking connection");
@@ -148,6 +192,15 @@ public class ExerciseInstructionFragment extends Fragment
         }
     }
 
+    /** changeConnection()
+     *
+     * Called from checkConnection(). We've found that we were not connected to any devices
+     * or the wrong devices for this current exercise. We simply create a list of devices
+     * that we need to connect to, then send that list to the main activity.
+     *
+     * @param exerciseDeviceType            -The type of device(s) that we need to connect to,
+     *                                      either being Glove or Shoe
+     */
     private void changeConnection(String exerciseDeviceType)
     {
         if(exerciseDeviceType.equals("Glove"))

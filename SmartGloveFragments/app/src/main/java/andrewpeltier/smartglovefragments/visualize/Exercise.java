@@ -1,14 +1,28 @@
 package andrewpeltier.smartglovefragments.visualize;
 
-public class Exercise {
+/** ======================================
+ *
+ *            Exercise Class
+ *
+ *  ======================================
+ *
+ * Object containing all of the information from an exercise. This is primarily used to
+ * create the ExerciseView, although some of this information is used to create the SmartGlove device
+ * object.
+ *
+ * @author Andrew Peltier
+ * @version 1.0
+ */
+public class Exercise
+{
+    private final String exerciseName;          // Name of the exercise
+    private final int exerciseIcon;             // Icon used to represent the exercise
+    private final String textName;              // Exercise name used in text field
+    private final Choice choice;                // Choice, containing the instructions for the exercise
+    private final String device;                // Type of device
 
-    private final String exerciseName;
-    private final int exerciseIcon;
-    private final String textName;
-    private final Choice choice;
-    private final String device;
-
-    public Exercise(String exerciseName, int exerciseIcon, String textName, Choice choice, String device) {
+    public Exercise(String exerciseName, int exerciseIcon, String textName, Choice choice, String device)
+    {
         this.exerciseName = exerciseName;
         this.exerciseIcon = exerciseIcon;
         this.textName = textName;

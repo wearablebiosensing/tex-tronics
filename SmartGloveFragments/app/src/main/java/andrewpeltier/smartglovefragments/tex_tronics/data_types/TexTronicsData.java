@@ -2,8 +2,20 @@ package andrewpeltier.smartglovefragments.tex_tronics.data_types;
 
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
 
-/**
- * Created by mcons on 2/28/2018.
+/** ======================================
+ *
+ *     TexTronicsData Abstract Class
+ *
+ *  ======================================
+ *
+ *  Abstract class meant to retrieve and format the data we get from each device. This
+ *  is used by both the FlexIMU and FlexOnly device types.
+ *
+ *  The data is formatted so that it can be stored in a CSV file. The only difference between the child
+ *  classes is the data being recorded.
+ *
+ * @author mcons on 2/28/2018.
+ * @version 1.0
  */
 
 public abstract class TexTronicsData {

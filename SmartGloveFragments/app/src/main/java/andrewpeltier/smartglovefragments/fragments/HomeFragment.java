@@ -18,12 +18,37 @@ import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseSelectio
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.R;
 
+/** ======================================
+ *
+ *          HomeFragment Class
+ *
+ *  ======================================
+ *
+ *      The Home fragment is the first fragment loaded into the main activity. This animates the logo, as well as
+ *  gets starts the application in either doctor or user mode.
+ *
+ *  @author Andrew Peltier
+ *  @version 1.0
+ *
+ */
 public class HomeFragment extends Fragment
 {
     private static final String TAG = "HomeFragment";
-    private Button startButton;
-    private ImageView logo;
 
+    private Button startButton;                 // Button that changes fragment
+    private ImageView logo;                     // Center animated Smart Glove logo
+
+    /** onCreateView()
+     *
+     * Called when the view is first created. We use the fragment_home XML file to load the view and its
+     * properties into the fragment, which is then given to the Main Activity. For the home screen, we only
+     * need to set up the start button and the logo animation.
+     *
+     * @param inflater                      -Used to "inflate" or load the layout inside the main activity
+     * @param container                     -Object containing the fragment layout (from MainActivity XML)
+     * @param savedInstanceState            -State of the application
+     * @return                          The intractable home fragment view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -31,22 +56,30 @@ public class HomeFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         startButton = view.findViewById(R.id.start_button);
-        startButton.setOnClickListener(new View.OnClickListener() {
+
+        // For version 1.0, a short click will activate the user side of the application...
+        startButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 ((MainActivity)getActivity()).setIsDoctor(false);
                 ((MainActivity)getActivity()).addFragment(new ExerciseSelectionFragment(), "ExerciseSelectionFragment");
             }
         });
-        startButton.setOnLongClickListener(new View.OnLongClickListener() {
+        // while a long click will activate the doctor side
+        startButton.setOnLongClickListener(new View.OnLongClickListener()
+        {
             @Override
-            public boolean onLongClick(View view) {
+            public boolean onLongClick(View view)
+            {
                 ((MainActivity)getActivity()).setIsDoctor(true);
                 ((MainActivity)getActivity()).addFragment(new PatientFeedFragment(), "PatientFeedFragment");
                 return false;
             }
         });
 
+        // Animates the Smart Glove logo
         logo = view.findViewById(R.id.logo);
         Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
         logo.startAnimation(fadeInAnimation);

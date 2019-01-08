@@ -4,7 +4,8 @@ package andrewpeltier.smartglovefragments.tex_tronics;
  * Created by mcons on 2/28/2018.
  */
 
-public enum TexTronicsUpdate {
+public enum TexTronicsUpdate
+{
     started ("uri.wbl.tex_tronics.started"),
     ble_connected ("uri.wbl.tex_tronics.ble_connected"),
     ble_disconnected ("uri.wbl.tex_tronics.ble_disconnected"),

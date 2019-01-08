@@ -13,23 +13,58 @@ import com.jjoe64.graphview.GraphView;
 
 import java.util.ArrayList;
 
+/** ======================================
+ *
+ *           GenerateGraph Class
+ *
+ *  ======================================
+ *
+ *  Creates and adds data to the variety of graphs that are used in the application. As
+ *  of version 1.0 we use two graphs, a line graph for our data collection and pie graphs
+ *  for our finish screen demo.
+ *
+ *  @author Andrew Peltier
+ *  @version 1.0
+ *
+ */
 public class GenerateGraph
 {
+    /** makeRTGraph()
+     *
+     * Called by the DeviceExerciseFragment class. This creates a line graph
+     * used to visualize incoming data from our devices.
+     *
+     * @param graph             -Reference to graph object in DeviceExerciseFragment
+     * @return              Graph with defined options
+     */
     public static GraphView makeRTGraph(GraphView graph)
     {
+        // Set the min and max dimensions of the line graph
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(400);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(250);
+        // enable scaling
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScalableY(true);
+        // Set additional options
         graph.getViewport().setYAxisBoundsManual(false);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setScrollable(true);
-        // enable scaling and scrolling
-        graph.getViewport().setScalable(true);
-        graph.getViewport().setScalableY(true);
         return graph;
     }
 
+    /** createPieChart()
+     *
+     * Called by the FinishFragment. Creates a pie chart used to demo data from the last
+     * activity. This method simply formats a chart without adding data to it.
+     *
+     * @param chart             -Reference to the chart object
+     * @param value             -The numerator
+     * @param max               -The denominator
+     * @param graphName         -Name of the graph
+     * @return              Formatted graph object
+     */
     public static PieChart createPieChart(PieChart chart, int value, int max, String graphName)
     {
         // Use percentages when graphing
@@ -55,6 +90,16 @@ public class GenerateGraph
         return chart;
     }
 
+    /** addData()
+     *
+     * Called by the FinishFragment after createPieChart() has been called. This adds data to each
+     * pie chart, which in this case means it fills the chart based on a value and the max value.
+     *
+     * @param mChart            -Reference to the chart
+     * @param mColor            -Color of the data in the chart
+     * @param value             -Numerator, or the user's data
+     * @param max               -Denomenator, or the max value a user can get from a component
+     */
     public static void addData(PieChart mChart, int mColor, int value, int max) {
         float[] yData = { value, max - value };
         String[] xData = { "X", "Y"};

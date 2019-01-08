@@ -12,13 +12,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by Matt Constant on 2/22/17.
+/** ======================================
+ *
+ *          DataLogService Class
+ *
+ *  ======================================
+ *
  *
  * Data Log Service is responsible for saving data to a file. For now, all data is saved in CSV
  * format and the contents must be passed in the proper format. In order to use this service, call
  * the static log(Context, File, String, String) method provided by the Service. This ensures the
  * Service is called with the proper information given to it.
+ *
+ * Created by Matt Constant on 2/22/17.
+ * @version 1.0
  */
 
 public class DataLogService extends IntentService {
