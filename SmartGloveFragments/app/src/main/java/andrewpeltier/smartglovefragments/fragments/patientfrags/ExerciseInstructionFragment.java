@@ -41,6 +41,7 @@ public class ExerciseInstructionFragment extends Fragment
     private TextView instrText;                 // Instructions to the user on how to complete the exercise
     private GifImageView instrImage;            // Gif image that corresponds to the exercise
 
+
     /** onCreateView()
      *
      * Called when the view is first created. We use the fragment_exercise_instruction XML file to load the view and its
@@ -162,7 +163,7 @@ public class ExerciseInstructionFragment extends Fragment
     {
         Log.d(TAG, "checkConnection: Checking connection");
         String[] deviceAddressList = MainActivity.getmDeviceAddressList();
-        if(deviceAddressList != null && deviceAddressList.length > 0 && MainActivity.connected)
+        if(deviceAddressList != null && deviceAddressList.length > 0 && MainActivity.CONNECTED)
         {
             // Checks to see the types of devices you are already connected to
             Log.d(TAG, "checkConnection: device list exists");

@@ -174,8 +174,15 @@ public class BluetoothLeConnectionService extends Service
 
         // This is where it characteristic gets updated. You need to figure how to get the value over to manager
         @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)
+        {
             log("Characteristic Updated (" + characteristic.getUuid() + ")");
+            /**
+             * mac address
+             * action
+             * byte array (data packet from device)
+             * uuid
+             */
             sendBroadcast(generateIntent(gatt.getDevice().getAddress(), GATT_CHARACTERISTIC_NOTIFY, characteristic.getValue(), characteristic.getUuid()));
         }
 

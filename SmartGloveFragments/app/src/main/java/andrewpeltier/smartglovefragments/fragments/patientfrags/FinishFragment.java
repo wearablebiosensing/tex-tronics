@@ -232,11 +232,19 @@ public class FinishFragment extends Fragment
      */
     private void restart()
     {
-        // Clears the list of exercises from our exercise selection fragment
-        ExerciseSelectionFragment.adapter.clear();
-        ExerciseSelectionFragment.listItems.clear();
-        // Disconnects from all devices and the MQTT server
-        ((MainActivity)getActivity()).disconnect();
+        try
+        {
+            // Clears the list of exercises from our exercise selection fragment
+            ExerciseSelectionFragment.adapter.clear();
+            ExerciseSelectionFragment.listItems.clear();
+            // Disconnects from all devices
+            ((MainActivity)getActivity()).disconnect();
+        }
+        catch(Exception e)
+        {
+            Log.e(TAG, "Error: " + e);
+        }
+        // Disconnects from MQTT server
         TexTronicsManagerService.stop(getActivity());
         // Restart the main activity to clear fragment manager and launch it again
         Intent intent = getActivity().getIntent();

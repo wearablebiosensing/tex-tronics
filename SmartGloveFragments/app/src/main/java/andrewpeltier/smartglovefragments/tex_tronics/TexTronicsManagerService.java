@@ -607,6 +607,8 @@ public class TexTronicsManagerService extends Service
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_connected);
                     // Once connected, we need to discover the services to find our characteristics
                     mBleService.discoverServices(deviceAddress);
+
+                    MainActivity.CONNECTED = true;
                     break;
                 case BluetoothLeConnectionService.GATT_STATE_DISCONNECTING:
                     TexTronicsUpdateReceiver.update(mContext, deviceAddress, TexTronicsUpdate.ble_disconnecting);
@@ -646,6 +648,9 @@ public class TexTronicsManagerService extends Service
                         return;
                     }
                     mTexTronicsList.remove(deviceAddress);
+
+                    MainActivity.CONNECTED = false;
+
                     break;
                 case BluetoothLeConnectionService.GATT_DISCOVERED_SERVICES:
                     // Enable notifications on our RX characteristic which sends our data packets

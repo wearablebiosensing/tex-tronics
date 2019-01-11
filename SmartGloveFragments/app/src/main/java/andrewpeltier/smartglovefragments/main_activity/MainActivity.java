@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayDeque<String> mNames;                  // String name of each exercise in list
     private UUID mRoutineID;                            // ID of the routine, set randomly
     public static String exercise_name;                 // Name of the current exercise
-    public static boolean connected;                    // Checks for BLE connection
+    public static boolean CONNECTED;                    // Checks for BLE connection
     private FragmentManager fragmentManager;            // Manages the fragments held by the Main Activity
     private FragmentTransaction fragmentTransaction;    // Changes the fragments
     private String mFragmentTag;                        // Name of the fragment currently in use
@@ -244,7 +244,6 @@ public class MainActivity extends AppCompatActivity
                     ExerciseMode.getExercise(exerciseModes[0]),
                     DeviceType.getDevicetype(deviceTypeList[i]), exerciseID, mRoutineID);
         }
-        connected = true;
     }
 
     /** disconnect()
@@ -258,7 +257,7 @@ public class MainActivity extends AppCompatActivity
         {
             TexTronicsManagerService.disconnect(this, address);
         }
-        connected = false;
+        CONNECTED = false;
     }
 
     /** publish()

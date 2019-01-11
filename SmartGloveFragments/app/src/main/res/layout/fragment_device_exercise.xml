@@ -7,23 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="701dp"
-        android:layout_height="352dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="48dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/White"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/stexercise_side_image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <Button
         android:id="@+id/disconnectBtn"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -50,13 +33,10 @@
         android:id="@+id/stexercise_side_image"
         android:layout_width="81dp"
         android:layout_height="103dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginTop="80dp"
         android:background="@drawable/fingertap_gif"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.692"
-        app:layout_constraintStart_toEndOf="@+id/graph"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -70,7 +50,7 @@
         android:text="Loading..."
         android:textColor="@color/White"
         android:textSize="50sp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.346"

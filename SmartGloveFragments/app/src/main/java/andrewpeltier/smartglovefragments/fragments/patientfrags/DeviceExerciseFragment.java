@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -27,6 +29,8 @@ import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
 import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
+import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdate;
+import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdateReceiver;
 import andrewpeltier.smartglovefragments.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -57,12 +61,10 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
      * the required devices are connected and the user is ready.
      */
     public static boolean START_LOG = false;
-    private GraphView graph;                                // Graph that shows incoming data
-    private LineGraphSeries<DataPoint> series1, series2;    // Series of data to be graphed
-    private int count;                                      // Number of data points being graphed
     private String exerciseName;                            // Name of the exercise currently in session
     private Button disconnectBtn, nextButton;               // View buttons
     private GifImageView sideImage;                         // Animated GIF specific to exercise
+    private TextView loadingText;
 
     /** onCreateView()
      *
@@ -80,11 +82,14 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
+        loadingText = view.findViewById(R.id.loadingText);
 
         //TODO: Countdown timer
         // Starts logging if the devices are connected
-        if(MainActivity.connected)
-            START_LOG = true;
+        if(MainActivity.CONNECTED)
+        {
+            startTimer();
+        }
 
         // Gets the exercise name from the Main Activity
         if(MainActivity.exercise_name != null)
@@ -94,7 +99,10 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // the current exercise
         sideImage = view.findViewById(R.id.stexercise_side_image);
         if(MainActivity.exercise_name != null)
+        {
             setSideViews(exerciseName);
+            sideImage.setVisibility(View.INVISIBLE);
+        }
 
         // Sets up the "Next" button
         nextButton = view.findViewById(R.id.next_button);
@@ -135,19 +143,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             }
         });
 
-        // Sets up the repetition counter on the GUI
-        count = 0;
-        // Sets up the graph
-        graph = view.findViewById(R.id.graph);
-        graph = GenerateGraph.makeRTGraph(graph);
-        series1 = new LineGraphSeries<>();
-        // Thumb (or Shoe 1)
-        series1.setColor(Color.RED);
-        graph.addSeries(series1);
-        series2 = new LineGraphSeries<>();
-        // Index (or Shoe 2)
-        series2.setColor(Color.GREEN);
-        graph.addSeries(series2);
+        // Set up loading text
 
         Log.d(TAG, "onCreateView: Started.");
         return view;
@@ -190,6 +186,32 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         {
             sideImage.setBackgroundResource(InstructionsImage.WALK_STEPS_GIF);
         }
+    }
+
+    private void startTimer()
+    {
+        Log.d(TAG, "Starting data logging.");
+        final CountDownTimer startTimer = new CountDownTimer(3000, 980) {
+            int countdown = 3;
+
+            @Override
+            public void onTick(long l)
+            {
+                Log.v(TAG, "Tick: " + countdown);
+                loadingText.setText("" + countdown);
+                countdown--;
+            }
+
+            @Override
+            public void onFinish()
+            {
+                START_LOG = true;
+//                graph.setVisibility(View.VISIBLE);
+                loadingText.setText("Collecting data...");
+                sideImage.setVisibility(View.VISIBLE);
+            }
+        };
+        startTimer.start();
     }
 
     /**
@@ -243,44 +265,33 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     // First Data Set
                     int thumb = (((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF)));
                     int index = (((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
-                    if(START_LOG)
-                        addEntry(thumb, index);
+
 
                     // Second Data Set
                     thumb = (((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
                     index = (((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
-                    if(START_LOG)
-                        addEntry(thumb, index);
+
 
                     // Third Data Set
                     thumb = (((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
                     index = (((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF)));
-                    if(START_LOG)
-                        addEntry(thumb, index);
+
 
                     Log.d(TAG, "onReceive: Start Log = " + START_LOG);
                 }
             }
+            else if(action.equals(BluetoothLeConnectionService.GATT_STATE_CONNECTED))
+            {
+                startTimer();
+            }
+            else if(action.equals(BluetoothLeConnectionService.GATT_STATE_DISCONNECTED))
+            {
+                START_LOG = false;
+                loadingText.setText("Disconnected");
+                sideImage.setVisibility(View.INVISIBLE);
+            }
         }
     };
-
-    /** addEntry()
-     *
-     * Appends data from the thumb and index (otherwise known as the first and second data points)
-     * to the graph. This is done by adding a new point to the line graph series, modifying the graph
-     * continuously in real time.
-     *
-     * (Both parsed from data packet)
-     * @param thumb         -First data point
-     * @param index         -Second data point
-     */
-    private void addEntry(int thumb, int index)
-    {
-        Log.e("MainActivity", "Thumb: " + thumb + " Index: " + index);
-        series1.appendData(new DataPoint(count, thumb), true, 1000);
-        series2.appendData(new DataPoint(count, index), true, 1000);
-        count++;
-    }
 
     /** onStart()
      *
