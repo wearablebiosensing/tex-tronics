@@ -103,31 +103,31 @@ void periodic_callback() {
     mag_x.value = imu.mx;
     mag_y.value = imu.my;
     mag_z.value = imu.mz;
-//    Serial.print(ticks.value);
-//    Serial.print(",");
-//    Serial.print(thumb_data.value);
-//    Serial.print(",");
-//    Serial.print(index_data.value);
-//    Serial.print(",");
-//    Serial.print(acc_x.value);
-//    Serial.print(",");
-//    Serial.print(acc_y.value);
-//    Serial.print(",");
-//    Serial.print(acc_z.value);
-//    Serial.print(",");
-//    Serial.print(gyr_x.value);
-//    Serial.print(",");
-//    Serial.print(gyr_y.value);
-//    Serial.print(",");
-//    Serial.print(gyr_z.value);
-//    Serial.print(",");
-//    Serial.print(mag_x.value);
-//    Serial.print(",");
-//    Serial.print(mag_y.value);
-//    Serial.print(",");
-//    Serial.print(mag_z.value);
-//    Serial.print(",");
-//    Serial.println("0");
+    Serial.print(ticks.value);
+    Serial.print(",");
+    Serial.print(thumb_data.value);
+    Serial.print(",");
+    Serial.print(index_data.value);
+    Serial.print(",");
+    Serial.print(acc_x.value);
+    Serial.print(",");
+    Serial.print(acc_y.value);
+    Serial.print(",");
+    Serial.print(acc_z.value);
+    Serial.print(",");
+    Serial.print(gyr_x.value);
+    Serial.print(",");
+    Serial.print(gyr_y.value);
+    Serial.print(",");
+    Serial.print(gyr_z.value);
+    Serial.print(",");
+    Serial.print(mag_x.value);
+    Serial.print(",");
+    Serial.print(mag_y.value);
+    Serial.print(",");
+    Serial.print(mag_z.value);
+    Serial.print(",");
+    Serial.println("0");
 
     // Populate Packet 1
     packet1[0] = 0x01;
@@ -188,7 +188,12 @@ void init_imu() {
   imu.settings.device.commInterface = IMU_MODE_I2C;   // Use I2C to Collect Data from IMU
   imu.settings.device.mAddress = LSM9DS1_M;           // Use default I2C Addresses
   imu.settings.device.agAddress = LSM9DS1_AG;
-  imu.begin();                                        // Start IMU
+  if(!imu.begin())// Start IMU
+  {
+    while (1)
+    ;
+  }
+  digitalWrite(13, HIGH);
 }
 
 void init_ble() {
@@ -221,6 +226,7 @@ void init_ble() {
 void setup() {
   // put your setup code here, to run once
   Serial.begin(115200);                             // Setup Serial Monitor
+  pinMode(13, OUTPUT);
   init_ble();                                       // Configure BLE Module and Start Advertising
   init_imu();                                       // Configure IMU Module and Start IMU
   ticker_task1.attach_us(periodic_callback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)
