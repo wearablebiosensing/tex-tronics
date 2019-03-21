@@ -195,21 +195,28 @@ void init_ble() {
 
 void setup() {
   // put your setup code here, to run once
-  Serial.begin(115200);                             // Setup Serial Monitor
+  //Serial.begin(115200);                             // Setup Serial Monitor
+  pinMode(D13, OUTPUT);
   init_ble();                                       // Configure BLE Module and Start Advertising
   //init_imu();                                       // Configure IMU Module and Start IMU
   if (!imu.begin())
   {
-    Serial.println("Failed to communicate with LSM9DS1.");
-    Serial.println("Double-check wiring.");
-    Serial.println("Default settings in this sketch will " \
+    //Serial.println("Failed to communicate with LSM9DS1.");
+    //Serial.println("Double-check wiring.");
+    //Serial.println("Default settings in this sketch will " \
                   "work for an out of the box LSM9DS1 " \
                   "Breakout, but may need to be modified " \
                   "if the board jumpers are.");
-    while (1)
-      ;
+    
+    while (1) {
+      digitalWrite(D13,HIGH);
+      delay(500);
+      digitalWrite(D13, LOW);
+      delay(500);
+    }
   }
-  Serial.println("Success");
+  //Serial.println("Success");
+  digitalWrite(D13,HIGH);
   ticker_task1.attach_us(periodic_callback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)
 }
 
