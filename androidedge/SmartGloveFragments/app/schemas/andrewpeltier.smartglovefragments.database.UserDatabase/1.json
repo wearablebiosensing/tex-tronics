@@ -1,0 +1,129 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "de00926388cee9394c887a56257bca37",
+    "entities": [
+      {
+        "tableName": "users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `age` INTEGER NOT NULL, `gender` INTEGER NOT NULL, `handedness` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `dose` REAL NOT NULL, `on_off` INTEGER NOT NULL, `comments` TEXT, `ex_hands_rest` TEXT, `ex_hands_out` TEXT, `ex_fin_nose` TEXT, `ex_fin_tap` TEXT, `ex_op_cl` TEXT, `ex_h_flip` TEXT, `ex_heel_stmp` TEXT, `ex_toe_tap` TEXT, `ex_gait` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "age",
+            "columnName": "age",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hand",
+            "columnName": "handedness",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose",
+            "columnName": "dose",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feel",
+            "columnName": "on_off",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "comments",
+            "columnName": "comments",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_hands_thighs",
+            "columnName": "ex_hands_rest",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_hands_out",
+            "columnName": "ex_hands_out",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_fin_nose",
+            "columnName": "ex_fin_nose",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_fin_tap",
+            "columnName": "ex_fin_tap",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_op_cl",
+            "columnName": "ex_op_cl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_h_flip",
+            "columnName": "ex_h_flip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_heel_stmp",
+            "columnName": "ex_heel_stmp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_toe_tap",
+            "columnName": "ex_toe_tap",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_gait",
+            "columnName": "ex_gait",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"de00926388cee9394c887a56257bca37\")"
+    ]
+  }
+}
