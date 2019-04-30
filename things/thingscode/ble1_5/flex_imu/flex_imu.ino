@@ -44,8 +44,8 @@ Ticker                                    ticker_task1;         // Timer for Per
 static uint8_t packet1[TXRX_BUF_LEN];                           // Container for data sent in first packet
 static uint8_t packet2[TXRX_BUF_LEN];                           // Container for data sent in second packet
 
-sg_time_t ticks;                                                // Timestamp sent along with data
-flex_data_t thumb_data, index_data;                             // FlexSensor Values
+sg_time_t prev_ticks;                                                // Timestamp sent along with data
+flex_data_t thumb_data, index_data, middle_data, ring_data, pinky_data;  // FlexSensor Values
 imu_data_t acc_x, acc_y, acc_z, gyr_x, gyr_y, gyr_z, mag_x, mag_y, mag_z; // IMU Values
 
 static Gap::ConnectionParams_t conn_params = {
@@ -88,71 +88,112 @@ void gattServerWriteCallBack(const GattWriteCallbackParams *Handler) {
 // This function is called every DATA_REFRESH_MS (SmartGlove.h)
 void periodic_callback() {
   if (ble.getGapState().connected) {
-    // Get Timestamp
-    ticks.value = millis();
-    // Collect Data from FlexSensors
-    thumb_data.value = analogRead(A3);
-    index_data.value = analogRead(A4);
+
+    //prev_ticks.value = (uint16_t)(millis()-prev_ticks.value);
+     
     // Collect Data from IMU
     acc_x.value = imu.ax;
     acc_y.value = imu.ay;
     acc_z.value = imu.az;
-    gyr_x.value = imu.gx;
-    gyr_y.value = imu.gy;
-    gyr_z.value = imu.gz;
-    mag_x.value = imu.mx;
-    mag_y.value = imu.my;
-    mag_z.value = imu.mz;
-
+//    gyr_x.value = imu.gx;
+//    gyr_y.value = imu.gy;
+//    gyr_z.value = imu.gz;
+//    mag_x.value = imu.mx;
+//    mag_y.value = imu.my;
+//    mag_z.value = imu.mz;
+    
+    prev_ticks.value = (uint16_t)(millis() - prev_ticks.value);
+    
     // Populate Packet 1
     packet1[0] = 0x01;
-    packet1[1] = ticks.b[3];
-    packet1[2] = ticks.b[2];
-    packet1[3] = ticks.b[1];
-    packet1[4] = ticks.b[0];
-    packet1[5] = thumb_data.b[1];
-    packet1[6] = thumb_data.b[0];
-    packet1[7] = index_data.b[1];
-    packet1[8] = index_data.b[0];
-    packet1[9] = 0x00;
-    packet1[10] = 0x00;
-    packet1[11] = 0x00;
-    packet1[12] = 0x00;
-    packet1[13] = 0x00;
-    packet1[14] = 0x00;
-    packet1[15] = 0x00;
-    packet1[16] = 0x00;
-    packet1[17] = 0x00;
-    packet1[18] = 0x00;
-
+    packet1[1] = prev_ticks.b[1];
+    packet1[2] = prev_ticks.b[0];
+    packet1[3] = thumb_data.b[1];
+    packet1[4] = thumb_data.b[0];
+    packet1[5] = index_data.b[1];
+    packet1[6] = index_data.b[0];
+    packet1[7] = middle_data.b[1];
+    packet1[8] = middle_data.b[0];
+    packet1[9] = ring_data.b[1];
+    packet1[10] = ring_data.b[0];
+    packet1[11] = pinky_data.b[1];
+    packet1[12] = pinky_data.b[0];
+    packet1[13] = acc_x.b[1];
+    packet1[14] = acc_x.b[0];
+    packet1[15] = acc_y.b[1];
+    packet1[16] = acc_y.b[0];
+    packet1[17] = acc_z.b[1];
+    packet1[18] = acc_z.b[0];
+    
     // Transmit Packet 1
     ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
 
-    // Delay?
 
-    // Populate Packet 2
-    packet2[0] = 0x02;
-    packet2[1] = acc_x.b[1];
-    packet2[2] = acc_x.b[0];
-    packet2[3] = acc_y.b[1];
-    packet2[4] = acc_y.b[0];
-    packet2[5] = acc_z.b[1];
-    packet2[6] = acc_z.b[0];
-    packet2[7] = gyr_x.b[1];
-    packet2[8] = gyr_x.b[0];
-    packet2[9] = gyr_y.b[1];
-    packet2[10] = gyr_y.b[0];
-    packet2[11] = gyr_z.b[1];
-    packet2[12] = gyr_z.b[0];
-    packet2[13] = mag_x.b[1];
-    packet2[14] = mag_x.b[0];
-    packet2[15] = mag_y.b[1];
-    packet2[16] = mag_y.b[0];
-    packet2[17] = mag_z.b[1];
-    packet2[18] = mag_z.b[0];
-
-    // Transmit Packet 2
-    ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
+//    // Get Timestamp
+//    ticks.value = millis();
+//    // Collect Data from FlexSensors
+//    thumb_data.value = analogRead(A3);
+//    index_data.value = analogRead(A4);
+//    // Collect Data from IMU
+//    acc_x.value = imu.ax;
+//    acc_y.value = imu.ay;
+//    acc_z.value = imu.az;
+//    gyr_x.value = imu.gx;
+//    gyr_y.value = imu.gy;
+//    gyr_z.value = imu.gz;
+//    mag_x.value = imu.mx;
+//    mag_y.value = imu.my;
+//    mag_z.value = imu.mz;
+//
+//    // Populate Packet 1
+//    packet1[0] = 0x01;
+//    packet1[1] = ticks.b[3];
+//    packet1[2] = ticks.b[2];
+//    packet1[3] = ticks.b[1];
+//    packet1[4] = ticks.b[0];
+//    packet1[5] = thumb_data.b[1];
+//    packet1[6] = thumb_data.b[0];
+//    packet1[7] = index_data.b[1];
+//    packet1[8] = index_data.b[0];
+//    packet1[9] = 0x00;
+//    packet1[10] = 0x00;
+//    packet1[11] = 0x00;
+//    packet1[12] = 0x00;
+//    packet1[13] = 0x00;
+//    packet1[14] = 0x00;
+//    packet1[15] = 0x00;
+//    packet1[16] = 0x00;
+//    packet1[17] = 0x00;
+//    packet1[18] = 0x00;
+//
+//    // Transmit Packet 1
+//    ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
+//
+//    // Delay?
+//
+//    // Populate Packet 2
+//    packet2[0] = 0x02;
+//    packet2[1] = acc_x.b[1];
+//    packet2[2] = acc_x.b[0];
+//    packet2[3] = acc_y.b[1];
+//    packet2[4] = acc_y.b[0];
+//    packet2[5] = acc_z.b[1];
+//    packet2[6] = acc_z.b[0];
+//    packet2[7] = gyr_x.b[1];
+//    packet2[8] = gyr_x.b[0];
+//    packet2[9] = gyr_y.b[1];
+//    packet2[10] = gyr_y.b[0];
+//    packet2[11] = gyr_z.b[1];
+//    packet2[12] = gyr_z.b[0];
+//    packet2[13] = mag_x.b[1];
+//    packet2[14] = mag_x.b[0];
+//    packet2[15] = mag_y.b[1];
+//    packet2[16] = mag_y.b[0];
+//    packet2[17] = mag_z.b[1];
+//    packet2[18] = mag_z.b[0];
+//
+//    // Transmit Packet 2
+//    ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
   }
 }
 
@@ -217,16 +258,25 @@ void setup() {
   }
   //Serial.println("Success");
   digitalWrite(D13,HIGH);
+  prev_ticks.value = (uint16_t)millis();
   ticker_task1.attach_us(periodic_callback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if (ble.getGapState().connected) {
-  // Update Data on IMU
+    // Collect Data from FlexSensors
+    //ticks.value = (uint16_t)(millis() - prev_ticks.value);
+    // Collect Data from FlexSensors
+    thumb_data.value = analogRead(A2);
+    index_data.value = analogRead(A0); //issues
+    middle_data.value = analogRead(A3); 
+    ring_data.value = analogRead(A4);  
+    pinky_data.value = analogRead(A5);
+    // Update Data on IMU
     imu.readAccel();
-    imu.readGyro();
-    imu.readMag();
+    //imu.readGyro();
+    //imu.readMag();
   } else {
     ble.waitForEvent(); 
   }
