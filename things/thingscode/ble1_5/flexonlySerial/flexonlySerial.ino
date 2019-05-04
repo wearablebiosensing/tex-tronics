@@ -43,6 +43,7 @@ static int looper;
 
 sg_dif_t ticks;                                                // Timestamp sent along with data
 sg_time_t prev_ticks;
+uint8_t time_since = 0;
 flex_data_t thumb_data, index_data, middle_data, ring_data, pinky_data;  // FlexSensor Values
 
 // The uuid of service and characteristics
@@ -79,31 +80,49 @@ void gattServerWriteCallBack(const GattWriteCallbackParams *Handler) {
 void periodic_callback() {
   if (ble.getGapState().connected)
   {
-    prev_ticks.value = (uint16_t)(millis() - prev_ticks.value);
-    
-    // Populate Packet 1
-    packet1[0] = 0x01;
-    packet1[1] = prev_ticks.b[1];
-    packet1[2] = prev_ticks.b[0];
-    packet1[3] = thumb_data.b[1];
-    packet1[4] = thumb_data.b[0];
-    packet1[5] = index_data.b[1];
-    packet1[6] = index_data.b[0];
-    packet1[7] = middle_data.b[1];
-    packet1[8] = middle_data.b[0];
-    packet1[9] = ring_data.b[1];
-    packet1[10] = ring_data.b[0];
-    packet1[11] = pinky_data.b[1];
-    packet1[12] = pinky_data.b[0];
-    packet2[13] = 0x00;
-    packet2[14] = 0x00;
-    packet2[15] = 0x00;
-    packet2[16] = 0x00;
-    packet2[17] = 0x00;
-    packet2[18] = 0x00;
-
-    // Transmit Packet 1
-    ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
+    prev_ticks.value = (uint16_t)millis() - prev_ticks.value;
+    time_since = byte(prev_ticks.value);
+    // Collect Data from FlexSensors
+    // thumb = A2 -right
+    // index = A0 - right
+    // middle = A3 - right
+    // ring = A4 - right
+    // pinky = A5 - right
+    //Right Read
+    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
+    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  
+    pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
+    //Left Read
+//    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
+//    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
+//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+//    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  //issues
+//    pinky_data.value = byte(map(analogRead(A2),0,1023,0,255));
+//    // Populate Packet 1
+//    packet1[0] = 0x01;
+//    packet1[1] = prev_ticks.b[1];
+//    packet1[2] = prev_ticks.b[0];
+//    packet1[3] = thumb_data.b[1];
+//    packet1[4] = thumb_data.b[0];
+//    packet1[5] = index_data.b[1];
+//    packet1[6] = index_data.b[0];
+//    packet1[7] = middle_data.b[1];
+//    packet1[8] = middle_data.b[0];
+//    packet1[9] = ring_data.b[1];
+//    packet1[10] = ring_data.b[0];
+//    packet1[11] = pinky_data.b[1];
+//    packet1[12] = pinky_data.b[0];
+//    packet2[13] = 0x00;
+//    packet2[14] = 0x00;
+//    packet2[15] = 0x00;
+//    packet2[16] = 0x00;
+//    packet2[17] = 0x00;
+//    packet2[18] = 0x00;
+//
+//    // Transmit Packet 1
+//    ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
 
 //    // Delay?
 //    // Collect Data from IMU
@@ -141,35 +160,34 @@ void periodic_callback() {
 //    // Transmit Packet 2
 //    ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
     
-    
-//    if (looper < (DATA_PER_PACKET/2))
-//    {
-//      packet1[0 + looper * PACKET_LENGTH] = ticks.b[1];
-//      packet1[1 + looper * PACKET_LENGTH] = ticks.b[0];
-//      packet1[2 + looper * PACKET_LENGTH] = thumb_data.b[1];
-//      packet1[3 + looper * PACKET_LENGTH] = thumb_data.b[0];
-//      packet1[4 + looper * PACKET_LENGTH] = index_data.b[1];
-//      packet1[5 + looper * PACKET_LENGTH] = index_data.b[0];
-//    }
-//    else
-//    {
-//      packet2[0 + (looper-3) * PACKET_LENGTH] = ticks.b[1];
-//      packet2[1 + (looper-3) * PACKET_LENGTH] = ticks.b[0];
-//      packet2[2 + (looper-3) * PACKET_LENGTH] = thumb_data.b[1];
-//      packet2[3 + (looper-3) * PACKET_LENGTH] = thumb_data.b[0];
-//      packet2[4 + (looper-3) * PACKET_LENGTH] = index_data.b[1];
-//      packet2[5 + (looper-3) * PACKET_LENGTH] = index_data.b[0];
-//    }
-//
-//
-//    if (looper == DATA_PER_PACKET-1)
-//    {
-//      // Transmit every 4 DATA_REFRESH_MS milliseconds
-//      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
-//      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
-//    }
-//
-//    looper = (looper + 1) % (DATA_PER_PACKET);
+    if (looper < (DATA_PER_PACKET/2))
+    {
+      packet1[1 + looper * PACKET_LENGTH] = prev_ticks.b[0];
+      packet1[2 + looper * PACKET_LENGTH] = thumb_data.b[0];
+      packet1[3 + looper * PACKET_LENGTH] = index_data.b[0];
+      packet1[4 + looper * PACKET_LENGTH] = middle_data.b[0];
+      packet1[5 + looper * PACKET_LENGTH] = ring_data.b[0];
+      packet1[6 + looper * PACKET_LENGTH] = pinky_data.b[0];
+    }
+    else
+    {
+      packet2[1 + (looper - 3) * PACKET_LENGTH] = prev_ticks.b[0];
+      packet2[2 + (looper - 3) * PACKET_LENGTH] = thumb_data.b[0];
+      packet2[3 + (looper - 3) * PACKET_LENGTH] = index_data.b[0];
+      packet2[4 + (looper - 3) * PACKET_LENGTH] = middle_data.b[0];
+      packet2[5 + (looper - 3) * PACKET_LENGTH] = ring_data.b[0];
+      packet2[6 + (looper - 3) * PACKET_LENGTH] = pinky_data.b[0];
+    }
+
+
+    if (looper == DATA_PER_PACKET-1)
+    {
+      // Transmit every 4 DATA_REFRESH_MS milliseconds
+      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
+      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
+    }
+
+    looper = (looper + 1) % (DATA_PER_PACKET);
   }
 
 }
@@ -208,24 +226,16 @@ void setup() {
   //pinMode(A3, INPUT);
   //pinMode(A4, INPUT);
   //pinMode(A5, INPUT);
-  prev_ticks.value = millis();
+  prev_ticks.value = (uint16_t)millis();
+  packet1[0] = 0x01;
+  packet2[0] = 0x01;
   ticker_task1.attach_us(periodic_callback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if (ble.getGapState().connected) {
-    // Collect Data from FlexSensors
-    // thumb = A2 -right
-    // index = A0 - right
-    // middle = A3 - right
-    // ring = A4 - right
-    // pinky = A5 - right
-    thumb_data.value = analogRead(A2);
-    index_data.value = analogRead(A0); //issues
-    middle_data.value = analogRead(A3); 
-    ring_data.value = analogRead(A4);  
-    pinky_data.value = analogRead(A5); 
+     
   } else {
     ble.waitForEvent();
   }

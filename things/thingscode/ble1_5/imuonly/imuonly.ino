@@ -96,11 +96,11 @@ void periodic_callback() {
     // ring = A4 - right
     // pinky = A5 - right
     //Right Read
-    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
-    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
-    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  
-    pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
+//    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
+//    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+//    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  
+//    pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
     //Left Read
 //    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
 //    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
@@ -111,35 +111,31 @@ void periodic_callback() {
     // Update Data on IMU
     imu.readAccel();
     // Collect Data from IMU
-    acc_x.value = byte(imu.ax);
-    acc_y.value = byte(imu.ay);
-    acc_z.value = byte(imu.az);
+    acc_x.value = imu.ax;
+    acc_y.value = imu.ay;
+    acc_z.value = imu.az;
     //imu.readGyro();
     //imu.readMag();
 
     if (looper <= (DATA_PER_PACKET/2))
     {
       packet1[1 + looper * PACKET_LENGTH] = prev_ticks.b[0];
-      packet1[2 + looper * PACKET_LENGTH] = thumb_data.b[0];
-      packet1[3 + looper * PACKET_LENGTH] = index_data.b[0];
-      packet1[4 + looper * PACKET_LENGTH] = middle_data.b[0];
-      packet1[5 + looper * PACKET_LENGTH] = ring_data.b[0];
-      packet1[6 + looper * PACKET_LENGTH] = pinky_data.b[0];
-      packet1[7 + looper * PACKET_LENGTH] = acc_x.b[0];
-      packet1[8 + looper * PACKET_LENGTH] = acc_y.b[0];
-      packet1[9 + looper * PACKET_LENGTH] = acc_z.b[0];
+      packet1[2 + looper * PACKET_LENGTH] = acc_x.b[1];
+      packet1[3 + looper * PACKET_LENGTH] = acc_x.b[0];
+      packet1[4 + looper * PACKET_LENGTH] = acc_y.b[1];
+      packet1[5 + looper * PACKET_LENGTH] = acc_y.b[0];
+      packet1[6 + looper * PACKET_LENGTH] = acc_z.b[1];
+      packet1[7 + looper * PACKET_LENGTH] = acc_z.b[0];
     }
     else
     {
       packet2[1 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[0];
-      packet2[2 + (looper - 2) * PACKET_LENGTH] = thumb_data.b[0];
-      packet2[3 + (looper - 2) * PACKET_LENGTH] = index_data.b[0];
-      packet2[4 + (looper - 2) * PACKET_LENGTH] = middle_data.b[0];
-      packet2[5 + (looper - 2) * PACKET_LENGTH] = ring_data.b[0];
-      packet2[6 + (looper - 2) * PACKET_LENGTH] = pinky_data.b[0];
-      packet2[7 + (looper - 2) * PACKET_LENGTH] = acc_x.b[0];
-      packet2[8 + (looper - 2) * PACKET_LENGTH] = acc_y.b[0];
-      packet2[9 + (looper - 2) * PACKET_LENGTH] = acc_z.b[0];
+      packet2[2 + (looper - 2) * PACKET_LENGTH] = acc_x.b[1];
+      packet2[3 + (looper - 2) * PACKET_LENGTH] = acc_x.b[0];
+      packet2[4 + (looper - 2) * PACKET_LENGTH] = acc_y.b[1];
+      packet2[5 + (looper - 2) * PACKET_LENGTH] = acc_y.b[0];
+      packet2[6 + (looper - 2) * PACKET_LENGTH] = acc_z.b[1];
+      packet2[7 + (looper - 2) * PACKET_LENGTH] = acc_z.b[0];
     }
 
 
