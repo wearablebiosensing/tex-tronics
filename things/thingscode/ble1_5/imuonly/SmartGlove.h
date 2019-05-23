@@ -8,7 +8,7 @@
 #define FALSE 1==0
 #endif
 
-#define DEVICE_NAME           "fleximu"  // Local Device Name
+#define DEVICE_NAME           "imu"  // Local Device Name
 #define TXRX_BUF_LEN          19            // BLE Packet Length
 #define DATA_REFRESH_RATE_MS  8           // Delay between data collection (milliseconds)
 #define DATA_PER_PACKET       4             // Number of data sets sent/packet
@@ -23,11 +23,6 @@ typedef union _sg_dif {
   uint8_t b[2];
   uint16_t value;
 } sg_dif_t;
-
-typedef union _flex_data {
-  uint8_t b[2];
-  int value;
-} flex_data_t;                              // Container for FlexSensor Data
 
 typedef union _imu_data {
   uint8_t b[2];

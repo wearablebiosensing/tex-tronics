@@ -89,25 +89,6 @@ void periodic_callback() {
     prev_ticks.value = (uint16_t)millis() - prev_ticks.value;
     time_since = byte(prev_ticks.value);
     
-    // Collect Data from FlexSensors
-    // thumb = A2 -right
-    // index = A0 - right
-    // middle = A3 - right
-    // ring = A4 - right
-    // pinky = A5 - right
-    //Right Read
-//    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
-//    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
-//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-//    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  
-//    pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
-    //Left Read
-//    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
-//    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
-//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-//    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  //issues
-//    pinky_data.value = byte(map(analogRead(A2),0,1023,0,255));
-
     // Update Data on IMU
     imu.readAccel();
     // Collect Data from IMU
@@ -214,11 +195,6 @@ void setup() {
   //Serial.println("Success");
   digitalWrite(D13,HIGH);
   looper = 0;                                       // Initialize Looper
-  //pinMode(A0, INPUT); //issue
-  //pinMode(A2, INPUT); 
-  //pinMode(A3, INPUT);
-  //pinMode(A4, INPUT);
-  //pinMode(A5, INPUT);
   prev_ticks.value = (uint16_t)millis();
   packet1[0] = 0x01;
   packet2[0] = 0x01;
