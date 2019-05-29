@@ -18,15 +18,15 @@ public class StudyLog {
 
     // Set Default Output File
     String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
-    String dateStringID = new SimpleDateFormat("MM.dd.yyyy", Locale.US).format(date);
     String timeString = new SimpleDateFormat("kk_mm_ss_SSS", Locale.US).format(date);
 
-    String fileName = dateString + "/" + dateStringID + "_glove_info_.csv";
-    File parentFile = new File("/storage/emulated/0/Documents");    // FIXME
-    File file = new File(parentFile, fileName);
-    boolean newFile = false;
 
-    public int  StudyLog(String info){
+    public int  StudyLog(int id, String info){
+        String fileName = dateString + "/" + id +"/" + timeString + "patient_info_.csv";
+        File parentFile = new File("/storage/emulated/0/Documents");    // FIXME
+        File file = new File(parentFile, fileName);
+        boolean newFile = false;
+
         String insrt_string = timeString + "," + info;
         if (!file.exists()) {
             newFile = true;

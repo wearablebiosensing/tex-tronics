@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "de00926388cee9394c887a56257bca37",
+    "identityHash": "d04c1aa92c9e202d97d8122a8275c83b",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `age` INTEGER NOT NULL, `gender` INTEGER NOT NULL, `handedness` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `dose` REAL NOT NULL, `on_off` INTEGER NOT NULL, `comments` TEXT, `ex_hands_rest` TEXT, `ex_hands_out` TEXT, `ex_fin_nose` TEXT, `ex_fin_tap` TEXT, `ex_op_cl` TEXT, `ex_h_flip` TEXT, `ex_heel_stmp` TEXT, `ex_toe_tap` TEXT, `ex_gait` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `age` INTEGER NOT NULL, `gender` INTEGER NOT NULL, `handedness` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `dose` REAL NOT NULL, `on_off` INTEGER NOT NULL, `initComments` TEXT, `finComments` TEXT, `ex_hands_rest_left` TEXT, `ex_hands_rest_right` TEXT, `score_hands_thighs` INTEGER NOT NULL, `ex_hands_out_left` TEXT, `ex_hands_out_right` TEXT, `score_hands_out` INTEGER NOT NULL, `ex_fin_nose_left` TEXT, `ex_fin_nose_right` TEXT, `score_fin_nose` INTEGER NOT NULL, `ex_fin_tap_left` TEXT, `ex_fin_tap_right` TEXT, `score_fin_tap` INTEGER NOT NULL, `ex_op_cl_left` TEXT, `ex_op_cl_right` TEXT, `score_op_cl` INTEGER NOT NULL, `ex_h_flip_left` TEXT, `ex_h_flip_right` TEXT, `score_h_flip` INTEGER NOT NULL, `ex_heel_stmp_left` TEXT, `ex_heel_stmp_right` TEXT, `score_heel_stmp` INTEGER NOT NULL, `ex_toe_tap_left` TEXT, `ex_toe_tap_right` TEXT, `score_toe_tap` INTEGER NOT NULL, `ex_gait_left` TEXT, `ex_gait_right` TEXT, `score_gait` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -51,64 +51,178 @@
             "notNull": true
           },
           {
-            "fieldPath": "comments",
-            "columnName": "comments",
+            "fieldPath": "init_comments",
+            "columnName": "initComments",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_hands_thighs",
-            "columnName": "ex_hands_rest",
+            "fieldPath": "fin_comments",
+            "columnName": "finComments",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_hands_out",
-            "columnName": "ex_hands_out",
+            "fieldPath": "data_hands_thighs_left",
+            "columnName": "ex_hands_rest_left",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_fin_nose",
-            "columnName": "ex_fin_nose",
+            "fieldPath": "data_hands_thighs_right",
+            "columnName": "ex_hands_rest_right",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_fin_tap",
-            "columnName": "ex_fin_tap",
+            "fieldPath": "score_hands_thighs",
+            "columnName": "score_hands_thighs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_hands_out_left",
+            "columnName": "ex_hands_out_left",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_op_cl",
-            "columnName": "ex_op_cl",
+            "fieldPath": "data_hands_out_right",
+            "columnName": "ex_hands_out_right",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_h_flip",
-            "columnName": "ex_h_flip",
+            "fieldPath": "score_hands_out",
+            "columnName": "score_hands_out",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_fin_nose_left",
+            "columnName": "ex_fin_nose_left",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_heel_stmp",
-            "columnName": "ex_heel_stmp",
+            "fieldPath": "data_fin_nose_right",
+            "columnName": "ex_fin_nose_right",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_toe_tap",
-            "columnName": "ex_toe_tap",
+            "fieldPath": "score_fin_nose",
+            "columnName": "score_fin_nose",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_fin_tap_left",
+            "columnName": "ex_fin_tap_left",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "data_gait",
-            "columnName": "ex_gait",
+            "fieldPath": "data_fin_tap_right",
+            "columnName": "ex_fin_tap_right",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "score_fin_tap",
+            "columnName": "score_fin_tap",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_op_cl_left",
+            "columnName": "ex_op_cl_left",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_op_cl_right",
+            "columnName": "ex_op_cl_right",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score_op_cl",
+            "columnName": "score_op_cl",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_h_flip_left",
+            "columnName": "ex_h_flip_left",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_h_flip_right",
+            "columnName": "ex_h_flip_right",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score_h_flip",
+            "columnName": "score_h_flip",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_heel_stmp_left",
+            "columnName": "ex_heel_stmp_left",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_heel_stmp_right",
+            "columnName": "ex_heel_stmp_right",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score_heel_stmp",
+            "columnName": "score_heel_stmp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_toe_tap_left",
+            "columnName": "ex_toe_tap_left",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_toe_tap_right",
+            "columnName": "ex_toe_tap_right",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score_toe_tap",
+            "columnName": "score_toe_tap",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data_gait_left",
+            "columnName": "ex_gait_left",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data_gait_right",
+            "columnName": "ex_gait_right",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score_gait",
+            "columnName": "score_gait",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -123,7 +237,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"de00926388cee9394c887a56257bca37\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d04c1aa92c9e202d97d8122a8275c83b\")"
     ]
   }
 }

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -70,13 +71,12 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     private Button disconnectBtn, nextButton;               // View buttons
     private GifImageView sideImage;                         // Animated GIF specific to exercise
     private TextView loadingText;
-    private String columnName;
     private EditText score_text;
     private String score_str;
 
     private List<Integer> ids;
     private int current_id;
-    private int score;
+    private float score;
 
     /** onCreateView()
      *
@@ -95,9 +95,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     {
         View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
         loadingText = view.findViewById(R.id.loadingText);
-//        score_text = view.findViewById(R.id.score_value);
-//        score_str = score_text.getText().toString();
-//        score = Integer.parseInt(score_str);
+        score_text = view.findViewById(R.id.score_value);
+
         ids = new ArrayList<>();
 
         try{
@@ -121,6 +120,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // Gets the exercise name from the Main Activity
         if(MainActivity.exercise_name != null)
             exerciseName = MainActivity.exercise_name;
+
+        // Call timer for the exercise
+        exeTimer(exerciseName);
 
         Log.d(TAG, "onCreateView: THIS IS THE EXERCISE NAME " + exerciseName);
 
@@ -150,9 +152,72 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             @Override
             public void onClick(View view)
             {
-                START_LOG = false;
-                ((MainActivity)getActivity()).publish();
-                ((MainActivity)getActivity()).startExercise();
+                score_str = score_text.getText().toString();
+                //score = Float.parseFloat(score_str);
+
+                boolean empty = false;
+                try {
+                    score = Float.parseFloat(score_str);
+                }
+                catch (Exception e){
+                    // add exeption
+
+                    empty = true;
+                }
+
+
+                if(empty){
+                    Toast.makeText(getActivity(),"Please enter a score!",Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    // TODO make an update call here for the score
+                    // TODO make a determination of which exercise this is...
+                    if (exerciseName.equals("Finger Tap"))
+                    {
+
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_fin_tap_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Closed Grip") )
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_op_cl_score(score,ids.size());
+                    }
+
+                    else if (exerciseName.equals("Hand Flip") )
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_h_flip_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Finger to Nose"))
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_fin_nose_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Hold Hands Out"))
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_handout_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Resting Hands on Thighs"))
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_h_rest_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Heel Stomp"))
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_heel_stmp_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Toe Tap"))
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_toe_tap_score(score,ids.size());
+                    }
+                    else if (exerciseName.equals("Walk Steps"))
+                    {
+                        UserRepository.getInstance(getActivity().getApplicationContext()).updateData_gait_score(score,ids.size());
+                    }
+
+
+
+                    START_LOG = false;
+                    ((MainActivity)getActivity()).publish();
+                    ((MainActivity)getActivity()).startExercise();
+                }
             }
         });
 
@@ -170,6 +235,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).disconnect();
+                ((MainActivity)getActivity()).RedoInst();
+
             }
         });
 
@@ -251,6 +318,62 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         };
         startTimer.start();
     }
+
+    private void  exeTimer(String name){
+        if (name.equals("Finger to Nose")|| name.equals("Hand Flip") || name.equals("Closed Grip") || name.equals("Finger Tap")
+                || name.equals("Hold Hands Out") ||name.equals("Resting Hands on Thighs") )
+        {
+            final CountDownTimer exe_Timer = new CountDownTimer(10000, 1000) {
+                int countdown = 10;
+
+                @Override
+                public void onTick(long l)
+                {
+                    Log.v(TAG, "Tick: " + countdown);
+                   // loadingText.setText("" + countdown);
+                    loadingText.setText("Collecting data...");
+                    countdown--;
+                }
+
+                @Override
+                public void onFinish()
+                {
+                    START_LOG = true;
+//                graph.setVisibility(View.VISIBLE);
+                    loadingText.setText("Completed");
+                    sideImage.setVisibility(View.VISIBLE);
+                }
+            };
+            exe_Timer.start();
+        }
+        else if(name.equals("Heel Stomp") || name.equals("Toe Tap")){
+            final CountDownTimer exe_Timer1 = new CountDownTimer(8000, 1000) {
+                int countdown = 8;
+
+                @Override
+                public void onTick(long l)
+                {
+                    Log.v(TAG, "Tick: " + countdown);
+                    //loadingText.setText("" + countdown);
+                    loadingText.setText("Collecting data...");
+                    countdown--;
+                }
+
+                @Override
+                public void onFinish()
+                {
+                    START_LOG = true;
+//                graph.setVisibility(View.VISIBLE);
+                    loadingText.setText("Completed");
+                    sideImage.setVisibility(View.VISIBLE);
+                }
+            };
+            exe_Timer1.start();
+        }
+
+    }
+
+
 
     /**
      *  ========= BLE Update Receiver =========

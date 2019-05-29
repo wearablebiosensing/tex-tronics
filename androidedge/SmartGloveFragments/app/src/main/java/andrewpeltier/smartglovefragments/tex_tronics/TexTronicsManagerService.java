@@ -22,6 +22,7 @@ import java.util.UUID;
 import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
 import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
 import andrewpeltier.smartglovefragments.ble.GattServices;
+import andrewpeltier.smartglovefragments.database.UpdateData;
 import andrewpeltier.smartglovefragments.database.UserRepository;
 import andrewpeltier.smartglovefragments.fragments.patientfrags.DeviceExerciseFragment;
 import andrewpeltier.smartglovefragments.io.IOUtil;
@@ -523,6 +524,7 @@ public class TexTronicsManagerService extends Service
                     // Call the service to publish this string, now in JSON format
                     mMqttService.publishMessage(json);
                     String exe_nm = MainActivity.exercise_name;
+
                     List<Integer> ids = new ArrayList<>();
                     try{
                         ids = UserRepository.getInstance(getApplicationContext()).getAllIdentities();
@@ -533,44 +535,80 @@ public class TexTronicsManagerService extends Service
 
                     int current = ids.size();
 
+                    Log.d(TAG, "UpdateData: logging the data");
 
-                    if (exe_nm.equals("Finger Tap"))
+                    if (exe_nm.equals("Finger Tap") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_finTap(json,current);
+                        UserRepository.getInstance(context).updateData_finTap_left(json,current);
                     }
-                    else if (exe_nm.equals("Closed Grip"))
+                    else if (exe_nm.equals("Closed Grip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_opCl(json,current);
+                        UserRepository.getInstance(context).updateData_opCl_left(json,current);
                     }
-                    else if (exe_nm.equals("Hand Flip"))
+                    else if (exe_nm.equals("Hand Flip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_h_flip(json,current);
+                        UserRepository.getInstance(context).updateData_h_flip_left(json,current);
                     }
-                    else if (exe_nm.equals("Finger to Nose"))
+                    else if (exe_nm.equals("Finger to Nose") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_finNose(json,current);
+                        UserRepository.getInstance(context).updateData_finNose_left(json,current);
                     }
-                    else if (exe_nm.equals("Hold Hands Out"))
+                    else if (exe_nm.equals("Hold Hands Out") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_handout(json,current);
+                        UserRepository.getInstance(context).updateData_handout_left(json,current);
                     }
-                    else if (exe_nm.equals("Resting Hands on Thighs"))
+                    else if (exe_nm.equals("Resting Hands on Thighs") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_handrest(json,current);
+                        UserRepository.getInstance(context).updateData_handrest_left(json,current);
                     }
-                    else if (exe_nm.equals("Heel Stomp"))
+                    else if (exe_nm.equals("Finger Tap") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_heelStmp(json,current);
+                        UserRepository.getInstance(context).updateData_finTap_right(json,current);
                     }
-                    else if (exe_nm.equals("Toe Tap"))
+                    else if (exe_nm.equals("Closed Grip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_toeTap(json,current);
+                        UserRepository.getInstance(context).updateData_opCl_right(json,current);
                     }
-                    else if (exe_nm.equals("Walk Steps"))
+                    else if (exe_nm.equals("Hand Flip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
-                        UserRepository.getInstance(getApplicationContext()).updateData_gait(json,current);
+                        UserRepository.getInstance(context).updateData_h_flip_right(json,current);
                     }
-
+                    else if (exe_nm.equals("Finger to Nose") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_finNose_right(json,current);
+                    }
+                    else if (exe_nm.equals("Hold Hands Out") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_handout_right(json,current);
+                    }
+                    else if (exe_nm.equals("Resting Hands on Thighs") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_handrest_right(json,current);
+                    }
+                    else if (exe_nm.equals("Heel Stomp") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_heelStmp_right(json,current);
+                    }
+                    else if (exe_nm.equals("Toe Tap") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_toeTap_right(json,current);
+                    }
+                    else if (exe_nm.equals("Walk Steps") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_gait_right(json,current);
+                    }
+                    else if (exe_nm.equals("Heel Stomp") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_heelStmp_left(json,current);
+                    }
+                    else if (exe_nm.equals("Toe Tap") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_toeTap_left(json,current);
+                    }
+                    else if (exe_nm.equals("Walk Steps") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    {
+                        UserRepository.getInstance(context).updateData_gait_left(json,current);
+                    }
                 }
                 else
                     Log.d(TAG, "publish: Publish failed. Device is null");

@@ -36,62 +36,92 @@ public class User {
     @ColumnInfo(name = "on_off")
     private int feel;
 
-    @ColumnInfo(name = "comments")
-    private String comments;
+    @ColumnInfo(name = "initComments")
+    private String init_comments;
 
-    @ColumnInfo(name = "ex_hands_rest",typeAffinity = ColumnInfo.TEXT)
-    private String data_hands_thighs;
+    @ColumnInfo(name = "finComments")
+    private String fin_comments;
 
-//    @ColumnInfo(name = "score_hands_r")
-//    private int score_hands_thighs;
+    @ColumnInfo(name = "ex_hands_rest_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_hands_thighs_left;
 
-    @ColumnInfo(name = "ex_hands_out",typeAffinity = ColumnInfo.TEXT)
-    private String data_hands_out;
+    @ColumnInfo(name = "ex_hands_rest_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_hands_thighs_right;
 
-//    @ColumnInfo(name = "score_hands_out")
-//    private int score_hands_out;
+    @ColumnInfo(name = "score_hands_thighs")
+    private int score_hands_thighs;
 
-    @ColumnInfo(name = "ex_fin_nose",typeAffinity = ColumnInfo.TEXT)
-    private String data_fin_nose;
+    @ColumnInfo(name = "ex_hands_out_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_hands_out_left;
 
-//    @ColumnInfo(name = "score_fin_nose")
-//    private int score_fin_nose;
+    @ColumnInfo(name = "ex_hands_out_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_hands_out_right;
 
-    @ColumnInfo(name = "ex_fin_tap",typeAffinity = ColumnInfo.TEXT)
-    private String data_fin_tap;
+    @ColumnInfo(name = "score_hands_out")
+    private int score_hands_out;
 
-//    @ColumnInfo(name = "score_fin_tap")
-//    private int score_fin_tap;
+    @ColumnInfo(name = "ex_fin_nose_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_fin_nose_left;
 
-    @ColumnInfo(name = "ex_op_cl",typeAffinity = ColumnInfo.TEXT)
-    private String data_op_cl;
+    @ColumnInfo(name = "ex_fin_nose_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_fin_nose_right;
 
-//    @ColumnInfo(name = "score_op_cl")
-//    private int score_op_cl;
+    @ColumnInfo(name = "score_fin_nose")
+    private int score_fin_nose;
 
-    @ColumnInfo(name = "ex_h_flip",typeAffinity = ColumnInfo.TEXT)
-    private String data_h_flip;
+    @ColumnInfo(name = "ex_fin_tap_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_fin_tap_left;
 
-//    @ColumnInfo(name = "score_h_flip")
-//    private int score_h_flip;
+    @ColumnInfo(name = "ex_fin_tap_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_fin_tap_right;
 
-    @ColumnInfo(name = "ex_heel_stmp",typeAffinity = ColumnInfo.TEXT)
-    private String data_heel_stmp;
+    @ColumnInfo(name = "score_fin_tap")
+    private int score_fin_tap;
 
-//    @ColumnInfo(name = "score_heel_stmp")
-//    private int score_heel_stmp;
+    @ColumnInfo(name = "ex_op_cl_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_op_cl_left;
 
-    @ColumnInfo(name = "ex_toe_tap",typeAffinity = ColumnInfo.TEXT)
-    private String data_toe_tap;
+    @ColumnInfo(name = "ex_op_cl_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_op_cl_right;
 
-//    @ColumnInfo(name = "score_toe_tap")
-//    private int score_toe_tap;
+    @ColumnInfo(name = "score_op_cl")
+    private int score_op_cl;
 
-    @ColumnInfo(name = "ex_gait",typeAffinity = ColumnInfo.TEXT)
-    private String data_gait;
+    @ColumnInfo(name = "ex_h_flip_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_h_flip_left;
 
-//    @ColumnInfo(name = "score_gait")
-//    private int score_gait;
+    @ColumnInfo(name = "ex_h_flip_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_h_flip_right;
+
+    @ColumnInfo(name = "score_h_flip")
+    private int score_h_flip;
+
+    @ColumnInfo(name = "ex_heel_stmp_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_heel_stmp_left;
+
+    @ColumnInfo(name = "ex_heel_stmp_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_heel_stmp_right;
+
+    @ColumnInfo(name = "score_heel_stmp")
+    private int score_heel_stmp;
+
+    @ColumnInfo(name = "ex_toe_tap_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_toe_tap_left;
+
+    @ColumnInfo(name = "ex_toe_tap_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_toe_tap_right;
+
+    @ColumnInfo(name = "score_toe_tap")
+    private int score_toe_tap;
+
+    @ColumnInfo(name = "ex_gait_left",typeAffinity = ColumnInfo.TEXT)
+    private String data_gait_left;
+
+    @ColumnInfo(name = "ex_gait_right",typeAffinity = ColumnInfo.TEXT)
+    private String data_gait_right;
+
+    @ColumnInfo(name = "score_gait")
+    private int score_gait;
 
     public User(){
 
@@ -105,9 +135,8 @@ public class User {
         this.duration = duration;
         this.dose = dose;
         this.feel = feel;
-        this.comments = comments;
+        this.init_comments = comments;
     }
-
 
     public int getId() {
         return id;
@@ -165,155 +194,235 @@ public class User {
         this.feel = feel;
     }
 
-    public String getComments() {
-        return comments;
+    public String getInit_comments() {
+        return init_comments;
     }
 
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setInit_comments(String init_comments) {
+        this.init_comments = init_comments;
     }
 
-    public String getData_hands_thighs() {
-        return data_hands_thighs;
+    public String getFin_comments() {
+        return fin_comments;
     }
 
-    public void setData_hands_thighs(String data_hands_thighs) {
-        this.data_hands_thighs = data_hands_thighs;
+    public void setFin_comments(String fin_comments) {
+        this.fin_comments = fin_comments;
     }
 
-//    public int getScore_hands_thighs() {
-//        return score_hands_thighs;
-//    }
-//
-//    public void setScore_hands_thighs(int score_hands_thighs) {
-//        this.score_hands_thighs = score_hands_thighs;
-//    }
-
-    public String getData_hands_out() {
-        return data_hands_out;
+    public String getData_hands_thighs_left() {
+        return data_hands_thighs_left;
     }
 
-    public void setData_hands_out(String data_hands_out) {
-        this.data_hands_out = data_hands_out;
+    public void setData_hands_thighs_left(String data_hands_thighs_left) {
+        this.data_hands_thighs_left = data_hands_thighs_left;
     }
 
-//    public int getScore_hands_out() {
-//        return score_hands_out;
-//    }
-//
-//    public void setScore_hands_out(int score_hands_out) {
-//        this.score_hands_out = score_hands_out;
-//    }
-
-    public String getData_fin_nose() {
-        return data_fin_nose;
+    public String getData_hands_thighs_right() {
+        return data_hands_thighs_right;
     }
 
-    public void setData_fin_nose(String data_fin_nose) {
-        this.data_fin_nose = data_fin_nose;
+    public void setData_hands_thighs_right(String data_hands_thighs_right) {
+        this.data_hands_thighs_right = data_hands_thighs_right;
     }
 
-//    public int getScore_fin_nose() {
-//        return score_fin_nose;
-//    }
-//
-//    public void setScore_fin_nose(int score_fin_nose) {
-//        this.score_fin_nose = score_fin_nose;
-//    }
-
-    public String getData_fin_tap() {
-        return data_fin_tap;
+    public int getScore_hands_thighs() {
+        return score_hands_thighs;
     }
 
-    public void setData_fin_tap(String data_fin_tap) {
-        this.data_fin_tap = data_fin_tap;
+    public void setScore_hands_thighs(int score_hands_thighs) {
+        this.score_hands_thighs = score_hands_thighs;
     }
 
-//    public int getScore_fin_tap() {
-//        return score_fin_tap;
-//    }
-//
-//    public void setScore_fin_tap(int score_fin_tap) {
-//        this.score_fin_tap = score_fin_tap;
-//    }
-
-    public String getData_op_cl() {
-        return data_op_cl;
+    public String getData_hands_out_left() {
+        return data_hands_out_left;
     }
 
-    public void setData_op_cl(String data_op_cl) {
-        this.data_op_cl = data_op_cl;
+    public void setData_hands_out_left(String data_hands_out_left) {
+        this.data_hands_out_left = data_hands_out_left;
     }
 
-//    public int getScore_op_cl() {
-//        return score_op_cl;
-//    }
-//
-//    public void setScore_op_cl(int score_op_cl) {
-//        this.score_op_cl = score_op_cl;
-//    }
-
-    public String getData_h_flip() {
-        return data_h_flip;
+    public String getData_hands_out_right() {
+        return data_hands_out_right;
     }
 
-    public void setData_h_flip(String data_h_flip) {
-        this.data_h_flip = data_h_flip;
+    public void setData_hands_out_right(String data_hands_out_right) {
+        this.data_hands_out_right = data_hands_out_right;
     }
 
-//    public int getScore_h_flip() {
-//        return score_h_flip;
-//    }
-//
-//    public void setScore_h_flip(int score_h_flip) {
-//        this.score_h_flip = score_h_flip;
-//    }
-
-    public String getData_heel_stmp() {
-        return data_heel_stmp;
+    public int getScore_hands_out() {
+        return score_hands_out;
     }
 
-    public void setData_heel_stmp(String data_heel_stmp) {
-        this.data_heel_stmp = data_heel_stmp;
+    public void setScore_hands_out(int score_hands_out) {
+        this.score_hands_out = score_hands_out;
     }
 
-//    public int getScore_heel_stmp() {
-//        return score_heel_stmp;
-//    }
-//
-//    public void setScore_heel_stmp(int score_heel_stmp) {
-//        this.score_heel_stmp = score_heel_stmp;
-//    }
-
-    public String getData_toe_tap() {
-        return data_toe_tap;
+    public String getData_fin_nose_left() {
+        return data_fin_nose_left;
     }
 
-    public void setData_toe_tap(String data_toe_tap) {
-        this.data_toe_tap = data_toe_tap;
+    public void setData_fin_nose_left(String data_fin_nose_left) {
+        this.data_fin_nose_left = data_fin_nose_left;
     }
 
-//    public int getScore_toe_tap() {
-//        return score_toe_tap;
-//    }
-//
-//    public void setScore_toe_tap(int score_toe_tap) {
-//        this.score_toe_tap = score_toe_tap;
-//    }
-
-    public String getData_gait() {
-        return data_gait;
+    public String getData_fin_nose_right() {
+        return data_fin_nose_right;
     }
 
-    public void setData_gait(String data_gait) {
-        this.data_gait = data_gait;
+    public void setData_fin_nose_right(String data_fin_nose_right) {
+        this.data_fin_nose_right = data_fin_nose_right;
     }
 
-//    public int getScore_gait() {
-//        return score_gait;
-//    }
-//
-//    public void setScore_gait(int score_gait) {
-//        this.score_gait = score_gait;
-//    }
+    public int getScore_fin_nose() {
+        return score_fin_nose;
+    }
+
+    public void setScore_fin_nose(int score_fin_nose) {
+        this.score_fin_nose = score_fin_nose;
+    }
+
+    public String getData_fin_tap_left() {
+        return data_fin_tap_left;
+    }
+
+    public void setData_fin_tap_left(String data_fin_tap_left) {
+        this.data_fin_tap_left = data_fin_tap_left;
+    }
+
+    public String getData_fin_tap_right() {
+        return data_fin_tap_right;
+    }
+
+    public void setData_fin_tap_right(String data_fin_tap_right) {
+        this.data_fin_tap_right = data_fin_tap_right;
+    }
+
+    public int getScore_fin_tap() {
+        return score_fin_tap;
+    }
+
+    public void setScore_fin_tap(int score_fin_tap) {
+        this.score_fin_tap = score_fin_tap;
+    }
+
+    public String getData_op_cl_left() {
+        return data_op_cl_left;
+    }
+
+    public void setData_op_cl_left(String data_op_cl_left) {
+        this.data_op_cl_left = data_op_cl_left;
+    }
+
+    public String getData_op_cl_right() {
+        return data_op_cl_right;
+    }
+
+    public void setData_op_cl_right(String data_op_cl_right) {
+        this.data_op_cl_right = data_op_cl_right;
+    }
+
+    public int getScore_op_cl() {
+        return score_op_cl;
+    }
+
+    public void setScore_op_cl(int score_op_cl) {
+        this.score_op_cl = score_op_cl;
+    }
+
+    public String getData_h_flip_left() {
+        return data_h_flip_left;
+    }
+
+    public void setData_h_flip_left(String data_h_flip_left) {
+        this.data_h_flip_left = data_h_flip_left;
+    }
+
+    public String getData_h_flip_right() {
+        return data_h_flip_right;
+    }
+
+    public void setData_h_flip_right(String data_h_flip_right) {
+        this.data_h_flip_right = data_h_flip_right;
+    }
+
+    public int getScore_h_flip() {
+        return score_h_flip;
+    }
+
+    public void setScore_h_flip(int score_h_flip) {
+        this.score_h_flip = score_h_flip;
+    }
+
+    public String getData_heel_stmp_left() {
+        return data_heel_stmp_left;
+    }
+
+    public void setData_heel_stmp_left(String data_heel_stmp_left) {
+        this.data_heel_stmp_left = data_heel_stmp_left;
+    }
+
+    public String getData_heel_stmp_right() {
+        return data_heel_stmp_right;
+    }
+
+    public void setData_heel_stmp_right(String data_heel_stmp_right) {
+        this.data_heel_stmp_right = data_heel_stmp_right;
+    }
+
+    public int getScore_heel_stmp() {
+        return score_heel_stmp;
+    }
+
+    public void setScore_heel_stmp(int score_heel_stmp) {
+        this.score_heel_stmp = score_heel_stmp;
+    }
+
+    public String getData_toe_tap_left() {
+        return data_toe_tap_left;
+    }
+
+    public void setData_toe_tap_left(String data_toe_tap_left) {
+        this.data_toe_tap_left = data_toe_tap_left;
+    }
+
+    public String getData_toe_tap_right() {
+        return data_toe_tap_right;
+    }
+
+    public void setData_toe_tap_right(String data_toe_tap_right) {
+        this.data_toe_tap_right = data_toe_tap_right;
+    }
+
+    public int getScore_toe_tap() {
+        return score_toe_tap;
+    }
+
+    public void setScore_toe_tap(int score_toe_tap) {
+        this.score_toe_tap = score_toe_tap;
+    }
+
+    public String getData_gait_left() {
+        return data_gait_left;
+    }
+
+    public void setData_gait_left(String data_gait_left) {
+        this.data_gait_left = data_gait_left;
+    }
+
+    public String getData_gait_right() {
+        return data_gait_right;
+    }
+
+    public void setData_gait_right(String data_gait_right) {
+        this.data_gait_right = data_gait_right;
+    }
+
+    public int getScore_gait() {
+        return score_gait;
+    }
+
+    public void setScore_gait(int score_gait) {
+        this.score_gait = score_gait;
+    }
 }

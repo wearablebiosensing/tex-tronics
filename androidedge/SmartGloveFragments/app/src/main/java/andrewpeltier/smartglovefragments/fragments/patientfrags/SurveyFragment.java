@@ -187,7 +187,7 @@ public class SurveyFragment extends Fragment {
 
 
                     myStudyLog = new StudyLog();
-                    myStudyLog.StudyLog(jsonPaitent);
+                    myStudyLog.StudyLog(ident.size(), jsonPaitent);
 
                     String[] studyExercises = {"Resting Hands on Thighs","Hold Hands Out","Finger to Nose","Finger Tap", "Closed Grip","Hand Flip","Heel Stomp","Toe Tap","Walk Steps"};
 

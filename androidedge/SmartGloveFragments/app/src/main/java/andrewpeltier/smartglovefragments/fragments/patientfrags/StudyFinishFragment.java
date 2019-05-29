@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +31,10 @@ import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
 public class StudyFinishFragment extends android.support.v4.app.Fragment {
 
     final String TAG = "Finish_study";
+    EditText com_text;
     //List<User> mUser = Collections.emptyList();
     List<User> mUsers;
+    List<Integer> ids;
     Button returnButton;
     ExportCVS_Study mExportCSV_Study;
 
@@ -42,19 +45,22 @@ public class StudyFinishFragment extends android.support.v4.app.Fragment {
 
         View view = inflater.inflate(R.layout.fragment_study_finish, container, false);
 
+        com_text = view.findViewById(R.id.final_comments);
         mUsers = new ArrayList<>();
+        ids = new ArrayList<>();
         try {
             mUsers = UserRepository.getInstance(getActivity().getApplicationContext()).getAllUsersFromStudy();
+            ids = UserRepository.getInstance(getActivity().getApplicationContext()).getAllIdentities();
         } catch (Exception e) {
             Log.d(TAG, "onClick: Error with identities");
         }
 
+
+
         Log.d(TAG, "onCreateView: User length " + Integer.toString(mUsers.size()));
 
 
-        mExportCSV_Study = new ExportCVS_Study();
-        mExportCSV_Study.ExportCSV_Study(mUsers);
-        //myStudyLog.StudyLog(jsonPaitent);
+        // TODO make an insert of the data into the database for final comments then log them into a file
 
 
         returnButton = view.findViewById(R.id.restart_button);
@@ -62,7 +68,14 @@ public class StudyFinishFragment extends android.support.v4.app.Fragment {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                restart();
+                Log.d(TAG, "onClick: in restart button");
+                String coms = com_text.getText().toString();
+                Log.d(TAG, "onClick: this is coms" + coms + "\n");
+                UserRepository.getInstance(((MainActivity)getActivity()).getApplicationContext()).updateData_final_comments(coms,ids.size());
+                mExportCSV_Study = new ExportCVS_Study();
+                mExportCSV_Study.ExportCSV_Study(mUsers.get(ids.size()-1), ids.size());
+                ((MainActivity)getActivity()).StartSucess();
+
             }
         });
 
@@ -70,28 +83,6 @@ public class StudyFinishFragment extends android.support.v4.app.Fragment {
 
     }
 
-
-    private void restart()
-    {
-        try
-        {
-            // Clears the list of exercises from our exercise selection fragment
-            ExerciseSelectionFragment.adapter.clear();
-            ExerciseSelectionFragment.listItems.clear();
-            // Disconnects from all devices
-            ((MainActivity)getActivity()).disconnect();
-        }
-        catch(Exception e)
-        {
-            Log.e(TAG, "Error: " + e);
-        }
-        // Disconnects from MQTT server
-        TexTronicsManagerService.stop(getActivity());
-        // Restart the main activity to clear fragment manager and launch it again
-        Intent intent = getActivity().getIntent();
-        getActivity().finish();
-        startActivity(intent);
-    }
 
 }
 

@@ -62,7 +62,7 @@ public class UserRepository {
         usr.setDuration(duration);
         usr.setDose(dose);
         usr.setFeel(o_f);
-        usr.setComments(comments);
+        usr.setInit_comments(comments);
 
         insertTask(usr, user_db);
     }
@@ -71,144 +71,435 @@ public class UserRepository {
         deleteTask(usr,user_db);
     }
 
-    public void updateData_h_flip(String exe, int id){
-        updateTask_Data_h_flip(exe, id, user_db);
+
+    // TODO h flip left
+    public void updateData_h_flip_left(String exe, int id){
+        updateTask_Data_h_flip_left(exe, id, user_db);
     }
 
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_h_flip(final String exe, final int id, final UserDatabase udb ){
+    public static void  updateTask_Data_h_flip_left(final String exe, final int id, final UserDatabase udb ){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_hFlip(exe,id);
+                udb.userDAO().insertScr_exer_hFlip_left(exe,id);
                 return null;
             }
         }.execute();
     }
 
-    public void updateData_handrest(String exe, int id){
-        updateTask_Data_handrest(exe,id, user_db);
+    // TODO h flip right
+    public void updateData_h_flip_right(String exe, int id){
+        updateTask_Data_h_flip_right(exe, id, user_db);
     }
 
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_handrest(final String exe, final int id, final UserDatabase udb ){
+    public static void  updateTask_Data_h_flip_right(final String exe, final int id, final UserDatabase udb ){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_handRest(exe,id);
-                return null;
-            }
-        }.execute();
-    }
-
-    public void updateData_handout(String exe, int id){
-        updateTask_Data_handout(exe, id, user_db);
-    }
-
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_handout(final String exe, final int id, final UserDatabase udb ){
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_handOut(exe,id);
-                return null;
-            }
-        }.execute();
-    }
-
-    public void updateData_finNose(String exe, int id){
-        updateTask_Data_finNose(exe, id, user_db);
-    }
-
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_finNose(final String exe, final int id, final UserDatabase udb ){
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_finNose(exe,id);
-                return null;
-            }
-        }.execute();
-    }
-
-    public void updateData_finTap(String exe, int id){
-        updateTask_Data_finTap(exe, id, user_db);
-    }
-
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_finTap(final String exe, final int id, final UserDatabase udb ){
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_finTap(exe,id);
-                return null;
-            }
-        }.execute();
-    }
-
-    public void updateData_opCl(String exe, int id){
-        updateTask_Data_opCl(exe, id, user_db);
-    }
-
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_opCl(final String exe, final int id, final UserDatabase udb ){
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_opCl(exe,id);
+                udb.userDAO().insertScr_exer_hFlip_right(exe,id);
                 return null;
             }
         }.execute();
     }
 
 
-    public void updateData_heelStmp(String exe, int id){
-        updateTask_Data_heelStmp(exe, id, user_db);
+    // TODO h flip score
+    public void updateData_h_flip_score(float scr, int id){
+        updateTask_Data_h_flip_score(scr, id, user_db);
     }
 
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_heelStmp(final String exe, final int id, final UserDatabase udb ){
+    public static void  updateTask_Data_h_flip_score(final float scr, final int id, final UserDatabase udb ){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_heelStmp(exe,id);
+                udb.userDAO().insertScr_h_flip(scr,id);
                 return null;
             }
         }.execute();
     }
 
 
-    public void updateData_toeTap(String exe, int id){
-        updateTask_Data_toeTap(exe, id, user_db);
+    // TODO hand rest left
+    public void updateData_handrest_left(String exe, int id){
+        updateTask_Data_handrest_left(exe,id, user_db);
     }
 
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_toeTap(final String exe, final int id, final UserDatabase udb ){
+    public static void  updateTask_Data_handrest_left(final String exe, final int id, final UserDatabase udb ){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_toeTap(exe,id);
+                udb.userDAO().insertScr_exer_handRest_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO hand rest left
+    public void updateData_handrest_right(String exe, int id){
+        updateTask_Data_handrest_right(exe,id, user_db);
+    }
+
+    public static void  updateTask_Data_handrest_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_handRest_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO h rest score
+    public void updateData_h_rest_score(float scr, int id){
+        updateTask_Data_h_rest_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_h_rest_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_hand_rest(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO hanout left
+    public void updateData_handout_left(String exe, int id){
+        updateTask_Data_handout_left(exe, id, user_db);
+    }
+
+
+    public static void  updateTask_Data_handout_left(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_handOut_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO hanout right
+    public void updateData_handout_right(String exe, int id){
+        updateTask_Data_handout_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_handout_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_handOut_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO handout  score
+    public void updateData_handout_score(float scr, int id){
+        updateTask_Data_handout_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_handout_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_hand_out(scr,id);
                 return null;
             }
         }.execute();
     }
 
 
-    public void updateData_gait(String exe, int id){
-        updateTask_Data_gait(exe, id, user_db);
+    // TODO fin nose left
+    public void updateData_finNose_left(String exe, int id){
+        updateTask_Data_finNose_left(exe, id, user_db);
     }
 
-    // TODO possible need an update task for each column
-    public static void  updateTask_Data_gait(final String exe,  final int id, final UserDatabase udb ){
+    public static void  updateTask_Data_finNose_left(final String exe, final int id, final UserDatabase udb ){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                udb.userDAO().insertScr_exer_gait(exe,id);
+                udb.userDAO().insertScr_exer_finNose_left(exe,id);
                 return null;
             }
         }.execute();
     }
 
+    // TODO fin nose right
+    public void updateData_finNose_right(String exe, int id){
+        updateTask_Data_finNose_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_finNose_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_finNose_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO fin nose score
+    public void updateData_fin_nose_score(float scr, int id){
+        updateTask_Data_fin_nose_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_fin_nose_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_fin_nose(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    //TODO fin tap left
+    public void updateData_finTap_left(String exe, int id){
+        updateTask_Data_finTap_left(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_finTap_left(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_finTap_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    //TODO fin tap right
+    public void updateData_finTap_right(String exe, int id){
+        updateTask_Data_finTap_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_finTap_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_finTap_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO fin tap score
+    public void updateData_fin_tap_score(float scr, int id){
+        updateTask_Data_fin_tap_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_fin_tap_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_fin_tap(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+
+    //TODO open close left
+    public void updateData_opCl_left(String exe, int id){
+        updateTask_Data_opCl_left(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_opCl_left(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_opCl_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    //TODO open close right
+    public void updateData_opCl_right(String exe, int id){
+        updateTask_Data_opCl_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_opCl_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_opCl_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO open close score
+    public void updateData_op_cl_score(float scr, int id){
+        updateTask_Data_op_cl_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_op_cl_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_op_cl(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+
+    //TODO heel stomp left
+    public void updateData_heelStmp_left(String exe, int id){
+        updateTask_Data_heelStmp_left(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_heelStmp_left(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_heelStmp_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    //TODO heel stomp right
+    public void updateData_heelStmp_right(String exe, int id){
+        updateTask_Data_heelStmp_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_heelStmp_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_heelStmp_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO heel stmp score
+    public void updateData_heel_stmp_score(float scr, int id){
+        updateTask_Data_heel_stmp_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_heel_stmp_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_heel_stmp(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO toe tap left
+    public void updateData_toeTap_left(String exe, int id){
+        updateTask_Data_toeTap_left(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_toeTap_left(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_toeTap_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO toe tap right
+    public void updateData_toeTap_right(String exe, int id){
+        updateTask_Data_toeTap_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_toeTap_right(final String exe, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_toeTap_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO toe tap score
+    public void updateData_toe_tap_score(float scr, int id){
+        updateTask_Data_toe_tap_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_toe_tap_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_toe_tap(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+
+    // TODO gait left
+    public void updateData_gait_left(String exe, int id){
+        updateTask_Data_gait_left(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_gait_left(final String exe,  final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_gait_left(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO gait right
+    public void updateData_gait_right(String exe, int id){
+        updateTask_Data_gait_right(exe, id, user_db);
+    }
+
+    public static void  updateTask_Data_gait_right(final String exe,  final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_exer_gait_right(exe,id);
+                return null;
+            }
+        }.execute();
+    }
+
+    // TODO gait score
+    public void updateData_gait_score(float scr, int id){
+        updateTask_Data_gait_score(scr, id, user_db);
+    }
+
+    public static void  updateTask_Data_gait_score(final float scr, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                udb.userDAO().insertScr_gait(scr,id);
+                return null;
+            }
+        }.execute();
+    }
+
+
+    // TODO final comments
+    public void updateData_final_comments(String fin_com, int id){
+        updateTask_Data_fin_comm(fin_com, id, user_db);
+    }
+
+    public static void  updateTask_Data_fin_comm(final String fin_c, final int id, final UserDatabase udb ){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Log.d("UPDATE FIN COMM", "doInBackground: fin comm " + fin_c);
+                udb.userDAO().insertFinComments(fin_c,id);
+                return null;
+            }
+        }.execute();
+    }
 
     public static void insertTask(final User usr, final UserDatabase udb) {
         new AsyncTask<Void, Void, Void>() {

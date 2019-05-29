@@ -25,6 +25,7 @@ import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseSelectio
 import andrewpeltier.smartglovefragments.fragments.patientfrags.FinishFragment;
 import andrewpeltier.smartglovefragments.fragments.HomeFragment;
 import andrewpeltier.smartglovefragments.fragments.patientfrags.StudyFinishFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.StudySuccessFragment;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdate;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdateReceiver;
@@ -140,7 +141,16 @@ public class MainActivity extends AppCompatActivity
         // No exercises left, go to the finish screen
         else {
             addFragment(new StudyFinishFragment(), "StudyFinishFragment");
+//            addFragment(new StudySuccessFragment(), "StudySuccessFragment");
         }
+    }
+
+    public void StartSucess(){
+        addFragment(new StudySuccessFragment(), "StudySuccessFragment");
+    }
+
+    public void RedoInst(){
+        addFragment(new ExerciseInstructionFragment(), "ExerciseInstructionFragment");
     }
 
     /** setIsDoctor()
