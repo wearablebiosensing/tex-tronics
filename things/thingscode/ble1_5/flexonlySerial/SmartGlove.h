@@ -8,10 +8,10 @@
 #define FALSE 1==0
 #endif
 
-#define DEVICE_NAME           "SG - Serial"  // Local Device Name
+#define DEVICE_NAME           "flexonly"  // Local Device Name
 #define TXRX_BUF_LEN          19            // BLE Packet Length
 #define DATA_REFRESH_RATE_MS  8           // Delay between data collection (milliseconds)
-#define DATA_PER_PACKET        6             // Number of data points sent/packet
+#define DATA_PER_PACKET       6             // Number of data points sent/packet
 #define PACKET_LENGTH         6
 
 typedef union _sg_time {
