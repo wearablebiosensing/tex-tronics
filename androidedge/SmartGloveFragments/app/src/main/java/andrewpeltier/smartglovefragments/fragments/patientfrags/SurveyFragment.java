@@ -189,15 +189,15 @@ public class SurveyFragment extends Fragment {
                     myStudyLog = new StudyLog();
                     myStudyLog.StudyLog(ident.size(), jsonPaitent);
 
-                    String[] studyExercises = {"Resting Hands on Thighs","Hold Hands Out","Finger to Nose","Finger Tap", "Closed Grip","Hand Flip","Heel Stomp","Toe Tap","Walk Steps"};
-
+                    String[] studyExercises = {"Resting Hands on Thighs","Hold Hands Out","Finger to Nose","Finger Tap","Closed Grip","Hand Flip","Heel Stomp","Toe Tap","Walk Steps"};
+                    String[] studyExerciseModes = {"IMU_ONLY","IMU_ONLY","IMU_ONLY","FLEX_ONLY","FLEX_ONLY","FLEX_ONLY","FLEX_IMU","FLEX_IMU","FLEX_IMU"}
 
                     // Takes exercises from list and sends them to Main Activity
                     // String[] chosenExercises = new String[adapter.getCount()];
                     for(int i = 0; i < studyExercises.length; i++)
                     {
                         //chosenExercises[i] = adapter.getItem(i);
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        exerciseModes.add(studyExerciseModes(i));
                     }
                     String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
                     ((MainActivity)getActivity()).setExercises(studyExercises, exerciseModeArray);

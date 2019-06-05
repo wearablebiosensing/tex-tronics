@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
                     deviceAddressList[i],
                     Choice.getChoice(exercise_name),
                     //StudyChoice.getChoice(exercise_name),
-                    ExerciseMode.getExercise(exerciseModes[0]),
+                    ExerciseMode.getExercise(exerciseModes[i]),
                     DeviceType.getDevicetype(deviceTypeList[i]), exerciseID, mRoutineID);
         }
     }
