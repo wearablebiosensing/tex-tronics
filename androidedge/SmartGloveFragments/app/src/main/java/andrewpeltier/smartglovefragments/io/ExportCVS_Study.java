@@ -18,7 +18,7 @@ import andrewpeltier.smartglovefragments.database.User;
 public class ExportCVS_Study {
 
     String TAG = "export study ";
-    private String header = "ID, Age, Gender, Hand, Feeling, Duration, Dose, Comments, Hands Thighs, Hands out," +
+    private String header = "ID, Age, Gender, Hand, Feeling, Duration, Dose, Amount, Comments, Hands Thighs, Hands out," +
             "Finger Nose, Finger Tap, Open Close, Hand Flip, Heel Stomp, Toe Tap, Gait";
     Date date = Calendar.getInstance().getTime();
 
@@ -68,6 +68,7 @@ public class ExportCVS_Study {
                                 tmp_user.getFeel()+ "," +
                                 tmp_user.getDuration()+ "," +
                                 tmp_user.getDose()+ "," +
+                                tmp_user.getAmount()+ "," +
                                 tmp_user.getInit_comments()+ "," +
                                 tmp_user.getData_hands_thighs_left()+ "," +
                                 tmp_user.getData_hands_thighs_right()+ "," +
