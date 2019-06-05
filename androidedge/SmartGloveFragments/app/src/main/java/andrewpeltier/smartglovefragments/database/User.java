@@ -5,8 +5,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.sql.Blob;
-
 import io.reactivex.annotations.NonNull;
 
 /* Setting up the table that will be inside the database. */
@@ -19,7 +17,6 @@ public class User {
 
     @ColumnInfo(name = "age")
     private int age;
-
 
     @ColumnInfo(name = "gender")
     private int gender;
@@ -35,6 +32,11 @@ public class User {
 
     @ColumnInfo(name = "on_off")
     private int feel;
+
+    /*added a new column*/
+    @ColumnInfo(name = "amount")
+    private float amount;
+    /*and also a constructor as well as getter and setter function*/
 
     @ColumnInfo(name = "initComments")
     private String init_comments;
@@ -128,13 +130,14 @@ public class User {
     }
 
     @Ignore
-    public User(int age, int gender, int hand, int duration, float dose, int feel, String comments){
+    public User(int age, int gender, int hand, int duration, float dose, int feel, float amount, String comments){
         this.age = age;
         this.gender = gender;
         this.hand = hand;
         this.duration = duration;
         this.dose = dose;
         this.feel = feel;
+        this.amount = amount;
         this.init_comments = comments;
     }
 
@@ -193,6 +196,10 @@ public class User {
     public void setFeel(int feel) {
         this.feel = feel;
     }
+
+    public float getAmount() { return amount; }
+
+    public void setAmount(float amount) { this.amount = amount; }
 
     public String getInit_comments() {
         return init_comments;

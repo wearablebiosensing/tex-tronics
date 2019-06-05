@@ -52,7 +52,7 @@ public class UserRepository {
         return user_db;
     }
 
-    public void insertUsr(int age, int gender, int hand, int duration, float dose, int o_f, String comments){
+    public void insertUsr(int age, int gender, int hand, int duration, float dose, float amount, int o_f, String comments){
 
         Log.d(TAG, "insertUsr: Insderting the user");
         User usr = new User();
@@ -61,6 +61,7 @@ public class UserRepository {
         usr.setHand(hand);
         usr.setDuration(duration);
         usr.setDose(dose);
+        usr.setAmount(amount);
         usr.setFeel(o_f);
         usr.setInit_comments(comments);
 
