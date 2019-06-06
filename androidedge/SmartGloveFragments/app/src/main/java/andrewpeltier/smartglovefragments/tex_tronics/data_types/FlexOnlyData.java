@@ -55,6 +55,66 @@ public class FlexOnlyData extends TexTronicsData {
     }
 
     @Override
+    public int getmAccX() {
+        return 0;
+    }
+
+    @Override
+    public void setmAccX(int AccX) {
+
+    }
+
+    @Override
+    public int getmAccY() {
+        return 0;
+    }
+
+    @Override
+    public void setmAccY(int AccY) {
+
+    }
+
+    @Override
+    public int getmAccZ() {
+        return 0;
+    }
+
+    @Override
+    public void setmAccZ(int AccZ) {
+
+    }
+
+    @Override
+    public int getmGYrX() {
+        return 0;
+    }
+
+    @Override
+    public void setmGyrX(int GyrX) {
+
+    }
+
+    @Override
+    public int getmGYrY() {
+        return 0;
+    }
+
+    @Override
+    public void setmGyrY(int GyrY) {
+
+    }
+
+    @Override
+    public int getmGYrZ() {
+        return 0;
+    }
+
+    @Override
+    public void setmGyrZ(int GyrZ) {
+
+    }
+
+    @Override
     public int getThumbFlex() {
         return mThumbFlex;
     }

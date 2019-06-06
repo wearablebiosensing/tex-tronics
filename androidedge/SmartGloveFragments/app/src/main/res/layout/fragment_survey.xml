@@ -28,7 +28,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="#8BC34A"
+            android:background="#388E3C"
             android:fontFamily="monospace"
             android:lineSpacingExtra="30sp"
             android:text="Enter patient information"
@@ -65,6 +65,7 @@
 
         <EditText
             android:id="@+id/age_text"
+            android:theme="@style/RadioButtonStyle1"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
@@ -113,6 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Male"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp" />
 
@@ -122,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Female"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp" />
 
@@ -150,6 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Left"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp" />
 
@@ -159,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Right"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp" />
         </RadioGroup>
@@ -200,7 +205,8 @@
             android:hint="Months"
             android:inputType="number"
             android:textAlignment="center"
-            android:textColor="@color/White" />
+            android:textColor="@color/White"
+            android:theme="@style/RadioButtonStyle1"/>
 
         <EditText
             android:id="@+id/years_text"
@@ -213,7 +219,8 @@
             android:hint="Years"
             android:inputType="number"
             android:textAlignment="center"
-            android:textColor="@color/White" />
+            android:textColor="@color/White"
+            android:theme="@style/RadioButtonStyle1"/>
 
         <TextView
             android:id="@+id/time_str"
@@ -234,10 +241,11 @@
             android:layout_marginLeft="0dp"
             android:layout_weight="1"
             android:ems="5"
-            android:hint="Months"
+            android:hint="Hours"
             android:inputType="numberDecimal"
             android:textAlignment="center"
-            android:textColor="@color/White" />
+            android:textColor="@color/White"
+            android:theme="@style/RadioButtonStyle1"/>
 
     </LinearLayout>
 
@@ -280,6 +288,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="On"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -290,6 +299,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="Off"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -300,6 +310,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="Unsure"
+                android:theme="@style/RadioButtonStyle"
                 android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -321,6 +332,7 @@
 
         <EditText
             android:id="@+id/amount_text"
+            android:theme="@style/RadioButtonStyle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="0dp"
@@ -360,6 +372,7 @@
 
         <EditText
             android:id="@+id/comments_text"
+            android:theme="@style/RadioButtonStyle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"

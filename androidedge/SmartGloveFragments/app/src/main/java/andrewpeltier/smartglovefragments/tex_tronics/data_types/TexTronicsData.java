@@ -29,6 +29,30 @@ public abstract class TexTronicsData {
 
     public abstract void setTimestamp(long timestamp) throws IllegalDeviceType;
 
+    public abstract int getmAccX();
+
+    public abstract void setmAccX(int AccX);
+
+    public abstract int getmAccY();
+
+    public abstract void setmAccY(int AccY);
+
+    public abstract int getmAccZ();
+
+    public abstract void setmAccZ(int AccZ);
+
+    public abstract int getmGYrX();
+
+    public abstract void setmGyrX(int GyrX);
+
+    public abstract int getmGYrY();
+
+    public abstract void setmGyrY(int GyrY);
+
+    public abstract int getmGYrZ();
+
+    public abstract void setmGyrZ(int GyrZ);
+
     public abstract int getThumbFlex() throws IllegalDeviceType;
 
     public abstract void setThumbFlex(int thumbFlex) throws IllegalDeviceType;

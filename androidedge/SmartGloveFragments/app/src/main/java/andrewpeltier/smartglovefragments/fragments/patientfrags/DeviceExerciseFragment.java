@@ -175,7 +175,6 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     // TODO make a determination of which exercise this is...
                     if (exerciseName.equals("Finger Tap"))
                     {
-
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_fin_tap_score(score,ids.size());
                     }
                     else if (exerciseName.equals("Closed Grip") )

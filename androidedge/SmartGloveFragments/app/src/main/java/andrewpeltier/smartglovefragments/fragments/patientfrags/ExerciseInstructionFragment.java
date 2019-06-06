@@ -19,6 +19,8 @@ import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
 import andrewpeltier.smartglovefragments.visualize.Exercise;
 import pl.droidsonroids.gif.GifImageView;
 
+
+
 /** ======================================
  *
  *    ExerciseInstructionFragment Class
@@ -111,60 +113,75 @@ public class ExerciseInstructionFragment extends Fragment
     {
         if (name.equals("Finger Tap"))
         {
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
             instrText.setText(SmartGloveInterface.StudyInstructionsText.FINGER_TAP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.FINGER_TAP_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
-
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Closed Grip"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.CLOSED_GRIP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.CLOSED_GRIP_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Hand Flip"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HAND_FLIP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HAND_FLIP_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Finger to Nose"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.FINGER_TONOSE_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.SCREEN_TAP_GIF);
-            instrImage.getLayoutParams().width = 428;
+            instrImage.getLayoutParams().width = 660;
             instrImage.getLayoutParams().height = 371;
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Hold Hands Out"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HOLD_HANDS_OUT_TEXT);
-            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HEEL_TAP_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HANDS_HOLD_GIF);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Resting Hands on Thighs"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.RESTING_HANDS_TEXT);
-            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.TOE_TAP_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Heel Stomp"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HEEL_STOMP_TEXT);
-            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.FOOT_STOMP_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HEEL_TAP_GIF);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Toe Tap"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.TOE_TAP_TEXT);
-            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.TOE_TAP_GIF);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
         else if (name.equals("Walk Steps"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.GAIT_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
-            instrImage.setVisibility(View.INVISIBLE);
+            instrImage.getLayoutParams().width = 660;
+            instrImage.getLayoutParams().height = 371;
+            instrImage.setVisibility(View.VISIBLE);
         }
     }
 
@@ -185,6 +202,8 @@ public class ExerciseInstructionFragment extends Fragment
             String existingDevice = deviceAddressList[0];
             if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
                 existingDevice = "Glove";
+                //if(flag==1){mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});}
+                //else if(flag==2){mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});}
             else
                 existingDevice = "Shoe";
             // If your device is not required for the following exercise, it changes the device list
@@ -222,8 +241,8 @@ public class ExerciseInstructionFragment extends Fragment
         if(exerciseDeviceType.equals("Glove"))
         {
             Log.d(TAG, "checkConnection: connecting to gloves");
-            String[] deviceAddressList = new String[] {GattDevices.LEFT_GLOVE_ADDR, GattDevices.RIGHT_GLOVE_ADDR};
-            String[] deviceTypeList = new String[] {DeviceType.SMART_GLOVE.toString(),DeviceType.SMART_GLOVE.toString()};
+            String[] deviceAddressList = new String[] {GattDevices.LEFT_GLOVE_ADDR};
+            String[] deviceTypeList = new String[] {DeviceType.SMART_GLOVE.toString()};
             ((MainActivity)getActivity()).setDeviceLists(deviceAddressList, deviceTypeList);
             ((MainActivity)getActivity()).connect();
         }
@@ -243,3 +262,4 @@ public class ExerciseInstructionFragment extends Fragment
         super.onDestroy();
     }
 }
+

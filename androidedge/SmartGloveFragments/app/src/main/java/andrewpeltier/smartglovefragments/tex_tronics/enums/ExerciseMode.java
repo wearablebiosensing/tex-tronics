@@ -24,7 +24,9 @@ public enum ExerciseMode
     /**
      * Only collects data from flex sensors
      */
-    FLEX_ONLY ("Flex Only");
+    FLEX_ONLY ("Flex Only"),
+
+    IMU_ONLY ("Imu Only");
 
     private final String mExercise;
 
@@ -41,6 +43,9 @@ public enum ExerciseMode
             case "Flex Only":
                 Log.d("Demo", "Retruning FLEX ONLY");
                 return FLEX_ONLY;
+            case "Imu Only":
+                Log.d("Demo", "Retruning IMU ONLY");
+                return IMU_ONLY;
             default:
                 return null;
         }

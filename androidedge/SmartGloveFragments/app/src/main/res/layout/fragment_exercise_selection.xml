@@ -34,7 +34,9 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="0dp"
-                    android:onClick="onClick" />
+                    android:onClick="onClick" >
+
+                </com.yarolegovich.discretescrollview.DiscreteScrollView>
             </andrewpeltier.smartglovefragments.visualize.ExerciseView>
 
         </LinearLayout>

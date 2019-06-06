@@ -14,6 +14,7 @@ import java.util.Locale;
 import andrewpeltier.smartglovefragments.io.DataLogService;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.FlexImuData;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.FlexOnlyData;
+import andrewpeltier.smartglovefragments.tex_tronics.data_types.ImuOnlyData;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.TexTronicsData;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
@@ -70,6 +71,11 @@ public class SmartGlove extends TexTronicsDevice
             case FLEX_ONLY:
                 mData = new FlexOnlyData();
                 mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
+                break;
+
+            case IMU_ONLY:
+                mData = new ImuOnlyData();
+                mHeader = "Device Address,Exercise,Timestamp,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
                 break;
         }
 

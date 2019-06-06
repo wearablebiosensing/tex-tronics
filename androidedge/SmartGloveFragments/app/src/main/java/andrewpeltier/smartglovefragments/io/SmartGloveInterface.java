@@ -48,27 +48,28 @@ public interface SmartGloveInterface
      */
     interface StudyInstructionsText
     {
-        String RESTING_HANDS_TEXT = "Sit still and count backwards from 100";
-        String HOLD_HANDS_OUT_TEXT = "Extend hands and arms out to the front";
-        String FINGER_TONOSE_TEXT = "Extend hand, bending elbow touch index finger to nose";
-        String FINGER_TAP_TEXT = "Tap your index finger to your thumb big and fast";
-        String CLOSED_GRIP_TEXT = "Close and open your hand, extend fingers big and fast";
-        String HAND_FLIP_TEXT = "Extend hand and flip hand palm up and down fast";
-        String HEEL_STOMP_TEXT = "Stomp with heel only big and fast";
-        String TOE_TAP_TEXT = "Leave heel planted and tap up and down, big and fast";
+        String RESTING_HANDS_TEXT = "Count backwards from 100";
+        String HOLD_HANDS_OUT_TEXT = "Hold hands straight out";
+        String FINGER_TONOSE_TEXT = "Finger to nose touching";
+        String FINGER_TAP_TEXT = "Finger tap";
+        String CLOSED_GRIP_TEXT = "Open/Close hands";
+        String HAND_FLIP_TEXT = "Hand flipping";
+        String HEEL_STOMP_TEXT = "Heel stomp";
+        String TOE_TAP_TEXT = "Toe tap";
         String GAIT_TEXT = "Walk 30 steps";
     }
 
     interface StudyInstructionsImage
     {
-        int FINGER_TAP_GIF = R.drawable.smartglovelogo;
-        int CLOSED_GRIP_GIF = R.drawable.smartglovelogo;
-        int HAND_FLIP_GIF = R.drawable.smartglovelogo;
-        int SCREEN_TAP_GIF =R.drawable.smartglovelogo;
-        int HEEL_TAP_GIF = R.drawable.smartglovelogo;
-        int TOE_TAP_GIF = R.drawable.smartglovelogo;
-        int FOOT_STOMP_GIF = R.drawable.smartglovelogo;
-        int WALK_STEPS_GIF =R.drawable.smartglovelogo;
+        int FINGER_TAP_GIF = R.drawable.finger_taps;
+        int CLOSED_GRIP_GIF = R.drawable.hand_grasps;
+        int HANDS_HOLD_GIF = R.drawable.extended_arm;
+        int HAND_FLIP_GIF = R.drawable.hand_flip;
+        int SCREEN_TAP_GIF =R.drawable.smartglove_launcher;
+        int HEEL_TAP_GIF = R.drawable.heel_tap;
+        int TOE_TAP_GIF = R.drawable.toe_tap;
+        int FOOT_STOMP_GIF = R.drawable.smartglove_launcher;
+        int WALK_STEPS_GIF =R.drawable.smartglove_launcher;
     }
 
     /**
@@ -76,12 +77,13 @@ public interface SmartGloveInterface
      */
     interface InstructionsImage
     {
-        int FINGER_TAP_GIF = R.drawable.fingertap_gif;
-        int CLOSED_GRIP_GIF = R.drawable.closed_grip_gif;
-        int HAND_FLIP_GIF = R.drawable.hand_flip_gif;
+        int FINGER_TAP_GIF = R.drawable.finger_taps;
+        int CLOSED_GRIP_GIF = R.drawable.hand_grasps;
+        int HANDS_HOLD_GIF = R.drawable.extended_arm;
+        int HAND_FLIP_GIF = R.drawable.hand_flip;
         int SCREEN_TAP_GIF = R.drawable.screen_tap_gif;
-        int HEEL_TAP_GIF = R.drawable.heeltap_gif;
-        int TOE_TAP_GIF = R.drawable.toetap_gif;
+        int HEEL_TAP_GIF = R.drawable.heel_tap;
+        int TOE_TAP_GIF = R.drawable.toe_tap;
         int FOOT_STOMP_GIF = R.drawable.footstomp_gif;
         int WALK_STEPS_GIF = R.drawable.walksteps_gif;
     }
