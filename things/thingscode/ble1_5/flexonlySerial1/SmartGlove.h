@@ -9,10 +9,10 @@
 #endif
 
 #define DEVICE_NAME           "flexonly"  // Local Device Name
-#define TXRX_BUF_LEN          19            // BLE Packet Length
+#define TXRX_BUF_LEN          20            // BLE Packet Length
 #define DATA_REFRESH_RATE_MS  8           // Delay between data collection (milliseconds)
-#define DATA_PER_PACKET       6             // Number of data points sent/packet
-#define PACKET_LENGTH         6
+#define DATA_PER_PACKET       4             // Number of data points sent/packet
+#define PACKET_LENGTH         10
 
 typedef union _sg_time {
   uint8_t b[4];

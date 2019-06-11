@@ -166,31 +166,31 @@ void periodic_callback() {
     {
       //packet1[1 + looper * PACKET_LENGTH] = prev_ticks.b[0];
       //packet1[2 + looper * PACKET_LENGTH] = prev_ticks.b[1];
-      packet1[1 + looper * PACKET_LENGTH] = thumb_data.b[0];
-      packet1[2 + looper * PACKET_LENGTH] = thumb_data.b[1];
-      packet1[3 + looper * PACKET_LENGTH] = index_data.b[0];
-      packet1[4 + looper * PACKET_LENGTH] = index_data.b[1];
-      packet1[5 + looper * PACKET_LENGTH] = middle_data.b[0];
-      packet1[6 + looper * PACKET_LENGTH] = middle_data.b[1];
-      packet1[7 + looper * PACKET_LENGTH] = ring_data.b[0];
-      packet1[8 + looper * PACKET_LENGTH] = ring_data.b[1];
-      packet1[9 + looper * PACKET_LENGTH] = pinky_data.b[0];
-      packet1[10 + looper * PACKET_LENGTH] = pinky_data.b[1];
+      packet1[0 + looper * PACKET_LENGTH] = thumb_data.b[0];
+      packet1[1 + looper * PACKET_LENGTH] = thumb_data.b[1];
+      packet1[2 + looper * PACKET_LENGTH] = index_data.b[0];
+      packet1[3 + looper * PACKET_LENGTH] = index_data.b[1];
+      packet1[4 + looper * PACKET_LENGTH] = middle_data.b[0];
+      packet1[5 + looper * PACKET_LENGTH] = middle_data.b[1];
+      packet1[6 + looper * PACKET_LENGTH] = ring_data.b[0];
+      packet1[7 + looper * PACKET_LENGTH] = ring_data.b[1];
+      packet1[8 + looper * PACKET_LENGTH] = pinky_data.b[0];
+      packet1[9 + looper * PACKET_LENGTH] = pinky_data.b[1];
     }
     else
     {
-      //packet2[1 + (looper - 3) * PACKET_LENGTH] = prev_ticks.b[0];
-      //packet2[2 + (looper - 3) * PACKET_LENGTH] = prev_ticks.b[1];
-      packet2[1 + (looper - 3) * PACKET_LENGTH] = thumb_data.b[0];
-      packet2[2 + (looper - 3) * PACKET_LENGTH] = thumb_data.b[1];
-      packet2[3 + (looper - 3) * PACKET_LENGTH] = index_data.b[0];
-      packet2[4 + (looper - 3) * PACKET_LENGTH] = index_data.b[1];
-      packet2[5 + (looper - 3) * PACKET_LENGTH] = middle_data.b[0];
-      packet2[6 + (looper - 3) * PACKET_LENGTH] = middle_data.b[1];
-      packet2[7 + (looper - 3) * PACKET_LENGTH] = ring_data.b[0];
-      packet2[8 + (looper - 3) * PACKET_LENGTH] = ring_data.b[1];
-      packet2[9 + (looper - 3) * PACKET_LENGTH] = pinky_data.b[0];
-      packet2[10 + (looper - 3) * PACKET_LENGTH] = pinky_data.b[1];
+      //packet2[1 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[0];
+      //packet2[2 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[1];
+      packet2[0 + (looper - 2) * PACKET_LENGTH] = thumb_data.b[0];
+      packet2[1 + (looper - 2) * PACKET_LENGTH] = thumb_data.b[1];
+      packet2[2 + (looper - 2) * PACKET_LENGTH] = index_data.b[0];
+      packet2[3 + (looper - 2) * PACKET_LENGTH] = index_data.b[1];
+      packet2[4 + (looper - 2) * PACKET_LENGTH] = middle_data.b[0];
+      packet2[5 + (looper - 2) * PACKET_LENGTH] = middle_data.b[1];
+      packet2[6 + (looper - 2) * PACKET_LENGTH] = ring_data.b[0];
+      packet2[7 + (looper - 2) * PACKET_LENGTH] = ring_data.b[1];
+      packet2[8 + (looper - 2) * PACKET_LENGTH] = pinky_data.b[0];
+      packet2[9 + (looper - 2) * PACKET_LENGTH] = pinky_data.b[1];
     }
 
 
