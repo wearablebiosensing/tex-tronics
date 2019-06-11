@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,7 +27,11 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +46,9 @@ import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdate;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdateReceiver;
 import andrewpeltier.smartglovefragments.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
+
+import java.io.File;
+
 
 /** ======================================
  *
@@ -59,8 +69,8 @@ import pl.droidsonroids.gif.GifImageView;
  *  @version 1.0
  *
  */
-public class DeviceExerciseFragment extends Fragment implements SmartGloveInterface
-{
+public class DeviceExerciseFragment extends Fragment implements SmartGloveInterface {
+
     private static final String TAG = "DeviceExerciseFragment";
     /**
      * Determines when the data from the exercise should start logging, namely when
@@ -78,6 +88,13 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     private int current_id;
     private float score;
 
+    private MediaRecorder myAudioRecorder ;
+    private String outFile;
+    private CountDownTimer countDownTimer;
+
+    public DeviceExerciseFragment(){
+
+    }
     /** onCreateView()
      *
      * Called when the view is first created. We use the fragment_device_exercise XML file to load the view and its
@@ -93,7 +110,44 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+
         View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
+
+
+
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String time = simpleDateFormat.format(calendar.getTime());
+
+        String folder_main = "SmartGloveRecordings";
+
+        File f = new File(Environment.getExternalStorageDirectory(), folder_main);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+
+        outFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+ folder_main + "/smart_speechSG" + currentDate + time + ".3gp";
+
+
+        //Create new media recorder instance.
+        myAudioRecorder = new MediaRecorder();
+
+        //myAudioRecorder = new MediaRecorder();
+
+        // This is for setting the audio resource i.e. microphone.
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+        //Define the output format.
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+
+        //This is magic line don't know what's gong on..
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+
+        //Set the output file paths. WTF is happening here ??
+        myAudioRecorder.setOutputFile(outFile);
+
         loadingText = view.findViewById(R.id.loadingText);
         score_text = view.findViewById(R.id.score_value);
 
@@ -108,18 +162,20 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         current_id = ids.size();
 
-        Log.d(TAG, "onCreateView: current ID Device exer gra " + Integer.toString(current_id));
+        //Log.d(TAG, "onCreateView: current ID Device exer gra " + Integer.toString(current_id));
 
-        //TODO: Countdown timer
+        // TODO: Countdown timer:--
         // Starts logging if the devices are connected
         if(MainActivity.CONNECTED)
         {
             startTimer();
+            //startTimerMedia();
         }
 
         // Gets the exercise name from the Main Activity
-        if(MainActivity.exercise_name != null)
+        if(MainActivity.exercise_name != null) {
             exerciseName = MainActivity.exercise_name;
+        }
 
         // Call timer for the exercise
         exeTimer(exerciseName);
@@ -197,6 +253,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     else if (exerciseName.equals("Resting Hands on Thighs"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_h_rest_score(score,ids.size());
+
+
                     }
                     else if (exerciseName.equals("Heel Stomp"))
                     {
@@ -211,9 +269,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_gait_score(score,ids.size());
                     }
 
-
-
                     START_LOG = false;
+
                     ((MainActivity)getActivity()).publish();
                     ((MainActivity)getActivity()).startExercise();
                 }
@@ -242,8 +299,69 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // Set up loading text
 
         Log.d(TAG, "onCreateView: Started.");
+
+//        startTimerMedia();
+
         return view;
     }
+
+    public void start_rec(){
+
+
+
+        try {
+            myAudioRecorder.prepare();
+            myAudioRecorder.start();
+        } //Freak out here...
+        catch(IllegalStateException ise){
+
+
+        } catch (IOException ioe){
+
+        }
+
+        //Toast a message...
+        Toast.makeText(getContext().getApplicationContext()," Recording started ...... ",Toast.LENGTH_LONG).show();
+
+
+    }
+    public void stop_rec(){
+        myAudioRecorder.stop();
+        myAudioRecorder.release();
+        myAudioRecorder = null;
+
+        //Toast a message...
+          Toast.makeText(getContext().getApplicationContext()," Audio recording ended ...... ",Toast.LENGTH_LONG).show();
+    }
+
+    public void play_rec(){
+
+        // Instansiate  a  MediaPlayer object ...
+        MediaPlayer mediaPlayers = new MediaPlayer();
+
+        try {
+
+            //Set the data sources here... with the output file.
+            mediaPlayers.setDataSource(outFile);//This freaks out of we dont have a try catchc.
+
+            //Prepare data.
+          //  mediaPlayers.prepare();
+
+            //Start to play the audio data.
+            //mediaPlayers.start();
+
+        }
+        catch(Exception e){
+
+        }
+
+        //Toast a message...
+        //Toast.makeText(getContext().getApplicationContext()," Playing the recording.... ",Toast.LENGTH_LONG).show();
+
+    }
+
+
+
 
     /** setSideViews()
      *
@@ -292,6 +410,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         }
     }
 
+
     private void startTimer()
     {
         Log.d(TAG, "Starting data logging.");
@@ -320,7 +439,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
     private void  exeTimer(String name){
         if (name.equals("Finger to Nose")|| name.equals("Hand Flip") || name.equals("Closed Grip") || name.equals("Finger Tap")
-                || name.equals("Hold Hands Out") ||name.equals("Resting Hands on Thighs") )
+                || name.equals("Hold Hands Out")/* ||name.equals("Resting Hands on Thighs")*/ )
         {
             final CountDownTimer exe_Timer = new CountDownTimer(10000, 1000) {
                 int countdown = 10;
@@ -329,8 +448,10 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 public void onTick(long l)
                 {
                     Log.v(TAG, "Tick: " + countdown);
-                   // loadingText.setText("" + countdown);
+
+                    // loadingText.setText("" + countdown);
                     loadingText.setText("Collecting data...");
+
                     countdown--;
                 }
 
@@ -340,11 +461,46 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     START_LOG = true;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
+
                     sideImage.setVisibility(View.VISIBLE);
                 }
             };
             exe_Timer.start();
         }
+        else if (name.equals("Resting Hands on Thighs")){
+
+          //  Toast.makeText(getContext().getApplicationContext()," Resting Hands on Thighs exer.... ",Toast.LENGTH_LONG).show();
+
+            final CountDownTimer exe_Timer = new CountDownTimer(10000, 1000) {
+                int countdown = 10;
+
+                @Override
+                public void onTick(long l)
+                {
+                    Log.v(TAG, "Tick: " + countdown);
+                    // loadingText.setText("" + countdown);
+                    loadingText.setText("Collecting data...");
+                    start_rec();
+
+                     countdown--;
+                }
+
+                @Override
+                public void onFinish()
+                {
+
+                    stop_rec();
+                    play_rec();
+
+                    START_LOG = true;
+//                graph.setVisibility(View.VISIBLE);
+                    loadingText.setText("Completed");
+                    sideImage.setVisibility(View.VISIBLE);
+                }
+            };
+            exe_Timer.start();
+        }
+
         else if(name.equals("Heel Stomp") || name.equals("Toe Tap")){
             final CountDownTimer exe_Timer1 = new CountDownTimer(8000, 1000) {
                 int countdown = 8;
@@ -362,7 +518,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 public void onFinish()
                 {
                     START_LOG = true;
-//                graph.setVisibility(View.VISIBLE);
+  //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
                     sideImage.setVisibility(View.VISIBLE);
                 }
