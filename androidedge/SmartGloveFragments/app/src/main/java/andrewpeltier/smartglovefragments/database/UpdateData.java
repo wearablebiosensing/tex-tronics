@@ -5,7 +5,8 @@ import android.util.Log;
 
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 
-public class UpdateData {
+public class
+UpdateData {
 
     String TAG = "update data";
 

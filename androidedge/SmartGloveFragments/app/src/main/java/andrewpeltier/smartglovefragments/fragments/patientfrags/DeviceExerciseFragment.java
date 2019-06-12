@@ -6,15 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
+import android.media.MediaPlayer;   //API for media recorder.
+import android.media.MediaRecorder; //API for media recorder.
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.util.Log;  //for logging print statements on the console.
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Calendar; //for getting local date and time from the system.
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +47,7 @@ import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdateReceiver;
 import andrewpeltier.smartglovefragments.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
 
-import java.io.File;
+import java.io.File;  //to create folders on device file management.
 
 
 /** ======================================
@@ -88,7 +88,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     private int current_id;
     private float score;
 
+    // Creates the media recorder object.
     private MediaRecorder myAudioRecorder ;
+    // For the output files.
     private String outFile;
     private CountDownTimer countDownTimer;
 
@@ -114,27 +116,32 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
 
 
+        /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+        /*    Variables are for the media recording feature.   */
 
+        //Gets the current date from the Calendar API.
         Calendar calendar = Calendar.getInstance();
         String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
 
+        //Gets the current tie from the Calender API built in Java.
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = simpleDateFormat.format(calendar.getTime());
 
+        //Folder to hold the recordings.
         String folder_main = "SmartGloveRecordings";
 
+        //Creates the folder SmartGloveRecordings in the android device if the folder with the same name is not already created.
         File f = new File(Environment.getExternalStorageDirectory(), folder_main);
         if (!f.exists()) {
             f.mkdirs();
         }
 
-        outFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+ folder_main + "/smart_speechSG" + currentDate + time + ".3gp";
 
+        //Sets the output path on the android device to store the media recordings.
+        outFile = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/" + folder_main + "/smart_speechSG" + currentDate + time + ".3gp";
 
         //Create new media recorder instance.
         myAudioRecorder = new MediaRecorder();
-
-        //myAudioRecorder = new MediaRecorder();
 
         // This is for setting the audio resource i.e. microphone.
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -142,11 +149,14 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         //Define the output format.
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        //This is magic line don't know what's gong on..
+        //This is magic line don't know what's gong on.
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
 
-        //Set the output file paths. WTF is happening here ??
+        //Set the output file paths. Little bit magic here.
         myAudioRecorder.setOutputFile(outFile);
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
 
         loadingText = view.findViewById(R.id.loadingText);
         score_text = view.findViewById(R.id.score_value);
@@ -300,67 +310,82 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         Log.d(TAG, "onCreateView: Started.");
 
-//        startTimerMedia();
-
         return view;
     }
 
+    /*
+    *
+    *       Media recording feature.
+    *      ==========================
+    * Limitations:-
+    * 1. Limited to SDK version 18.
+    * 2. Records data for 10 seconds only no more no less.
+    *
+    * Author @Shehjar Sadhu completed on Monday June 10th 2019.
+    *
+    * */
+
+    /*  This function prepares and starts the media recording by enabeling the device microphone. */
     public void start_rec(){
 
-
-
         try {
+            //.prepare(), .start() is from the media API of android studio.
             myAudioRecorder.prepare();
             myAudioRecorder.start();
         } //Freak out here...
         catch(IllegalStateException ise){
-
+            //No need to print anything.
 
         } catch (IOException ioe){
+            //No need to print anything.
+
 
         }
-
         //Toast a message...
-        Toast.makeText(getContext().getApplicationContext()," Recording started ...... ",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext().getApplicationContext()," Recording started ...... ",Toast.LENGTH_LONG).show();
 
 
     }
+    /* This function stops the media recording. */
     public void stop_rec(){
+
+        //.prepare(), .start() is from the media API of android studio.
         myAudioRecorder.stop();
         myAudioRecorder.release();
+        //sets the Media recorder object to null.
         myAudioRecorder = null;
 
         //Toast a message...
-          Toast.makeText(getContext().getApplicationContext()," Audio recording ended ...... ",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext().getApplicationContext()," Audio recording ended ...... ",Toast.LENGTH_LONG).show();
     }
 
+    /* Sets the out file dir for the recorded media file.*/
     public void play_rec(){
 
-        // Instansiate  a  MediaPlayer object ...
+        // Instansiate  a  MediaPlayer object from Media API.
         MediaPlayer mediaPlayers = new MediaPlayer();
 
         try {
 
             //Set the data sources here... with the output file.
-            mediaPlayers.setDataSource(outFile);//This freaks out of we dont have a try catchc.
+            mediaPlayers.setDataSource(outFile); //This freaks out of we don't have a try catch.
 
+            /* This will play the audio and once recording is over. For debugging purposes. */
             //Prepare data.
-          //  mediaPlayers.prepare();
+            //mediaPlayers.prepare();
 
             //Start to play the audio data.
             //mediaPlayers.start();
 
         }
         catch(Exception e){
-
+            //No need to print anything.
         }
 
         //Toast a message...
         //Toast.makeText(getContext().getApplicationContext()," Playing the recording.... ",Toast.LENGTH_LONG).show();
 
     }
-
-
 
 
     /** setSideViews()
@@ -458,7 +483,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onFinish()
                 {
-                    START_LOG = true;
+                    START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
 
@@ -480,22 +505,25 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     Log.v(TAG, "Tick: " + countdown);
                     // loadingText.setText("" + countdown);
                     loadingText.setText("Collecting data...");
+                    //Starts recording the media once the Resting Hands on Thighs exercise has been started.
                     start_rec();
-
-                     countdown--;
+                    countdown--;
                 }
 
                 @Override
                 public void onFinish()
                 {
 
-                    stop_rec();
-                    play_rec();
 
-                    START_LOG = true;
+                    START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
                     sideImage.setVisibility(View.VISIBLE);
+                    //Stops recording the media once the Resting Hands on Thighs exercise has been started.
+                    stop_rec();
+
+                    //Sets the out file dir recording the media once the Resting Hands on Thighs exercise has been started.
+                    play_rec();
                 }
             };
             exe_Timer.start();
@@ -517,7 +545,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onFinish()
                 {
-                    START_LOG = true;
+                    START_LOG = false;
   //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
                     sideImage.setVisibility(View.VISIBLE);
@@ -565,6 +593,10 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
                 if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC))
                 {
+                    /* Check to see which exercise we are on and
+                    * then break up the data into different exercises.
+                    * Make new csv files for each exercise.
+                    * */
                     // Get the data from the intent
                     Log.d(TAG, "Data Received");
                     byte[] data = intent.getByteArrayExtra(BluetoothLeConnectionService.INTENT_DATA);
@@ -577,6 +609,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                      * set to true to make sure that the user is ready and exercsing before we log
                      * the data and display it on our graph
                      */
+/*
 
                     // First Data Set
                     int thumb = (((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF)));
@@ -591,6 +624,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     // Third Data Set
                     thumb = (((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
                     index = (((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF)));
+*/
 
 
                     Log.d(TAG, "onReceive: Start Log = " + START_LOG);

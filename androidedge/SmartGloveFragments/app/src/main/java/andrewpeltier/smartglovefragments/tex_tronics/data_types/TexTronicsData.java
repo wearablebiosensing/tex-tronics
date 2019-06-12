@@ -19,6 +19,7 @@ import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceTyp
  */
 
 public abstract class TexTronicsData {
+
     public TexTronicsData() {
 
     }

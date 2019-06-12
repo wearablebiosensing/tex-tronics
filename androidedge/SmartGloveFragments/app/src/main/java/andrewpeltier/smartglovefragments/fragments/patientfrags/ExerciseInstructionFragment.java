@@ -241,8 +241,8 @@ public class ExerciseInstructionFragment extends Fragment
         if(exerciseDeviceType.equals("Glove"))
         {
             Log.d(TAG, "checkConnection: connecting to gloves");
-            String[] deviceAddressList = new String[] {GattDevices.LEFT_GLOVE_ADDR};
-            String[] deviceTypeList = new String[] {DeviceType.SMART_GLOVE.toString()};
+            String[] deviceAddressList = new String[] {GattDevices.LEFT_GLOVE_ADDR,GattDevices.RIGHT_GLOVE_ADDR};
+            String[] deviceTypeList = new String[] {DeviceType.SMART_GLOVE.toString(),DeviceType.SMART_GLOVE.toString()};
             ((MainActivity)getActivity()).setDeviceLists(deviceAddressList, deviceTypeList);
             ((MainActivity)getActivity()).connect();
         }

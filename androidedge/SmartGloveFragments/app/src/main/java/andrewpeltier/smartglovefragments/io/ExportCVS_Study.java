@@ -122,7 +122,6 @@ public class ExportCVS_Study {
 
        // }
 
-
         return 1;
     }
 

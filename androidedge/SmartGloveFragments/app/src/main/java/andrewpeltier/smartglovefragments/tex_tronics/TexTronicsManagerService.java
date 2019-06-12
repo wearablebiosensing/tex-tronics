@@ -832,7 +832,7 @@ public class TexTronicsManagerService extends Service
                                         device.setIndexFlex((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
                                         device.setMiddleFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
                                         device.setRingFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-                                        device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
+                                        //device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);
