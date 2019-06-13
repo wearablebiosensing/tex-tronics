@@ -57,6 +57,7 @@ public abstract class TexTronicsDevice
     protected String mDeviceAddress;        // MAC address of TexTronics Device
 
     public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode, @NonNull Choice choice, String exerciseID, String routineID) throws IllegalArgumentException {
+
         // Validate Bluetooth Device Address Provided
         if(!BluetoothAdapter.checkBluetoothAddress(deviceAddress))
         {
