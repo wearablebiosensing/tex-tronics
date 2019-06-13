@@ -792,34 +792,55 @@ public class TexTronicsManagerService extends Service
                                 /** alli edit - how the csv files is logged */
                                 switch (exerciseMode)
                                 {
-                                    //case FLEX_IMU:
+                                    case FLEX_IMU:
                                         // Move data processing into Data Model?
-                                        //if (data[0] == PACKET_ID_1) {
-                                         //   device.clear();
+//                                        //if (data[0] == PACKET_ID_1) {
+                                            //device.clear();
                                            // device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                            //device.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                            //device.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
-                                            // TODO: Add rest of fingers
-                                        //} else if (data[0] == PACKET_ID_2) {
-                                          //  device.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
-                                            //device.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
-                                            //device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
-                                            //device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                            //device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
-                                            //device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
-                                            //device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+                                            device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
+                                            device.setIndexFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
+                                            device.setAccX(((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
+                                            device.setAccY(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
+                                            device.setAccZ(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                            device.setGyrX(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
+                                            device.setGyrY(((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF)));
+                                            device.setGyrZ(((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
+
+                                        //device.setMiddleFlex((((data[2] & 0x00FF) << 8))); //| ((data[5] & 0x00FF))));
+                                            //device.setRingFlex((((data[3] & 0x00FF) << 8))); //| ((data[7] & 0x00FF))));
+                                            //device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
+//                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
+//                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
+//                                            device.setAccZ(((data[7] & 0x00FF) << 8)); // | ((data[6] & 0x00FF)));
+//                                            device.setGyrX(((data[8] & 0x00FF) << 8)); // | ((data[8] & 0x00FF)));
+//                                            device.setGyrY(((data[9] & 0x00FF) << 8)); // | ((data[10] & 0x00FF)));
+//                                            device.setGyrZ(((data[10] & 0x00FF) << 8)); // | ((data[12] & 0x00FF)));
+//                                            // TODO: Add rest of fingers
+//                                        //} else if (data[0] == PACKET_ID_2) {
+//                                            device.setThumbFlex((((data[0] & 0x00FF) << 8))); //| ((data[6] & 0x00FF))));
+//                                            device.setIndexFlex((((data[1] & 0x00FF) << 8))); //| ((data[8] & 0x00FF))));
+//                                            device.setMiddleFlex((((data[2] & 0x00FF) << 8))); //| ((data[5] & 0x00FF))));
+//                                            device.setRingFlex((((data[3] & 0x00FF) << 8))); //| ((data[7] & 0x00FF))));
+//                                            device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
+//                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
+//                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
+//                                            device.setAccZ(((data[7] & 0x00FF) << 8)); // | ((data[6] & 0x00FF)));
+//                                            device.setGyrX(((data[8] & 0x00FF) << 8)); // | ((data[8] & 0x00FF)));
+//                                            device.setGyrY(((data[9] & 0x00FF) << 8)); // | ((data[10] & 0x00FF)));
+//                                            device.setGyrZ(((data[10] & 0x00FF) << 8)); // | ((data[12] & 0x00FF)));
+                                            // device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
                                             //device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             //device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
                                             // If in exercise, log this data to CSV file
-                                            //if(DeviceExerciseFragment.START_LOG)
-                                              //  device.logData(mContext);
-                                        //} else {
-                                          //  Log.w(TAG, "Invalid Data Packet");
-                                            //return;
-                                        //}
-                                        //break;
-                                    case FLEX_ONLY:
+                                            if(DeviceExerciseFragment.START_LOG){
+                                                    device.logData(mContext);
+                                            } else {
+                                                Log.w(TAG, "Invalid Data Packet");
+                                                return;
+                                            }
+                                            break;                                    
+                                        case FLEX_ONLY:
                                         // First Data Set
                                         //device.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
                                         device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
