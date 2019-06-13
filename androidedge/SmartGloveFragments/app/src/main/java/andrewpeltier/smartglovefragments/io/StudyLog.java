@@ -22,6 +22,7 @@ public class StudyLog {
 
 
     public int  StudyLog(int id, String info){
+
         String fileName = dateString + "/" + id +"/" + timeString + "patient_info_.csv";
         File parentFile = new File("/storage/emulated/0/Documents");    // FIXME
         File file = new File(parentFile, fileName);

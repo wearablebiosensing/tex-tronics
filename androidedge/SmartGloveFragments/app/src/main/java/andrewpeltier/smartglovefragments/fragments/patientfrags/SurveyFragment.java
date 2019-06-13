@@ -196,22 +196,11 @@ public class SurveyFragment extends Fragment {
 
                     // Takes exercises from list and sends them to Main Activity
                     // String[] chosenExercises = new String[adapter.getCount()];
-//                    for(int i = 0; i < studyExercises.length; i++)
-//                    {
-//                        //chosenExercises[i] = adapter.getItem(i);
-//                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-//                    }
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-
-
+                    for(int i = 0; i < studyExercises.length; i++)
+                    {
+                        //chosenExercises[i] = adapter.getItem(i);
+                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    }
                     String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
                     ((MainActivity)getActivity()).setExercises(studyExercises, exerciseModeArray);
                     ((MainActivity)getActivity()).startExercise();

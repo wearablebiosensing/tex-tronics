@@ -1,6 +1,6 @@
 package andrewpeltier.smartglovefragments.fragments.patientfrags;
 
-
+import java.lang.String;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,10 +40,13 @@ import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
 import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
 import andrewpeltier.smartglovefragments.database.StudyInformation;
 import andrewpeltier.smartglovefragments.database.UserRepository;
+import andrewpeltier.smartglovefragments.io.DataLog;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
+import andrewpeltier.smartglovefragments.io.StudyLog;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdate;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdateReceiver;
+import andrewpeltier.smartglovefragments.visualize.Exercise;
 import andrewpeltier.smartglovefragments.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -115,7 +118,6 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
 
-
         /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
         /*    Variables are for the media recording feature.   */
 
@@ -129,6 +131,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         //Folder to hold the recordings.
         String folder_main = "SmartGloveRecordings";
+
+
 
         //Creates the folder SmartGloveRecordings in the android device if the folder with the same name is not already created.
         File f = new File(Environment.getExternalStorageDirectory(), folder_main);
@@ -161,6 +165,10 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         loadingText = view.findViewById(R.id.loadingText);
         score_text = view.findViewById(R.id.score_value);
 
+        //Create a DataLog object.
+        DataLog dataLog;
+
+
         ids = new ArrayList<>();
 
         try{
@@ -174,10 +182,18 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         //Log.d(TAG, "onCreateView: current ID Device exer gra " + Integer.toString(current_id));
 
+        List<Integer> ident = new ArrayList<>();
+        try {
+            ident  = UserRepository.getInstance(getActivity().getApplicationContext()).getAllIdentities();
+        }
+        catch(Exception e){
+            Log.d(TAG, "onClick: Error with identities");
+        }
+
+
         // TODO: Countdown timer:--
         // Starts logging if the devices are connected
-        if(MainActivity.CONNECTED)
-        {
+        if(MainActivity.CONNECTED){
             startTimer();
             //startTimerMedia();
         }
@@ -185,6 +201,12 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // Gets the exercise name from the Main Activity
         if(MainActivity.exercise_name != null) {
             exerciseName = MainActivity.exercise_name;
+
+            // Initialize the data log obj bu passing in the exercise name.
+            dataLog = new DataLog();
+
+            // Call to the constructor to create files.
+            dataLog.DataLog(ident.size(),exerciseName);
         }
 
         // Call timer for the exercise
@@ -200,6 +222,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         {
             setSideViews(exerciseName);
             sideImage.setVisibility(View.INVISIBLE);
+
+            //Init with the constructor.
+
         }
 
         // Sets up the "Next" button
@@ -263,7 +288,6 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     else if (exerciseName.equals("Resting Hands on Thighs"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_h_rest_score(score,ids.size());
-
 
                     }
                     else if (exerciseName.equals("Heel Stomp"))

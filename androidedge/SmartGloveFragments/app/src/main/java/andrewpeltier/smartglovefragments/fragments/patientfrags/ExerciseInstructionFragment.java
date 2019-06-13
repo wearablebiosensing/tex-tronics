@@ -118,7 +118,6 @@ public class ExerciseInstructionFragment extends Fragment
             instrText.setText(SmartGloveInterface.StudyInstructionsText.FINGER_TAP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.FINGER_TAP_GIF);
             instrImage.setVisibility(View.VISIBLE);
-
         }
         else if (name.equals("Closed Grip"))
         {
