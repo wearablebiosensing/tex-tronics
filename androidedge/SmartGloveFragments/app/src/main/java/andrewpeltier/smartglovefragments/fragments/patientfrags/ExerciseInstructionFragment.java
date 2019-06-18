@@ -191,6 +191,9 @@ public class ExerciseInstructionFragment extends Fragment
      * connected device should be used for this particular exercise.
      *
      */
+
+    public static int flag=0;
+
     private void checkConnection()
     {
         Log.d(TAG, "checkConnection: Checking connection");
@@ -200,10 +203,20 @@ public class ExerciseInstructionFragment extends Fragment
             // Checks to see the types of devices you are already connected to
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
+            //------------------------------------------------------------
+            if (exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
+                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")){
+                flag=1;
+                Log.d(TAG, "flag=" + flag);}
+            else if(exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
+                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")){
+                flag=2;
+                Log.d(TAG, "flag=" + flag);
+            }
+            //------------------------------------------------------------
             if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
                 existingDevice = "Glove";
-                //if(flag==1){mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});}
-                //else if(flag==2){mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});}
+
             else
                 existingDevice = "Shoe";
             // If your device is not required for the following exercise, it changes the device list

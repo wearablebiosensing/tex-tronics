@@ -201,9 +201,9 @@ public class SurveyFragment extends Fragment {
 //                        //chosenExercises[i] = adapter.getItem(i);
 //                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
 //                    }
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());

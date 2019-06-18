@@ -25,6 +25,7 @@ import andrewpeltier.smartglovefragments.ble.GattServices;
 import andrewpeltier.smartglovefragments.database.UpdateData;
 import andrewpeltier.smartglovefragments.database.UserRepository;
 import andrewpeltier.smartglovefragments.fragments.patientfrags.DeviceExerciseFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseInstructionFragment;
 import andrewpeltier.smartglovefragments.io.IOUtil;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
@@ -756,13 +757,13 @@ public class TexTronicsManagerService extends Service
                     /**
                      * added to sent 1 or 2 or 3 to the bluetooth device
                      */
-                    if(exerciseMode==ExerciseMode.FLEX_ONLY)
+                    if(ExerciseInstructionFragment.flag==1)
                     {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});
                         Log.d(TAG, "Data sent via flex");}
-                    else if(exerciseMode==ExerciseMode.IMU_ONLY)
+                    else if(ExerciseInstructionFragment.flag==2)
                     {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});
                         Log.d(TAG, "Data sent via imu");}
-                    else if(exerciseMode==ExerciseMode.FLEX_IMU)
+                    else if(ExerciseInstructionFragment.flag==3)
                     {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x03});}
 
                     /*-----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -859,7 +860,7 @@ public class TexTronicsManagerService extends Service
                                         device.setIndexFlex((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
                                         device.setMiddleFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
                                         device.setRingFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-                                        device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
+                                     //   device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);

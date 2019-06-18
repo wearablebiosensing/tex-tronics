@@ -194,7 +194,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // TODO: Countdown timer:--
         // Starts logging if the devices are connected
         if(MainActivity.CONNECTED){
-            startTimer();
+           // startTimer();
             //startTimerMedia();
         }
 
@@ -206,7 +206,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             dataLog = new DataLog();
 
             // Call to the constructor to create files.
-            dataLog.DataLog(ident.size(),exerciseName);
+            dataLog.DataLog(ident.size(),exerciseName, ExerciseInstructionFragment.flag);
+
         }
 
         // Call timer for the exercise

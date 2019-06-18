@@ -2,6 +2,7 @@ package andrewpeltier.smartglovefragments.io;
 
 import android.util.Log;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -37,7 +38,10 @@ public class DataLog {
     // Set Default Output File
     String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
     String timeString = new SimpleDateFormat("kk_mm_ss_SSS", Locale.US).format(date);
+    String header;
+    String header_flexOnly = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
 
+    String header_imuonly = "Device Address,Exercise,Timestamp,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
 
     /* Default Constructor. Does nothing */
     public void DataLog(){
@@ -51,7 +55,7 @@ public class DataLog {
     *  Creates new csv files for each of the exercises.
     * */
 
-    public void DataLog(int id, String exerciseName){
+    public void DataLog(int id, String exerciseName,int flag){
 
         // Get the device type for each exercise.
         String exerciseDeviceType = Exercise.getDeviceName(exerciseName);
@@ -75,10 +79,14 @@ public class DataLog {
         else if (existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR)){
             exerciseDeviceType = "RIGHT_SHOE_";
         }
+
         /* Debug statements... */
+        Log.e("Data log FLAG!!=", String.valueOf(flag));
         Log.e("Data log DEVICE TYPE=", exerciseDeviceType);
         Log.e("Data log EXERCISE NAME=", exerciseName.toString());
         Log.e("Data log ID NUMBER=", String.valueOf(id));
+
+
 
 //        String folder_main = "/storage/emulated/0/Documents";
 //        //Creates new folder.
@@ -93,9 +101,21 @@ public class DataLog {
         File parentFile = new File( "/storage/emulated/0/Documents");    // FIXME
         File file = new File(parentFile, fileName);
 
+        /*  Set the header according to the exercises. */
+        if(flag == 1 || flag ==0 ){
+            header = header_flexOnly;
+        }
+        else if(flag == 2){
+            header = header_imuonly;
+        }
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            outputStreamWriter.write(header);
+            outputStreamWriter.close();
+           // BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+            //bufferedWriter.write("Hello world!");
+            //bufferedWriter.newLine();
             Log.d("","Creating new CSV file");
 
         }catch (IOException e){
