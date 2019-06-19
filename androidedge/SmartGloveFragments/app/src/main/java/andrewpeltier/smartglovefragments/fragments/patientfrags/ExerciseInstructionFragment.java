@@ -1,5 +1,7 @@
 package andrewpeltier.smartglovefragments.fragments.patientfrags;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,10 +17,15 @@ import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.ble.GattDevices;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
+import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
+import andrewpeltier.smartglovefragments.tex_tronics.devices.SmartGlove;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
+import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
+import andrewpeltier.smartglovefragments.visualize.Choice;
 import andrewpeltier.smartglovefragments.visualize.Exercise;
 import pl.droidsonroids.gif.GifImageView;
 
+import static andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService.*;
 
 
 /** ======================================
@@ -72,9 +79,12 @@ public class ExerciseInstructionFragment extends Fragment
         }
 
         // Connect to the appropriate device(s)
-        checkConnection();
+        checkConnection(MainActivity.exercise_mode);
 
+
+        //call connect() from ....
         // Set up the exercise button click method
+
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -194,7 +204,7 @@ public class ExerciseInstructionFragment extends Fragment
 
     public static int flag=0;
 
-    private void checkConnection()
+    private void checkConnection(String exercise_modes)
     {
         Log.d(TAG, "checkConnection: Checking connection");
         String[] deviceAddressList = MainActivity.getmDeviceAddressList();
@@ -204,20 +214,20 @@ public class ExerciseInstructionFragment extends Fragment
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
             //------------------------------------------------------------
-            if (exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
-                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")){
-                flag=1;
-                Log.d(TAG, "flag=" + flag);}
-            else if(exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
-                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")){
+            if (exercise_modes.equals("IMU_ONLY")/*exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
+                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")*/){
                 flag=2;
+                Log.d(TAG, "flag=" + flag);}
+            else if(exercise_modes.equals("FLEX_ONLY")/*exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
+                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")*/){
+                flag=1;
                 Log.d(TAG, "flag=" + flag);
             }
             //------------------------------------------------------------
             if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
                 existingDevice = "Glove";
 
-            else
+            else if(existingDevice.equals(GattDevices.LEFT_SHOE_ADDR) || existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR))
                 existingDevice = "Shoe";
             // If your device is not required for the following exercise, it changes the device list
             // and reconnects to the appropriate devices

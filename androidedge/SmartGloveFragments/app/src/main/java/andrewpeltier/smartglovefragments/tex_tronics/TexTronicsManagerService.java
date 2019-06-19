@@ -78,21 +78,21 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
-    private static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.device";
+    public static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.device";
 
     /**
      * Used to identify the transmit mode.
      *
      * @since 1.0
      */
-    private static final String EXTRA_MODE = "tex_tronics.wbl.uri.ble.mode";
+    public static final String EXTRA_MODE = "tex_tronics.wbl.uri.ble.mode";
 
     /**
      * Used to identify the device type.
      *
      * @since 1.0
      */
-    private static final String EXTRA_TYPE = "tex_tronics.wbl.uri.ble.type";
+    public static final String EXTRA_TYPE = "tex_tronics.wbl.uri.ble.type";
     /**
      * The packet ID for the first packet transmitted when communicating in Flex+IMU mode.
      * This will be the first byte of the packet.
@@ -103,26 +103,26 @@ public class TexTronicsManagerService extends Service
     /**
      * The choice of exercise being done
      */
-    private static final String EXTRA_CHOICE = "tex_tronics.wbl.uri.ble.choice";
+    public static final String EXTRA_CHOICE = "tex_tronics.wbl.uri.ble.choice";
 
     /**
      * The UUID of the current exercise
      */
-    private static final String EXTRA_EX_ID = "tex_tronics.wbl.uri.ble.ex_id";
+    public static final String EXTRA_EX_ID = "tex_tronics.wbl.uri.ble.ex_id";
 
     /**
      * The UUID of the routine
      */
-    private static final String EXTRA_ROUTINE_ID  = "tex_tronics.wbl.uri.ble.routine_id";
+    public static final String EXTRA_ROUTINE_ID  = "tex_tronics.wbl.uri.ble.routine_id";
 
-    private static final byte PACKET_ID_1 = 0x01;
+    public static final byte PACKET_ID_1 = 0x01;
     /**
      * The packet ID for the second packet transmitted when communicating in Flex+IMU mode.
      * This will be the first byte of the packet.
      *
      * @since 1.0
      */
-    private static final byte PACKET_ID_2 = 0x02;
+    public static final byte PACKET_ID_2 = 0x02;
 
     /**
      * The value to return in onStartCommand
@@ -131,12 +131,12 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
-    private static final int INTENT_RETURN_POLICY = START_STICKY;
-    private static Context context;
-    private static String deviceAddress;
-    private static Choice choice;
-    private static ExerciseMode exerciseMode;
-    private static DeviceType deviceType;
+    public static final int INTENT_RETURN_POLICY = START_STICKY;
+    public static Context context;
+    public static String deviceAddress;
+    public static Choice choice;
+    public static ExerciseMode exerciseMode;
+    public static DeviceType deviceType;
 
 
     /** =====================================================
@@ -159,7 +159,7 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
-    public static void connect(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType, UUID exerciseID, UUID routineID) {
+    public static void connect_devices(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType, UUID exerciseID, UUID routineID) {
         TexTronicsManagerService.context = context;
         TexTronicsManagerService.deviceAddress = deviceAddress;
         TexTronicsManagerService.choice = choice;
@@ -285,6 +285,7 @@ public class TexTronicsManagerService extends Service
      * Contains reference to each connected Tex-Tronics Device.
      */
     private HashMap<String, TexTronicsDevice> mTexTronicsList;
+
 
     @Override
     public void onCreate()
@@ -427,6 +428,60 @@ public class TexTronicsManagerService extends Service
         super.onDestroy();
     }
 
+    public void create_datalog(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID){
+        SmartGlove smartGlove;
+
+        // Only connects if we have a bounded BLE service, which we should if this service has started
+        if (mBleServiceBound) {
+
+            List<Integer> ident = new ArrayList<>();
+            try {
+                ident = UserRepository.getInstance(this.getApplicationContext()).getAllIdentities();
+            } catch (Exception e) {
+                Log.d(TAG, "onClick: Error with identities");
+            }
+
+            String exerciseName;
+
+            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
+            switch (deviceType) {
+                case SMART_GLOVE:
+                    //Log.e("Data log EXERCISE===", choice.toString());
+                    if (MainActivity.exercise_name != null) {
+                        exerciseName = MainActivity.exercise_name;
+                        Log.e("Data log EXERCISE===", exerciseName);
+
+                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+                        mTexTronicsList.put(deviceAddress, smartGlove);
+
+                    }
+
+                    break;
+                // Add Different Devices Here
+                case SMART_SOCK:
+
+                    if (MainActivity.exercise_name != null) {
+                        exerciseName = MainActivity.exercise_name;
+                        Log.e("Data log EXERCISE===", exerciseName);
+
+                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+                        mTexTronicsList.put(deviceAddress, smartGlove);
+
+                    }
+                    // Added the Smart Sock code, just copied from above
+                    //smartGlove = new SmartGlove(ident.size(),choice.toString(), ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
+                    //mTexTronicsList.put(deviceAddress, smartGlove);
+                    break;
+                default:
+
+                    break;
+            }
+        }
+
+    }
+
     /** =====================================================
      *
      *                  Service Methods
@@ -450,28 +505,58 @@ public class TexTronicsManagerService extends Service
      */
     private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID)
     {
+        //SmartGlove smartGlove;
+
         // Only connects if we have a bounded BLE service, which we should if this service has started
         if (mBleServiceBound)
         {
-            SmartGlove smartGlove;
-            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
-            switch (deviceType)
-            {
-                case SMART_GLOVE:
-                    // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
-                    mTexTronicsList.put(deviceAddress, smartGlove);
-                    break;
-                // Add Different Devices Here
-                case SMART_SOCK:
-                    // Added the Smart Sock code, just copied from above
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
-                    mTexTronicsList.put(deviceAddress, smartGlove);
-                    break;
-                default:
-
-                    break;
-            }
+//
+//            List<Integer> ident = new ArrayList<>();
+//            try {
+//                ident  = UserRepository.getInstance(this.getApplicationContext()).getAllIdentities();
+//            }
+//            catch(Exception e){
+//                Log.d(TAG, "onClick: Error with identities");
+//            }
+//
+//            String exerciseName;
+//
+//            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
+//            switch (deviceType)
+//            {
+//                case SMART_GLOVE:
+//                    Log.e("Data log EXERCISE===", choice.toString());
+//                    if(MainActivity.exercise_name != null) {
+//                        exerciseName = MainActivity.exercise_name;
+//                        Log.e("Data log EXERCISE===", exerciseName);
+//
+//                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+//                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                        mTexTronicsList.put(deviceAddress, smartGlove);
+//
+//                    }
+//
+//                    break;
+//                // Add Different Devices Here
+//                case SMART_SOCK:
+//
+//                    if(MainActivity.exercise_name != null) {
+//                        exerciseName = MainActivity.exercise_name;
+//                        Log.e("Data log EXERCISE===", exerciseName);
+//
+//                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+//                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                        mTexTronicsList.put(deviceAddress, smartGlove);
+//
+//                    }
+//                    // Added the Smart Sock code, just copied from above
+//                    //smartGlove = new SmartGlove(ident.size(),choice.toString(), ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                    //mTexTronicsList.put(deviceAddress, smartGlove);
+//                    break;
+//                default:
+//
+//                    break;
+//            }
 
             mBleService.connect(deviceAddress);
         }

@@ -81,6 +81,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
      */
     public static boolean START_LOG = false;
     private String exerciseName;                            // Name of the exercise currently in session
+    private  String exerciseMode;
     private Button disconnectBtn, nextButton;               // View buttons
     private GifImageView sideImage;                         // Animated GIF specific to exercise
     private TextView loadingText;
@@ -95,7 +96,6 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     private MediaRecorder myAudioRecorder ;
     // For the output files.
     private String outFile;
-    private CountDownTimer countDownTimer;
 
     public DeviceExerciseFragment(){
 
@@ -117,48 +117,6 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     {
 
         View view = inflater.inflate(R.layout.fragment_device_exercise, container, false);
-
-        /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-        /*    Variables are for the media recording feature.   */
-
-        //Gets the current date from the Calendar API.
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
-
-        //Gets the current tie from the Calender API built in Java.
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        String time = simpleDateFormat.format(calendar.getTime());
-
-        //Folder to hold the recordings.
-        String folder_main = "SmartGloveRecordings";
-
-
-
-        //Creates the folder SmartGloveRecordings in the android device if the folder with the same name is not already created.
-        File f = new File(Environment.getExternalStorageDirectory(), folder_main);
-        if (!f.exists()) {
-            f.mkdirs();
-        }
-
-
-        //Sets the output path on the android device to store the media recordings.
-        outFile = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/" + folder_main + "/smart_speechSG" + currentDate + time + ".3gp";
-
-        //Create new media recorder instance.
-        myAudioRecorder = new MediaRecorder();
-
-        // This is for setting the audio resource i.e. microphone.
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-        //Define the output format.
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-
-        //This is magic line don't know what's gong on.
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-
-        //Set the output file paths. Little bit magic here.
-        myAudioRecorder.setOutputFile(outFile);
-/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
 
@@ -202,11 +160,55 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         if(MainActivity.exercise_name != null) {
             exerciseName = MainActivity.exercise_name;
 
+            if(exerciseName.equals("Resting Hands on Thighs")){
+
+                /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+                /*    Variables are for the media recording feature.   */
+
+                //Gets the current date from the Calendar API.
+                Calendar calendar = Calendar.getInstance();
+                String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+
+                //Gets the current tie from the Calender API built in Java.
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                String time = simpleDateFormat.format(calendar.getTime());
+
+                //Folder to hold the recordings.
+                String folder_main = "SmartGloveRecordings";
+
+                //Creates the folder SmartGloveRecordings in the android device if the folder with the same name is not already created.
+                File f = new File(Environment.getExternalStorageDirectory(), folder_main);
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+
+
+                //Sets the output path on the android device to store the media recordings.
+                outFile = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/" + folder_main + "/smart_speechSG" + currentDate + time + ".3gp";
+
+                //Create new media recorder instance.
+                myAudioRecorder = new MediaRecorder();
+
+                // This is for setting the audio resource i.e. microphone.
+                myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+                //Define the output format.
+                myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+
+                //This is magic line don't know what's gong on.
+                myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+
+                //Set the output file paths. Little bit magic here.
+                myAudioRecorder.setOutputFile(outFile);
+                /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+            }
+
             // Initialize the data log obj bu passing in the exercise name.
-            dataLog = new DataLog();
+            //dataLog = new DataLog();
 
             // Call to the constructor to create files.
-            dataLog.DataLog(ident.size(),exerciseName, ExerciseInstructionFragment.flag);
+          //  dataLog.DataLog(ident.size(),exerciseName, ExerciseInstructionFragment.flag);
 
         }
 
@@ -214,7 +216,6 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         exeTimer(exerciseName);
 
         Log.d(TAG, "onCreateView: THIS IS THE EXERCISE NAME " + exerciseName);
-
 
         // Using the exercise name, set the animated gif to the image corresponding to
         // the current exercise
@@ -385,7 +386,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     }
 
     /* Sets the out file dir for the recorded media file.*/
-    public void play_rec(){
+    public void store_rec(){
 
         // Instansiate  a  MediaPlayer object from Media API.
         MediaPlayer mediaPlayers = new MediaPlayer();
@@ -497,6 +498,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onTick(long l)
                 {
+                    START_LOG = true;
                     Log.v(TAG, "Tick: " + countdown);
 
                     // loadingText.setText("" + countdown);
@@ -512,7 +514,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
 
-                    sideImage.setVisibility(View.VISIBLE);
+                    sideImage.setVisibility(View.INVISIBLE);
                 }
             };
             exe_Timer.start();
@@ -527,6 +529,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onTick(long l)
                 {
+                    START_LOG = true;
                     Log.v(TAG, "Tick: " + countdown);
                     // loadingText.setText("" + countdown);
                     loadingText.setText("Collecting data...");
@@ -543,12 +546,11 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
-                    sideImage.setVisibility(View.VISIBLE);
+                    sideImage.setVisibility(View.INVISIBLE);
                     //Stops recording the media once the Resting Hands on Thighs exercise has been started.
                     stop_rec();
-
                     //Sets the out file dir recording the media once the Resting Hands on Thighs exercise has been started.
-                    play_rec();
+                    store_rec();
                 }
             };
             exe_Timer.start();
@@ -657,7 +659,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             }
             else if(action.equals(BluetoothLeConnectionService.GATT_STATE_CONNECTED))
             {
-                startTimer();
+                //startTimer();
             }
             else if(action.equals(BluetoothLeConnectionService.GATT_STATE_DISCONNECTED))
             {

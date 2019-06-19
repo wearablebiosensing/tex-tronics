@@ -156,8 +156,9 @@ public class SurveyFragment extends Fragment {
                 }
                 catch (Exception e){
                     // add exeption
+                    //UnCOMMENT THIS!!!!!!
 
-                    empty = true;
+                  //  empty = true;
                 }
 
 
@@ -212,6 +213,7 @@ public class SurveyFragment extends Fragment {
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
 
                     String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
+
                     ((MainActivity)getActivity()).setExercises(studyExercises, exerciseModeArray);
                     ((MainActivity)getActivity()).startExercise();
                 }
