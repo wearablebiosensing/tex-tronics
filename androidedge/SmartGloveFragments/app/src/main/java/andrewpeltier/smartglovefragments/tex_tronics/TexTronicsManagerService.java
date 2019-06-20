@@ -367,6 +367,9 @@ public class TexTronicsManagerService extends Service
             return INTENT_RETURN_POLICY;
         }
 
+        String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
+        String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
+
         // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
         switch (action)
         {
@@ -382,19 +385,21 @@ public class TexTronicsManagerService extends Service
                 ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
                 DeviceType deviceType = (DeviceType) intent.getSerializableExtra(EXTRA_TYPE);
                 Choice choice = (Choice) intent.getSerializableExtra(EXTRA_CHOICE);
-                String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
-                String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
 
                 // Use data to connect to device
                 connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
-            }
+                }
             break;
             case disconnect:
                 // Attempt to disconnect from a currently connected BLE Device
                 disconnect(deviceAddress);
                 break;
             case publish:
+
                 publish(deviceAddress);
+                create_datalog(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
+
+
                 break;
             case stop:
                 // Disconnect from each device, then stop services
@@ -449,12 +454,13 @@ public class TexTronicsManagerService extends Service
                     //Log.e("Data log EXERCISE===", choice.toString());
                     if (MainActivity.exercise_name != null) {
                         exerciseName = MainActivity.exercise_name;
-                        Log.e("Data log EXERCISE===", exerciseName);
+                        Log.e(" EXERCISE===", exerciseName);
+                        Log.e(" FLAG===" , String.valueOf(ExerciseInstructionFragment.flag));
+
 
                         // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
                         mTexTronicsList.put(deviceAddress, smartGlove);
-
                     }
 
                     break;
@@ -466,7 +472,7 @@ public class TexTronicsManagerService extends Service
                         Log.e("Data log EXERCISE===", exerciseName);
 
                         // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
                         mTexTronicsList.put(deviceAddress, smartGlove);
 
                     }
@@ -519,7 +525,7 @@ public class TexTronicsManagerService extends Service
 //                Log.d(TAG, "onClick: Error with identities");
 //            }
 //
-//            String exerciseName;
+//           String exerciseName;
 //
 //            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
 //            switch (deviceType)
@@ -530,8 +536,8 @@ public class TexTronicsManagerService extends Service
 //                        exerciseName = MainActivity.exercise_name;
 //                        Log.e("Data log EXERCISE===", exerciseName);
 //
-//                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
-//                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                       // TODO Assume connection will be successful, if connection fails we must remove it from list.
+//                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
 //                        mTexTronicsList.put(deviceAddress, smartGlove);
 //
 //                    }
@@ -545,20 +551,20 @@ public class TexTronicsManagerService extends Service
 //                        Log.e("Data log EXERCISE===", exerciseName);
 //
 //                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
-//                        smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                         smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
 //                        mTexTronicsList.put(deviceAddress, smartGlove);
 //
 //                    }
 //                    // Added the Smart Sock code, just copied from above
 //                    //smartGlove = new SmartGlove(ident.size(),choice.toString(), ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
 //                    //mTexTronicsList.put(deviceAddress, smartGlove);
-//                    break;
+//                   break;
 //                default:
 //
 //                    break;
 //            }
 
-            mBleService.connect(deviceAddress);
+            mBleService.connect(deviceAddress); //add_connected
         }
         else {
             Log.w(TAG,"Cannot Connect - BLE Connection Service is not bound yet!");
@@ -772,6 +778,9 @@ public class TexTronicsManagerService extends Service
             // Get the MAC address and action from the intent
             String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
             String action = intent.getStringExtra(BluetoothLeConnectionService.INTENT_EXTRA);
+
+            Log.d(TAG, "Received BLE Update ACTION====="+ action);
+
             /*
              * The action holds what type of update we are dealing with. For each action, we
              * need to update the TT update receiver.
@@ -918,6 +927,8 @@ public class TexTronicsManagerService extends Service
                                             //device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             //device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
+                                            Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+
                                             // If in exercise, log this data to CSV file
                                             if(DeviceExerciseFragment.START_LOG){
                                                     device.logData(mContext);
@@ -935,6 +946,8 @@ public class TexTronicsManagerService extends Service
                                         device.setRingFlex((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
                                         device.setPinkyFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
 
+                                        Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);
 
@@ -945,7 +958,8 @@ public class TexTronicsManagerService extends Service
                                         device.setIndexFlex((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
                                         device.setMiddleFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
                                         device.setRingFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-                                     //   device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
+                                     //   device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))))
+                                            Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);
@@ -966,6 +980,8 @@ public class TexTronicsManagerService extends Service
                                         device.setGyrX(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
                                         device.setGyrY(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
                                         device.setGyrZ(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
+
+                                        Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);

@@ -152,7 +152,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // TODO: Countdown timer:--
         // Starts logging if the devices are connected
         if(MainActivity.CONNECTED){
-           // startTimer();
+            //startTimer();
             //startTimerMedia();
         }
 
@@ -510,7 +510,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onFinish()
                 {
-                    START_LOG = false;
+                   // START_LOG = true;
+
+                    // START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
 
@@ -529,7 +531,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onTick(long l)
                 {
-                    START_LOG = true;
+                    //START_LOG = true;
                     Log.v(TAG, "Tick: " + countdown);
                     // loadingText.setText("" + countdown);
                     loadingText.setText("Collecting data...");
@@ -543,7 +545,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 {
 
 
-                    START_LOG = false;
+                    START_LOG = true;
+
+                    // START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
                     sideImage.setVisibility(View.INVISIBLE);
@@ -563,6 +567,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onTick(long l)
                 {
+                    START_LOG = true;
+
                     Log.v(TAG, "Tick: " + countdown);
                     //loadingText.setText("" + countdown);
                     loadingText.setText("Collecting data...");
@@ -572,7 +578,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onFinish()
                 {
-                    START_LOG = false;
+
+                    //START_LOG = false;
   //                graph.setVisibility(View.VISIBLE);
                     loadingText.setText("Completed");
                     sideImage.setVisibility(View.VISIBLE);
@@ -680,6 +687,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: started " + exerciseName);
+
 
         getActivity().registerReceiver(mBLEUpdateReceiver, new IntentFilter(BluetoothLeConnectionService.INTENT_FILTER_STRING));
     }

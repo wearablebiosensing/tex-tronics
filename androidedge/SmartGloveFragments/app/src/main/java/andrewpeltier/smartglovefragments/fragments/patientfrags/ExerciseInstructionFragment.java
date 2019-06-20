@@ -78,12 +78,11 @@ public class ExerciseInstructionFragment extends Fragment
             setSideViews(exerciseName);
         }
 
+        Log.d(TAG, "MainActivity.exercise_mode  ===== "  + MainActivity.exercise_mode);
+
+
         // Connect to the appropriate device(s)
         checkConnection(MainActivity.exercise_mode);
-
-
-        //call connect() from ....
-        // Set up the exercise button click method
 
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,12 +213,12 @@ public class ExerciseInstructionFragment extends Fragment
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
             //------------------------------------------------------------
-            if (exercise_modes.equals("IMU_ONLY")/*exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
-                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")*/){
+            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
+                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")){
                 flag=2;
                 Log.d(TAG, "flag=" + flag);}
-            else if(exercise_modes.equals("FLEX_ONLY")/*exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
-                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")*/){
+            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
+                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")){
                 flag=1;
                 Log.d(TAG, "flag=" + flag);
             }

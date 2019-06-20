@@ -68,7 +68,7 @@ public class SmartGlove extends TexTronicsDevice
      * @param exerciseID                -ID of the chosen exercise
      * @param routineID                 -ID of the routine
      */
-    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
+    public SmartGlove(int id, String exerciseName,int flag,String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
         /*
          * Calls super method, which sets all shared parent variables given the
          * input parameters
@@ -103,6 +103,11 @@ public class SmartGlove extends TexTronicsDevice
         File parentFile1 = new File("/storage/emulated/0/Documents");    // FIXME
         File file1 = new File(parentFile1, fileName1);
         setCsvFile(file1);
+
+        /* Create 6 different files for 6 different exercises.
+         *  How to get the exercise name.?
+         * */
+        create_files( id,  exerciseName, flag);
 
 
 
@@ -181,7 +186,9 @@ public class SmartGlove extends TexTronicsDevice
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-            outputStreamWriter.write(mHeader);
+            outputStreamWriter.write(header);
+           // outputStreamWriter.write(mData.toString());
+
             outputStreamWriter.close();
             Log.d("","Creating new CSV file");
 
@@ -192,13 +199,6 @@ public class SmartGlove extends TexTronicsDevice
         }
 
         //}
-
-
-        /*String fileName2 = dateString + "/" + String.valueOf(id) + "/" + timeString + "_" + exerciseDeviceType + "HOLDING HANDS OUT" + ".csv";
-
-        File parentFile2 = new File( "/storage/emulated/0/Documents");    // FIXME
-        File file2 = new File(parentFile2, fileName2);
-        setCsvFile(file2);*/
 
     }
     /** logData()
