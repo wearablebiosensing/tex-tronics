@@ -68,7 +68,7 @@ public class SmartGlove extends TexTronicsDevice
      * @param exerciseID                -ID of the chosen exercise
      * @param routineID                 -ID of the routine
      */
-    public SmartGlove(int id, String exerciseName,int flag,String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
+    public SmartGlove(String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
         /*
          * Calls super method, which sets all shared parent variables given the
          * input parameters
@@ -93,7 +93,7 @@ public class SmartGlove extends TexTronicsDevice
                 break;
         }
 
-        Date date = Calendar.getInstance().getTime();
+       /* Date date = Calendar.getInstance().getTime();
 
         // Set Default Output File
         String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
@@ -102,12 +102,12 @@ public class SmartGlove extends TexTronicsDevice
         String fileName1 = dateString + "/" + timeString + "_glove.csv";
         File parentFile1 = new File("/storage/emulated/0/Documents");    // FIXME
         File file1 = new File(parentFile1, fileName1);
-        setCsvFile(file1);
+        setCsvFile(file1);*/
 
         /* Create 6 different files for 6 different exercises.
          *  How to get the exercise name.?
          * */
-        create_files( id,  exerciseName, flag);
+       // create_files( id,  exerciseName, flag);
 
 
 
@@ -216,7 +216,7 @@ public class SmartGlove extends TexTronicsDevice
 
         // Store in CSV File
         String data = mData.toString();
-        String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + data;
+        String logString = mDeviceAddress + "," + MainActivity.exercise_mode + "," + data;
         DataLogService.log(context, mCsvFile, logString, mHeader);
     }
 
