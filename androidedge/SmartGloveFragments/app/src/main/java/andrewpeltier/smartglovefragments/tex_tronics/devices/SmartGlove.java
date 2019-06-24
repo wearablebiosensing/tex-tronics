@@ -182,7 +182,7 @@ public class SmartGlove extends TexTronicsDevice
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-            outputStreamWriter.write(mHeader);
+            outputStreamWriter.write(header);
            // outputStreamWriter.write(mData.toString());
 
             outputStreamWriter.close();
@@ -212,7 +212,7 @@ public class SmartGlove extends TexTronicsDevice
 
         // Store in CSV File
         String data = mData.toString();
-        String logString = mDeviceAddress + "," + EXERCISE_MODE.toString() + "," + data;
+        String logString = mDeviceAddress + "," + MainActivity.exercise_mode + "," + data;
         DataLogService.log(context, mCsvFile, logString, mHeader);
     }
 

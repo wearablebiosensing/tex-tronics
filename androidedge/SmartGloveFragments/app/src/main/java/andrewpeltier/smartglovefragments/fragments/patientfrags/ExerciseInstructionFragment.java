@@ -216,11 +216,11 @@ public class ExerciseInstructionFragment extends Fragment
             if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
                     exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")){
                 flag=2;
-                Log.d(TAG, "flag=" + flag);}
+                Log.e(TAG, "flag=" + flag);}
             else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
                     exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")){
                 flag=1;
-                Log.d(TAG, "flag=" + flag);
+                Log.e(TAG, "flag=" + flag);
             }
             //------------------------------------------------------------
             if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
