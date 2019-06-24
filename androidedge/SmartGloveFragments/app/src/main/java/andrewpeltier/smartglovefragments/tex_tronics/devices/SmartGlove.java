@@ -65,7 +65,7 @@ public class SmartGlove extends TexTronicsDevice
      * @param exerciseID                -ID of the chosen exercise
      * @param routineID                 -ID of the routine
      */
-    public SmartGlove(int id, String exerciseName,int flag,String deviceAddress, ExerciseMode exerciseMode, Choice choice, String exerciseID, String routineID) {
+    public SmartGlove(int id, String exerciseName,int flag,String deviceAddress, String exerciseMode, Choice choice, String exerciseID, String routineID) {
         /*
          * Calls super method, which sets all shared parent variables given the
          * input parameters
@@ -74,19 +74,19 @@ public class SmartGlove extends TexTronicsDevice
         mDeviceAddress = deviceAddress;
 
         // Set CSV Header and Data Model depending on exercise mode
-        switch (EXERCISE_MODE) {
+        switch (exerciseMode) {
 //            case FLEX_IMU:
 //                mData = new FlexImuData();
 //                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
 //                break;
-            case FLEX_ONLY:
+            case "Flex Only":
                 mData = new FlexOnlyData();
-                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
+                mHeader = "Device Address,Exercise,Thumb,Index,Middle,Ring,Pinky";
                 break;
 
-            case IMU_ONLY:
+            case "Imu Only":
                 mData = new ImuOnlyData();
-                mHeader = "Device Address,Exercise,Timestamp,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
+                mHeader = "Device Address,Exercise,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
                 break;
         }
 
@@ -129,25 +129,23 @@ public class SmartGlove extends TexTronicsDevice
 
 
         //Log.e("Data log DEVICE TYPE CONNECTION=", gattDevices);
-        for(int i = 0; i <deviceAddressList.length; i++ ){
+        String existingDevice = null;
+        for(int i = 0; i <deviceAddressList.length; i++ ) {
 
-            String existingDevice = deviceAddressList[i];
+            existingDevice = deviceAddressList[i];
 
-            if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR))
-            {
+            if (existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR)) {
                 exerciseDeviceType = "LEFT_GLOVE_";
-            }
-            if(existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR)){
+            } else if (existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR)) {
                 exerciseDeviceType = "RIGHT_GLOVE_";
-            }
-            if(existingDevice.equals(GattDevices.LEFT_SHOE_ADDR)){
+            } else if (existingDevice.equals(GattDevices.LEFT_SHOE_ADDR)) {
                 exerciseDeviceType = "LEFT_SHOE_";
+            } else if (existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR)) {
+                exerciseDeviceType = "RIGHT_SHOE_";
             }
-            if (existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR)){
-                exerciseDeviceType  = "RIGHT_SHOE_";
-            }
-
         }
+
+
 
         /* Debug statements... */
         Log.e("Data log FLAG!!=", String.valueOf(flag));
@@ -172,6 +170,7 @@ public class SmartGlove extends TexTronicsDevice
         File file = new File(parentFile, fileName);
         setCsvFile(file);
 
+
         /*  Set the header according to the exercises. */
         if(flag == 1 || flag ==0 ){
             header = header_imuonly;
@@ -182,7 +181,7 @@ public class SmartGlove extends TexTronicsDevice
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-            outputStreamWriter.write(header);
+            outputStreamWriter.write(mHeader);
            // outputStreamWriter.write(mData.toString());
 
             outputStreamWriter.close();

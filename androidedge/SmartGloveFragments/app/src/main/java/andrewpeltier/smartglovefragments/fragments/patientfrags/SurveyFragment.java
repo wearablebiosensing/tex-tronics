@@ -204,10 +204,10 @@ public class SurveyFragment extends Fragment {
 //                    }
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
@@ -215,6 +215,7 @@ public class SurveyFragment extends Fragment {
                     String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
 
                     ((MainActivity)getActivity()).setExercises(studyExercises, exerciseModeArray);
+                    ((MainActivity)getActivity()).setModes(studyExercises, exerciseModeArray);
                     ((MainActivity)getActivity()).startExercise();
                 }
             }

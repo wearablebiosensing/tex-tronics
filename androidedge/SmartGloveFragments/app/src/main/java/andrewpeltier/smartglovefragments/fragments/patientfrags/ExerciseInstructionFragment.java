@@ -213,12 +213,13 @@ public class ExerciseInstructionFragment extends Fragment
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
             //------------------------------------------------------------
-            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
-                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")){
+            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold Hands Out")||exerciseName.equals("Resting Hands on Thighs")
+                    || exerciseName.equals("Hand Flip")
+                   ){
                 flag=2;
                 Log.e(TAG, "flag=" + flag);}
-            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
-                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")){
+            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Heel Stomp")
+                    || exerciseName.equals("Finger Tap")|| exerciseName.equals("Toe Tap")|| exerciseName.equals("Closed Grip")  ){
                 flag=1;
                 Log.e(TAG, "flag=" + flag);
             }
