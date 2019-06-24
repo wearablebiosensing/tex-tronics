@@ -171,14 +171,14 @@ public class ExerciseSelectionFragment extends Fragment implements
                         // Takes exercises from list and sends them to Main Activity
                         String[] chosenExercises = new String[adapter.getCount()];
 
-                        for(int i = 0; i < adapter.getCount(); i++)
-                        {
-                            chosenExercises[i] = adapter.getItem(i);
-                            //exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        }
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+//                        for(int i = 0; i < adapter.getCount(); i++)
+//                        {
+//                            chosenExercises[i] = adapter.getItem(i);
+//                            exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+//                        }
                         exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());

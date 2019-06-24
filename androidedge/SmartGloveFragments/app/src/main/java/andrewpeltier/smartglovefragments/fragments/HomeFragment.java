@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment
 {
     private static final String TAG = "HomeFragment";
 
-    private Button startButton;                 // Button that changes fragment
+    private Button beginButton;                 // Button that changes fragment
     private ImageView logo;                     // Center animated Smart Glove logo
 
     /** onCreateView()
@@ -56,12 +56,12 @@ public class HomeFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        startButton = view.findViewById(R.id.start_button);
+        beginButton = view.findViewById(R.id.start_button);
 
         Log.d(TAG, "onCreateView: Home Fragment is launched");
 
         // For version 1.0, a short click will activate the user side of the application...
-        startButton.setOnClickListener(new View.OnClickListener()
+        beginButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
