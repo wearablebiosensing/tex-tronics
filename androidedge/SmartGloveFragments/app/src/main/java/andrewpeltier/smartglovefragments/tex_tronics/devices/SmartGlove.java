@@ -17,7 +17,6 @@ import andrewpeltier.smartglovefragments.io.DataLogService;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.FlexOnlyData;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.ImuOnlyData;
-import andrewpeltier.smartglovefragments.tex_tronics.data_types.FlexImuData;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.TexTronicsData;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
@@ -50,9 +49,6 @@ public class SmartGlove extends TexTronicsDevice
     private TexTronicsData mData;           // CSV Formatted exercise data.
 
     String header;
-
-
-
     String header_flexOnly = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
 
     String header_imuonly = "Device Address,Exercise,Timestamp,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
@@ -79,34 +75,15 @@ public class SmartGlove extends TexTronicsDevice
 
         // Set CSV Header and Data Model depending on exercise mode
         switch (exerciseMode) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            case "Flex + IMU":
-                mData = new FlexImuData();
-                mHeader = "Device Address,Exercise,Thumb,Index,Middle,Ring,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
-                break;
-=======
-=======
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
 //            case FLEX_IMU:
 //                mData = new FlexImuData();
 //                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
 //                break;
-<<<<<<< HEAD
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
-=======
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
             case "Flex Only":
                 mData = new FlexOnlyData();
                 mHeader = "Device Address,Exercise,Thumb,Index,Middle,Ring,Pinky";
                 break;
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
-=======
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
             case "Imu Only":
                 mData = new ImuOnlyData();
                 mHeader = "Device Address,Exercise,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
@@ -195,12 +172,12 @@ public class SmartGlove extends TexTronicsDevice
 
 
         /*  Set the header according to the exercises. */
-//        if(flag == 1 || flag ==0 ){
-//            header = header_imuonly;
-//        }
-//        else if(flag == 2){
-//            header = header_imuonly;
-//        }
+        if(flag == 1 || flag ==0 ){
+            header = header_imuonly;
+        }
+        else if(flag == 2){
+            header = header_imuonly;
+        }
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);

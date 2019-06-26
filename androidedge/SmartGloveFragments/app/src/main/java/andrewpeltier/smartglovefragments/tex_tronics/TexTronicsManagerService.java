@@ -235,15 +235,7 @@ public class TexTronicsManagerService extends Service
 //                        if(device != null)
 //                            exerciseMode1 = device.getExerciseMode();
                         // TODO Assume connection will be successful, if connection fails we must remove it from list.
-<<<<<<< HEAD
-<<<<<<< HEAD
-                        smartGlove = new SmartGlove(ident.size(),exerciseName,3,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
-=======
                         smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
-=======
-                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                         mTexTronicsList.put(deviceAddress, smartGlove);
                     }
 
@@ -992,22 +984,22 @@ public class TexTronicsManagerService extends Service
 
                                 switch (exerciseMode)
                                 {
-                                    case "Flex + IMU":
+                                    case "Flex + Imu":
                                         // Move data processing into Data Model?
 //                                        //if (data[0] == PACKET_ID_1) {
                                             //device.clear();
                                            // device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                            device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
-                                            device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
-                                            device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
-                                            device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                            device.setAccX(((data[8] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                            device.setAccY(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
-                                            device.setAccZ(((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF)));
-                                            device.setGyrX(((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
-                                            device.setGyrY(((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF)));
-                                            device.setGyrZ(((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF)));
+                                            device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
+                                            device.setIndexFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
+                                            device.setAccX(((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
+                                            device.setAccY(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
+                                            device.setAccZ(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                            device.setGyrX(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
+                                            device.setGyrY(((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF)));
+                                            device.setGyrZ(((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
 
+                                        //device.setMiddleFlex((((data[2] & 0x00FF) << 8))); //| ((data[5] & 0x00FF))));
+                                            //device.setRingFlex((((data[3] & 0x00FF) << 8))); //| ((data[7] & 0x00FF))));
                                             //device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
 //                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
 //                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));

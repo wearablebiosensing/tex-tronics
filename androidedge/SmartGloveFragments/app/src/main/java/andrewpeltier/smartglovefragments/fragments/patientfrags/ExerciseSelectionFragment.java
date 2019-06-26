@@ -171,35 +171,20 @@ public class ExerciseSelectionFragment extends Fragment implements
                         // Takes exercises from list and sends them to Main Activity
                         String[] chosenExercises = new String[adapter.getCount()];
 
-                        for(int i = 0; i < adapter.getCount(); i++)
-                        {
-                            chosenExercises[i] = adapter.getItem(i);
-                            exerciseModes.add(ExerciseMode.FLEX_IMU.toString());
-                        }
-                        /*exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+//                        for(int i = 0; i < adapter.getCount(); i++)
+//                        {
+//                            chosenExercises[i] = adapter.getItem(i);
+//                            exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+//                        }
                         exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                         exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-<<<<<<< HEAD
-<<<<<<< HEAD
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());*/
-=======
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
-=======
->>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                         String[] studyExercises = {"Resting Hands on Thighs","Hold Hands Out","Finger to Nose","Finger Tap", "Closed Grip","Hand Flip","Heel Stomp","Toe Tap","Walk Steps"};
 
 
