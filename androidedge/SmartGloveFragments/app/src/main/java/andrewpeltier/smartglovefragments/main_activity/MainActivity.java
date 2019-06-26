@@ -216,13 +216,26 @@ public class MainActivity extends AppCompatActivity
     {
         exerciseChoices = chosenExercises;
         exerciseModes = exerciseModeArray;
-        mModes =  new ArrayDeque<>(Arrays.asList(exerciseModes));
+        //mModes =  new ArrayDeque<>(Arrays.asList(exerciseModes));
         mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
         // A new routine has just been created, so we create a random ID for
         // this new routine
         mRoutineID = UUID.randomUUID();
         Log.d(TAG, "setExercises: Exercises set");
     }
+    public void setModes(String[] chosenExercises, String[] exerciseModeArray){
+
+        //exerciseChoices = chosenExercises;
+        exerciseModes = exerciseModeArray;
+        mModes =  new ArrayDeque<>(Arrays.asList(exerciseModes));
+       // mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
+        // A new routine has just been created, so we create a random ID for
+        // this new routine
+        mRoutineID = UUID.randomUUID();
+        Log.d(TAG, "setModes: Exercises MODE set");
+
+    }
+
 
     public static int getExerciseCount()
     {
@@ -265,7 +278,7 @@ public class MainActivity extends AppCompatActivity
                     deviceAddressList[i],
                     Choice.getChoice(exercise_name),
                     //StudyChoice.getChoice(exercise_name),
-                    ExerciseMode.getExercise(exercise_mode),//exerciseModes[i]
+                    ExerciseMode.getExercise(exerciseModes[i]),//exerciseModes[i]
                     DeviceType.getDevicetype(deviceTypeList[i]), exerciseID, mRoutineID);
         }
     }

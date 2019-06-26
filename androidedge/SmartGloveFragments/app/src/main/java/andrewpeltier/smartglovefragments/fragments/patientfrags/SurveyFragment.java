@@ -196,6 +196,15 @@ public class SurveyFragment extends Fragment {
 
 
                     // Takes exercises from list and sends them to Main Activity
+<<<<<<< HEAD
+//                     String[] chosenExercises = new String[adapter.getCount()];
+                    for(int i = 0; i < studyExercises.length; i++)
+                    {
+                        //chosenExercises[i] = adapter.getItem(i);
+                        exerciseModes.add(ExerciseMode.FLEX_IMU.toString());
+                    }
+                    /*exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+=======
                      //String[] chosenExercises = new String[adapter.getCount()];
 //                    for(int i = 0; i < studyExercises.length; i++)
 //                    {
@@ -203,18 +212,31 @@ public class SurveyFragment extends Fragment {
 //                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
 //                    }
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+<<<<<<< HEAD
+>>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
+=======
+>>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+>>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
+=======
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+>>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                    exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());*/
 
                     String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
 
                     ((MainActivity)getActivity()).setExercises(studyExercises, exerciseModeArray);
+                    ((MainActivity)getActivity()).setModes(studyExercises, exerciseModeArray);
                     ((MainActivity)getActivity()).startExercise();
                 }
             }

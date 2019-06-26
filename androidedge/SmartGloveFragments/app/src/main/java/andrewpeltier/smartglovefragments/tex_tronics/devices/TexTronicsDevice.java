@@ -37,7 +37,7 @@ public abstract class TexTronicsDevice
     /**
      * Constant exercise mode, being either FlexOnly or FlexIMU
      */
-    protected final ExerciseMode EXERCISE_MODE;
+    protected final String EXERCISE_MODE;
     /**
      * One of the eight exercises that the device is currently collecting data from
      */
@@ -56,7 +56,7 @@ public abstract class TexTronicsDevice
     protected String mDate;                 // Date that the CSV file has been generated, including time
     protected String mDeviceAddress;        // MAC address of TexTronics Device
 
-    public TexTronicsDevice(@NonNull String deviceAddress, @NonNull ExerciseMode exerciseMode, @NonNull Choice choice, String exerciseID, String routineID) throws IllegalArgumentException {
+    public TexTronicsDevice(@NonNull String deviceAddress, @NonNull String exerciseMode, @NonNull Choice choice, String exerciseID, String routineID) throws IllegalArgumentException {
 
         // Validate Bluetooth Device Address Provided
         if(!BluetoothAdapter.checkBluetoothAddress(deviceAddress))
@@ -94,7 +94,7 @@ public abstract class TexTronicsDevice
         return mDate;
     }
 
-    public ExerciseMode getExerciseMode() {
+    public String getExerciseMode() {
         return EXERCISE_MODE;
     }
 

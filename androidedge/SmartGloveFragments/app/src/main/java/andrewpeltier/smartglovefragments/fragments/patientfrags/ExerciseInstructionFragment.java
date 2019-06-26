@@ -201,7 +201,7 @@ public class ExerciseInstructionFragment extends Fragment
      *
      */
 
-    public static int flag=0;
+    public static int flag=3;
 
     private void checkConnection(String exercise_modes)
     {
@@ -213,13 +213,25 @@ public class ExerciseInstructionFragment extends Fragment
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
             //------------------------------------------------------------
-            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Hand Flip") ||
-                    exerciseName.equals("Closed Grip") || exerciseName.equals("Finger Tap")){
+            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold Hands Out")||exerciseName.equals("Resting Hands on Thighs")
+                    || exerciseName.equals("Hand Flip")
+                   ){
+<<<<<<< HEAD
+<<<<<<< HEAD
+                flag=3;
+                Log.e(TAG, "flag=" + flag);}
+            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Heel Stomp")
+                    || exerciseName.equals("Finger Tap")|| exerciseName.equals("Toe Tap")|| exerciseName.equals("Closed Grip")  ){
+                flag=3;
+=======
+=======
+>>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                 flag=2;
                 Log.e(TAG, "flag=" + flag);}
-            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Resting Hands on Thighs") || exerciseName.equals("Heel Stomp") ||
-                    exerciseName.equals("Toe Tap")|| exerciseName.equals("Hold Hands Out")){
+            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Heel Stomp")
+                    || exerciseName.equals("Finger Tap")|| exerciseName.equals("Toe Tap")|| exerciseName.equals("Closed Grip")  ){
                 flag=1;
+>>>>>>> bed31085bc12fb175f08c919faf24ed163c962a3
                 Log.e(TAG, "flag=" + flag);
             }
             //------------------------------------------------------------
