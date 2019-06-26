@@ -1,0 +1,47 @@
+2018-05-21 09:59:30,511 ERROR: Exception on /edit_profile [GET] [in /Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py:1560]
+Traceback (most recent call last):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask_login/utils.py", line 228, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/kabuki/Desktop/wblblog-summer/app/routes.py", line 158, in edit_profile
+    form.traits.data = current_user.traits
+AttributeError: 'EditProfileForm' object has no attribute 'traits'
+2018-05-21 10:03:37,614 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 10:03:41,621 ERROR: Exception on /edit_profile [GET] [in /Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py:1560]
+Traceback (most recent call last):
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/kabuki/Desktop/wblblog-summer/venv/lib/python3.6/site-packages/flask_login/utils.py", line 228, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/kabuki/Desktop/wblblog-summer/app/routes.py", line 159, in edit_profile
+    form.strategy.data = current_user.strategy
+AttributeError: 'EditProfileForm' object has no attribute 'strategy'
+2018-05-21 10:04:42,958 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 10:04:47,723 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 10:05:17,345 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 10:08:21,773 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 12:54:12,737 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 12:54:56,968 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 12:55:04,257 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]
+2018-05-21 12:57:56,470 INFO: WBL Blog startup [in /Users/kabuki/Desktop/wblblog-summer/app/__init__.py:49]

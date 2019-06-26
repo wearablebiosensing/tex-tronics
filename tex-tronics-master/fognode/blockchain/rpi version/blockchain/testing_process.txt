@@ -1,0 +1,199 @@
+Process
+
+The steps to run the network are as follows:
+1) New transactions are broadcast to all nodes.
+2) Each node collects new transactions into a block.
+3) Each node works on finding a difficult proof-of-work for its block.
+4) When a node finds a proof-of-work, it broadcasts the block to all nodes.
+5) Nodes accept the block only if all transactions in it are valid and not
+already spent.
+6) Nodes express their acceptance of the block by working on creating the
+next block in thechain, using the hash of the accepted block as the previous
+hash.
+
+
+For this set of code
+location ~/Documents/Github/blockchain
+
+a.) Startup a node via virtual environment
+
+source bin/activate
+cd blockchain
+python3 blockchain.py
+
+b.) Now first node is up. Check by mining
+
+http://127.0.0.1:5000/mine
+
+2.) perform a transaction
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "sender": "nick",
+ "recipient": "kaytee",
+ "Exercise results": 12341112
+}' "http://127.0.0.1:5000/transactions/new"
+
+
+c.) check chain
+
+http://127.0.0.1:5000/chain
+
+
+a.) now add another node
+create another virtual environment and use port 5001
+
+source bin/activate
+cd blockchain
+python3 blockchain.py -p 5001
+
+b.) Now the node is up. Check by mining
+
+http://127.0.0.1:5001/mine
+
+d.) Register nodes with eachother
+node 5000 with 5001
+node 5001 with 5000
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5001"]
+}' "http://127.0.0.1:5000/nodes/register"
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5000"]
+}' "http://127.0.0.1:5001/nodes/register"
+
+
+1.) Resolve chains to check registration
+
+http://127.0.0.1:5000/nodes/resolve
+http://127.0.0.1:5001/nodes/resolve
+
+
+2.) Perform a transaction on node 5001
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "sender": "nick",
+ "recipient": "kaytee",
+ "amount": 2341
+}' "http://127.0.0.1:5001/transactions/new"
+
+
+3.) current block not ready to be added to chain until new block has been mined
+so mine a block
+
+http://127.0.0.1:5001/mine
+
+
+4.,5.,6.) check to see if this transaction was seen by the other nodes
+
+http://127.0.0.1:5000/nodes/resolve
+http://127.0.0.1:5001/nodes/resolve
+
+
+a.) add a third node
+create another virtual environment and use port 5001
+
+source bin/activate
+cd blockchain
+python3 blockchain.py -p 5002
+
+
+d.) Register nodes with eachother
+node 5000 with node 5002
+node 5001 with node 5002
+node 5002 with node 5001
+node 5002 with node 5000
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5002"]
+}' "http://127.0.0.1:5000/nodes/register"
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5002"]
+}' "http://127.0.0.1:5001/nodes/register"
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5001"]
+}' "http://127.0.0.1:5002/nodes/register"
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5000"]
+}' "http://127.0.0.1:5002/nodes/register"
+
+
+4.,5.,6.) Resolve the nodes to ensure all have the same view of the world (latest chain)
+127.0.0.1:5000/nodes/resolve
+127.0.0.1:5001/nodes/resolve
+127.0.0.1:5002/nodes/resolve
+
+
+2.) Perform a transaction on the third node
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "sender": "nick",
+ "recipient": "kaytee",
+ "amount": 3412
+}' "http://127.0.0.1:5002/transactions/new"
+
+
+3.) current block not ready to be added to chain until new block has been mined
+so mine a block
+
+http://127.0.0.1:5002/mine
+
+
+4.,5.,6.) check to see if this transaction was seen by the other nodes
+
+http://127.0.0.1:5002/nodes/resolve
+http://127.0.0.1:5000/nodes/resolve
+http://127.0.0.1:5001/nodes/resolve
+
+
+
+Now add a node without access to full network
+a.) Startup a node via virtual environment
+
+cd ~/Documents/Github/blockchain
+source bin/activate
+cd blockchain
+python3 blockchain.py -p 5003
+
+
+d.) Register nodes with only one other
+node 5003 with node 5002
+node 5002 with node 5003
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5002"]
+}' "http://127.0.0.1:5003/nodes/register"
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "nodes": ["http://127.0.0.1:5003"]
+}' "http://127.0.0.1:5002/nodes/register"
+
+
+4.,5.,6.) Resolve the nodes to ensure all have the same view of the world (latest chain)
+curl http://127.0.0.1:5003/nodes/resolve
+
+
+2.) Perform a transaction on the mini node
+
+curl -X POST -H "Content-Type: application/json" -d '{
+ "sender": "nick",
+ "recipient": "kaytee",
+ "amount": 4123
+}' "http://127.0.0.1:5003/transactions/new"
+
+
+3.) current block not ready to be added to chain until new block has been mined
+so mine a block
+
+curl http://127.0.0.1:5003/mine
+
+
+4.,5.,6.) check to see if this transaction was seen by the other nodes
+
+curl http://127.0.0.1:5003/nodes/resolve
+curl http://127.0.0.1:5002/nodes/resolve
+curl http://127.0.0.1:5000/nodes/resolve
+curl http://127.0.0.1:5001/nodes/resolve
