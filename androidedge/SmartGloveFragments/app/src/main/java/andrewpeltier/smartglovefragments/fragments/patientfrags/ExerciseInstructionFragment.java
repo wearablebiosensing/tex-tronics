@@ -120,7 +120,7 @@ public class ExerciseInstructionFragment extends Fragment
      */
     private void setSideViews(String name)
     {
-        if (name.equals("Finger Tap"))
+        if (name.equals("Finger_Tap"))
         {
             instrImage.getLayoutParams().width = 660;
             instrImage.getLayoutParams().height = 371;
@@ -128,7 +128,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.FINGER_TAP_GIF);
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Closed Grip"))
+        else if (name.equals("Closed_Grip"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.CLOSED_GRIP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.CLOSED_GRIP_GIF);
@@ -136,7 +136,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Hand Flip"))
+        else if (name.equals("Hand_Flip"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HAND_FLIP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HAND_FLIP_GIF);
@@ -144,7 +144,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Finger to Nose"))
+        else if (name.equals("Finger_to_Nose"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.FINGER_TONOSE_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.SCREEN_TAP_GIF);
@@ -152,7 +152,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Hold Hands Out"))
+        else if (name.equals("Hold_Hands_Out"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HOLD_HANDS_OUT_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HANDS_HOLD_GIF);
@@ -160,7 +160,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Resting Hands on Thighs"))
+        else if (name.equals("Resting_Hands_on_Thighs"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.RESTING_HANDS_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
@@ -168,7 +168,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Heel Stomp"))
+        else if (name.equals("Heel_Stomp"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HEEL_STOMP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HEEL_TAP_GIF);
@@ -176,7 +176,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Toe Tap"))
+        else if (name.equals("Toe_Tap"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.TOE_TAP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.TOE_TAP_GIF);
@@ -184,7 +184,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Walk Steps"))
+        else if (name.equals("Walk_Steps"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.GAIT_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
@@ -201,7 +201,7 @@ public class ExerciseInstructionFragment extends Fragment
      *
      */
 
-    public static int flag=0;
+    public static int flag=3;
 
     private void checkConnection(String exercise_modes)
     {
@@ -213,14 +213,14 @@ public class ExerciseInstructionFragment extends Fragment
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
             //------------------------------------------------------------
-            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold Hands Out")||exerciseName.equals("Resting Hands on Thighs")
-                    || exerciseName.equals("Hand Flip")
+            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold_Hands_Out")||exerciseName.equals("Resting_Hands_on_Thighs")
+                    || exerciseName.equals("Hand_Flip")
                    ){
-                flag=2;
+                flag=3;
                 Log.e(TAG, "flag=" + flag);}
-            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger to Nose")|| exerciseName.equals("Heel Stomp")
-                    || exerciseName.equals("Finger Tap")|| exerciseName.equals("Toe Tap")|| exerciseName.equals("Closed Grip")  ){
-                flag=1;
+            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger_to_Nose")|| exerciseName.equals("Heel_Stomp")
+                    || exerciseName.equals("Finger_Tap")|| exerciseName.equals("Toe_Tap")|| exerciseName.equals("Closed_Grip")  ){
+                flag=3;
                 Log.e(TAG, "flag=" + flag);
             }
             //------------------------------------------------------------

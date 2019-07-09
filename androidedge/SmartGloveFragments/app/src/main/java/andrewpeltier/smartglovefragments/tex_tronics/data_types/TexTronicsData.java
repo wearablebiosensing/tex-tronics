@@ -12,9 +12,9 @@ public abstract class TexTronicsData {
 
     public abstract void clear();
 
-//    public abstract long getTimestamp() throws IllegalDeviceType;
-//
-//    public abstract void setTimestamp(long timestamp) throws IllegalDeviceType;
+    public abstract long getTimestamp() throws IllegalDeviceType;
+
+    public abstract void setTimestamp(long timestamp) throws IllegalDeviceType;
 
     public abstract int getThumbFlex() throws IllegalDeviceType;
 

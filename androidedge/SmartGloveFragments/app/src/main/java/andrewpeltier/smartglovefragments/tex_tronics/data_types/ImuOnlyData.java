@@ -7,12 +7,12 @@ import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceTyp
  */
 
 public class ImuOnlyData extends TexTronicsData {
-    //private long mTimestamp;
+    private long mTimestamp;
     private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ;
 
     public ImuOnlyData() {
         super();
-        //mTimestamp = 0;
+        mTimestamp = 0;
         mAccX = 0;
         mAccY = 0;
         mAccY = 0;
@@ -22,7 +22,7 @@ public class ImuOnlyData extends TexTronicsData {
     }
 
     public void set(long timestamp, int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ) {
-        //mTimestamp = timestamp;
+        mTimestamp = timestamp;
         mAccX = AccX;
         mAccY = AccY;
         mAccY = AccZ;
@@ -32,7 +32,7 @@ public class ImuOnlyData extends TexTronicsData {
     }
 
     public void clear() {
-        //mTimestamp = 0;
+        mTimestamp = 0;
         mAccX = 0;
         mAccY = 0;
         mAccY = 0;
@@ -47,15 +47,15 @@ public class ImuOnlyData extends TexTronicsData {
                 "," + mGyrX + "," + mGyrY + "," + mGyrZ;
     }
 
-//    @Override
-//    public long getTimestamp() {
-//        return mTimestamp;
-//    }
-//
-//    @Override
-//    public void setTimestamp(long timestamp) {
-//        mTimestamp = timestamp;
-//    }
+    @Override
+    public long getTimestamp() {
+        return mTimestamp;
+    }
+
+    @Override
+    public void setTimestamp(long timestamp) {
+        mTimestamp = timestamp;
+    }
 
     @Override
     public int getAccX() {

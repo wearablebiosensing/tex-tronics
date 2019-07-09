@@ -17,6 +17,7 @@ import andrewpeltier.smartglovefragments.io.DataLogService;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.FlexOnlyData;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.ImuOnlyData;
+import andrewpeltier.smartglovefragments.tex_tronics.data_types.FlexImuData;
 import andrewpeltier.smartglovefragments.tex_tronics.data_types.TexTronicsData;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
@@ -49,6 +50,9 @@ public class SmartGlove extends TexTronicsDevice
     private TexTronicsData mData;           // CSV Formatted exercise data.
 
     String header;
+
+
+
     String header_flexOnly = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
 
     String header_imuonly = "Device Address,Exercise,Timestamp,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
@@ -75,18 +79,17 @@ public class SmartGlove extends TexTronicsDevice
 
         // Set CSV Header and Data Model depending on exercise mode
         switch (exerciseMode) {
-//            case FLEX_IMU:
-//                mData = new FlexImuData();
-//                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z),Mag(x),Mag(y),Mag(z)";
-//                break;
+            case "Flex + IMU":
+                mData = new FlexImuData();
+                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)\n";
+                break;
             case "Flex Only":
                 mData = new FlexOnlyData();
                 mHeader = "Device Address,Exercise,Thumb,Index,Middle,Ring,Pinky";
                 break;
-
             case "Imu Only":
                 mData = new ImuOnlyData();
-                mHeader = "Device Address,Exercise,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
+                mHeader = "Device Address,Exercise,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)\n ";
                 break;
         }
 
@@ -118,7 +121,7 @@ public class SmartGlove extends TexTronicsDevice
         String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
         String timeString = new SimpleDateFormat("kk_mm_ss_SSS", Locale.US).format(date);
 
-        /* Create 6 different files for 6 different exercises.
+        /* Create 9 different files for 9 different exercises.
          *  How to get the exercise name.?
          * */
 
@@ -172,12 +175,12 @@ public class SmartGlove extends TexTronicsDevice
 
 
         /*  Set the header according to the exercises. */
-        if(flag == 1 || flag ==0 ){
-            header = header_imuonly;
-        }
-        else if(flag == 2){
-            header = header_imuonly;
-        }
+//        if(flag == 1 || flag ==0 ){
+//            header = header_imuonly;
+//        }
+//        else if(flag == 2){
+//            header = header_imuonly;
+//        }
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
@@ -227,14 +230,14 @@ public class SmartGlove extends TexTronicsDevice
         mData.clear();
     }
 
-//    @Override
-//    public void setTimestamp(long timestamp) {
-//        try {
-//            mData.setTimestamp(timestamp);
-//        } catch (IllegalDeviceType e) {
-//            Log.e("SmartGlove", e.toString());
-//        }
-//    }
+    @Override
+    public void setTimestamp(long timestamp) {
+        try {
+            mData.setTimestamp(timestamp);
+        } catch (IllegalDeviceType e) {
+            Log.e("SmartGlove", e.toString());
+        }
+    }
 
     @Override
     public void setThumbFlex(int thumbFlex) {

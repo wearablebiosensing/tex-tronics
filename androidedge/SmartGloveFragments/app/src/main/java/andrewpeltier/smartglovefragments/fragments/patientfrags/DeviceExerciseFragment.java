@@ -160,7 +160,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         if(MainActivity.exercise_name != null) {
             exerciseName = MainActivity.exercise_name;
 
-            if(exerciseName.equals("Resting Hands on Thighs")){
+            if(exerciseName.equals("Resting_Hands_on_Thighs")){
 
                 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
                 /*    Variables are for the media recording feature.   */
@@ -266,41 +266,41 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
                     // TODO make an update call here for the score
                     // TODO make a determination of which exercise this is...
-                    if (exerciseName.equals("Finger Tap"))
+                    if (exerciseName.equals("Finger_Tap"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_fin_tap_score(score,ids.size());
                     }
-                    else if (exerciseName.equals("Closed Grip") )
+                    else if (exerciseName.equals("Closed_Grip") )
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_op_cl_score(score,ids.size());
                     }
 
-                    else if (exerciseName.equals("Hand Flip") )
+                    else if (exerciseName.equals("Hand_Flip") )
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_h_flip_score(score,ids.size());
                     }
-                    else if (exerciseName.equals("Finger to Nose"))
+                    else if (exerciseName.equals("Finger_to_Nose"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_fin_nose_score(score,ids.size());
                     }
-                    else if (exerciseName.equals("Hold Hands Out"))
+                    else if (exerciseName.equals("Hold_Hands_Out"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_handout_score(score,ids.size());
                     }
-                    else if (exerciseName.equals("Resting Hands on Thighs"))
+                    else if (exerciseName.equals("Resting_Hands_on_Thighs"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_h_rest_score(score,ids.size());
 
                     }
-                    else if (exerciseName.equals("Heel Stomp"))
+                    else if (exerciseName.equals("Heel_Stomp"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_heel_stmp_score(score,ids.size());
                     }
-                    else if (exerciseName.equals("Toe Tap"))
+                    else if (exerciseName.equals("Toe_Tap"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_toe_tap_score(score,ids.size());
                     }
-                    else if (exerciseName.equals("Walk Steps"))
+                    else if (exerciseName.equals("Walk_Steps"))
                     {
                         UserRepository.getInstance(getActivity().getApplicationContext()).updateData_gait_score(score,ids.size());
                     }
@@ -423,39 +423,39 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
      */
     private void setSideViews(String name)
     {
-        if (name.equals("Finger Tap"))
+        if (name.equals("Finger_Tap"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.FINGER_TAP_GIF);
         }
-        else if (name.equals("Closed Grip"))
+        else if (name.equals("Closed_Grip"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.CLOSED_GRIP_GIF);
         }
-        else if (name.equals("Hand Flip"))
+        else if (name.equals("Hand_Flip"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.HAND_FLIP_GIF);
         }
-        else if (name.equals("Finger to Nose"))
+        else if (name.equals("Finger_to_Nose"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.HEEL_TAP_GIF);
         }
-        else if (name.equals("Hold Hands Out"))
+        else if (name.equals("Hold_Hands_Out"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.TOE_TAP_GIF);
         }
-        else if (name.equals("Resting Hands on Thighs"))
+        else if (name.equals("Resting_Hands_on_Thighs"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.FOOT_STOMP_GIF);
         }
-        else if (name.equals("Heel Stomp"))
+        else if (name.equals("Heel_Stomp"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.WALK_STEPS_GIF);
         }
-        else if (name.equals("Toe Tap"))
+        else if (name.equals("Toe_Tap"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.WALK_STEPS_GIF);
         }
-        else if (name.equals("Walk Steps"))
+        else if (name.equals("Walk_Steps"))
         {
             sideImage.setBackgroundResource(StudyInstructionsImage.WALK_STEPS_GIF);
         }
@@ -489,8 +489,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     }
 
     private void  exeTimer(String name){
-        if (name.equals("Finger to Nose")|| name.equals("Hand Flip") || name.equals("Closed Grip") || name.equals("Finger Tap")
-                || name.equals("Hold Hands Out")/* ||name.equals("Resting Hands on Thighs")*/ )
+        if (name.equals("Finger_to_Nose")|| name.equals("Hand_Flip") || name.equals("Closed_Grip") || name.equals("Finger_Tap")
+                || name.equals("Hold_Hands_Out")/* ||name.equals("Resting Hands on Thighs")*/ )
         {
             final CountDownTimer exe_Timer = new CountDownTimer(10000, 1000) {
                 int countdown = 10;
@@ -521,7 +521,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             };
             exe_Timer.start();
         }
-        else if (name.equals("Resting Hands on Thighs")){
+        else if (name.equals("Resting_Hands_on_Thighs")){
 
           //  Toast.makeText(getContext().getApplicationContext()," Resting Hands on Thighs exer.... ",Toast.LENGTH_LONG).show();
 
@@ -560,7 +560,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             exe_Timer.start();
         }
 
-        else if(name.equals("Heel Stomp") || name.equals("Toe Tap")){
+        else if(name.equals("Heel_Stomp") || name.equals("Toe_Tap")){
             final CountDownTimer exe_Timer1 = new CountDownTimer(8000, 1000) {
                 int countdown = 8;
 

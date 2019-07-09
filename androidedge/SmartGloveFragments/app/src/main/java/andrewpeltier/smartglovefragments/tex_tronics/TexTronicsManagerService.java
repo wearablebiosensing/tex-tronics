@@ -235,7 +235,7 @@ public class TexTronicsManagerService extends Service
 //                        if(device != null)
 //                            exerciseMode1 = device.getExerciseMode();
                         // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
+                        smartGlove = new SmartGlove(ident.size(),exerciseName,3,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
                         mTexTronicsList.put(deviceAddress, smartGlove);
                     }
 
@@ -246,9 +246,10 @@ public class TexTronicsManagerService extends Service
                     if (MainActivity.exercise_name != null) {
                         exerciseName = MainActivity.exercise_name;
                         Log.e("Data log EXERCISE===", exerciseName);
+                        Log.e(" FLAG===" , String.valueOf(ExerciseInstructionFragment.flag));
 
                         // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
+                        smartGlove = new SmartGlove(ident.size(),exerciseName,3,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
                         mTexTronicsList.put(deviceAddress, smartGlove);
 
                     }
@@ -475,8 +476,9 @@ public class TexTronicsManagerService extends Service
                 disconnect(deviceAddress);
                 break;
             case publish:
-                publish(deviceAddress);
+                //connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
 
+                publish(deviceAddress);
                 transmit_flags();
                 create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
 
@@ -658,75 +660,75 @@ public class TexTronicsManagerService extends Service
 
                     Log.d(TAG, "UpdateData: logging the data");
 
-                    if (exe_nm.equals("Finger Tap") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    if (exe_nm.equals("Finger_Tap") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finTap_left(json,current);
                     }
-                    else if (exe_nm.equals("Closed Grip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Closed_Grip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_opCl_left(json,current);
                     }
-                    else if (exe_nm.equals("Hand Flip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hand_Flip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_h_flip_left(json,current);
                     }
-                    else if (exe_nm.equals("Finger to Nose") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Finger_to_Nose") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finNose_left(json,current);
                     }
-                    else if (exe_nm.equals("Hold Hands Out") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hold_Hands_Out") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handout_left(json,current);
                     }
-                    else if (exe_nm.equals("Resting Hands on Thighs") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Resting_Hands_on_Thighs") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handrest_left(json,current);
                     }
-                    else if (exe_nm.equals("Finger Tap") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Finger_Tap") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finTap_right(json,current);
                     }
-                    else if (exe_nm.equals("Closed Grip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Closed_Grip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_opCl_right(json,current);
                     }
-                    else if (exe_nm.equals("Hand Flip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hand_Flip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_h_flip_right(json,current);
                     }
-                    else if (exe_nm.equals("Finger to Nose") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Finger_to_Nose") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finNose_right(json,current);
                     }
-                    else if (exe_nm.equals("Hold Hands Out") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hold_Hands_Out") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handout_right(json,current);
                     }
-                    else if (exe_nm.equals("Resting Hands on Thighs") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Resting_Hands_on_Thighs") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handrest_right(json,current);
                     }
-                    else if (exe_nm.equals("Heel Stomp") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Heel_Stomp") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_heelStmp_right(json,current);
                     }
-                    else if (exe_nm.equals("Toe Tap") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Toe_Tap") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_toeTap_right(json,current);
                     }
-                    else if (exe_nm.equals("Walk Steps") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Walk_Steps") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_gait_right(json,current);
                     }
-                    else if (exe_nm.equals("Heel Stomp") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Heel_Stomp") && deviceAddress.equals("LEFT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_heelStmp_left(json,current);
                     }
-                    else if (exe_nm.equals("Toe Tap") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Toe_Tap") && deviceAddress.equals("LEFT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_toeTap_left(json,current);
                     }
-                    else if (exe_nm.equals("Walk Steps") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Walk_Steps") && deviceAddress.equals("LEFT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_gait_left(json,current);
                     }
@@ -984,22 +986,23 @@ public class TexTronicsManagerService extends Service
 
                                 switch (exerciseMode)
                                 {
-                                    case "Flex + Imu":
+                                    case "Flex + IMU":
                                         // Move data processing into Data Model?
 //                                        //if (data[0] == PACKET_ID_1) {
                                             //device.clear();
-                                           // device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                            device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
-                                            device.setIndexFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
-                                            device.setAccX(((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
-                                            device.setAccY(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
-                                            device.setAccZ(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
-                                            device.setGyrX(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
-                                            device.setGyrY(((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF)));
-                                            device.setGyrZ(((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
+                                            //device.setTimestamp(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));// | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                                            //device.setTimestamp(((data[0] & 0x00FF) << 24) | ((data[1] & 0x00FF) << 16) | ((data[2] & 0x00FF) << 8) | (data[3] & 0x00FF));
+                                            device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
+                                            device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                            device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                            device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                            device.setAccX(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                            device.setAccY(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+                                            device.setAccZ(((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
+                                            device.setGyrX(((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+                                            device.setGyrY(((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
+                                            device.setGyrZ(((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
-                                        //device.setMiddleFlex((((data[2] & 0x00FF) << 8))); //| ((data[5] & 0x00FF))));
-                                            //device.setRingFlex((((data[3] & 0x00FF) << 8))); //| ((data[7] & 0x00FF))));
                                             //device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
 //                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
 //                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
@@ -1038,11 +1041,11 @@ public class TexTronicsManagerService extends Service
                                         // First Data Set
                                         //device.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
 
-                                        device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
-                                        device.setIndexFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
-                                        device.setMiddleFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
-                                        device.setRingFlex((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
-                                        device.setPinkyFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
+                                        device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
+                                        device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                        device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                        device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                        device.setPinkyFlex((((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
 
                                         Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
@@ -1052,11 +1055,11 @@ public class TexTronicsManagerService extends Service
 
                                         // Second Data Set
                                         //device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
-                                        device.setThumbFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
-                                        device.setIndexFlex((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
-                                        device.setMiddleFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
-                                        device.setRingFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-                                        device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
+                                        device.setThumbFlex((((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF))));
+                                        device.setIndexFlex((((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF))));
+                                        device.setMiddleFlex((((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF))));
+                                        device.setRingFlex((((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF))));
+                                        device.setPinkyFlex((((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF))));
                                             Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
                                         if(DeviceExerciseFragment.START_LOG)
@@ -1072,12 +1075,12 @@ public class TexTronicsManagerService extends Service
                                          //   device.logData(mContext);
 
                                     case "Imu Only":
-                                        device.setAccX(((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF)));
-                                        device.setAccY(((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF)));
-                                        device.setAccZ(((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
-                                        device.setGyrX(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
-                                        device.setGyrY(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
-                                        device.setGyrZ(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
+                                        device.setAccX(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));
+                                        device.setAccY(((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
+                                        device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
+                                        device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
+                                        device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
+                                        device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
 
                                         Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 

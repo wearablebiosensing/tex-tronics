@@ -171,21 +171,21 @@ public class ExerciseSelectionFragment extends Fragment implements
                         // Takes exercises from list and sends them to Main Activity
                         String[] chosenExercises = new String[adapter.getCount()];
 
-//                        for(int i = 0; i < adapter.getCount(); i++)
-//                        {
-//                            chosenExercises[i] = adapter.getItem(i);
-//                            exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-//                        }
-                        exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        for(int i = 0; i < adapter.getCount(); i++)
+                        {
+                            chosenExercises[i] = adapter.getItem(i);
+                            exerciseModes.add(ExerciseMode.FLEX_IMU.toString());
+                        }
+                        /*exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        String[] studyExercises = {"Resting Hands on Thighs","Hold Hands Out","Finger to Nose","Finger Tap", "Closed Grip","Hand Flip","Heel Stomp","Toe Tap","Walk Steps"};
+                        exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
+                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());*/
+                        String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap", "Closed_Grip","Hand_Flip","Heel_Stomp","Toe_Tap","Walk_Steps"};
 
 
                         String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);

@@ -3,13 +3,13 @@ package andrewpeltier.smartglovefragments.tex_tronics.data_types;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
 
 public class FlexImuData extends TexTronicsData {
-//    private long mTimestamp;
+    private long mTimestamp;
     private int mThumbFlex, mIndexFlex, mMiddleFlex, mRingFlex;// mPinkyFlex;
     private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ;  //, mMagX, mMagY, mMagZ;
 
     public FlexImuData() {
         super();
-//      mTimestamp = 0;
+        mTimestamp = 0;
         mThumbFlex = 0;
         mIndexFlex = 0;
         mMiddleFlex = 0;
@@ -23,8 +23,8 @@ public class FlexImuData extends TexTronicsData {
         mGyrZ = 0;
     }
 
-    public void set(int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ, int thumbFlex, int indexFlex, int middleFlex, int ringFlex) {
-  //      mTimestamp = data.getTimestamp();
+    public void set(long timestamp, int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ, int thumbFlex, int indexFlex, int middleFlex, int ringFlex) {
+        mTimestamp = timestamp;
         mAccX = AccX;
         mAccY = AccY;
         mAccY = AccZ;
@@ -39,7 +39,7 @@ public class FlexImuData extends TexTronicsData {
         }
 
     public void clear() {
-//        mTimestamp = 0;
+        mTimestamp = 0;
         mThumbFlex = 0;
         mIndexFlex = 0;
         mMiddleFlex = 0;
@@ -58,18 +58,20 @@ public class FlexImuData extends TexTronicsData {
 
     @Override
     public String toString() {
-        return mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex +
-                "," + mRingFlex  + "," + mAccX + "," + mAccY + "," + mAccZ +
+        return mTimestamp + "," + mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex + "," + mRingFlex +
+                "," + mAccX + "," + mAccY + "," + mAccZ +
                 "," + mGyrX + "," + mGyrY + "," + mGyrZ;
     }
 
-//    public long getTimestamp() {
-//        return mTimestamp;
-//    }
-//
-//    public void setTimestamp(long timestamp) {
-//        mTimestamp = timestamp;
-//    }
+    @Override
+    public long getTimestamp() {
+        return mTimestamp;
+    }
+
+    @Override
+    public void setTimestamp(long timestamp) {
+        mTimestamp = timestamp;
+    }
 
     @Override
     public int getAccX() {
@@ -167,8 +169,8 @@ public class FlexImuData extends TexTronicsData {
     }
 
     @Override
-    public void setRingFlex(int ringFlex) {
-        mRingFlex = ringFlex;
+    public void setRingFlex(int RingFlex) {
+        mRingFlex = RingFlex;
     }
 
     @Override
