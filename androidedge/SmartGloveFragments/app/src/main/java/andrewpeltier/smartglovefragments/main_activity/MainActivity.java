@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;            // Manages the fragments held by the Main Activity
     private FragmentTransaction fragmentTransaction;    // Changes the fragments
     private String mFragmentTag;                        // Name of the fragment currently in use
+    String deviceAddress;
+    int counter;
+    public static int DeviceConection = 0;
 
     /** onCreate()
      *
@@ -329,13 +333,14 @@ public class MainActivity extends AppCompatActivity
          * @param intent            -Operation to be performed. Here, it contains the type of update
          */
         @Override
+
         public void onReceive(Context context, Intent intent) {
             if(intent == null || !intent.hasExtra(UPDATE_DEVICE) || !intent.hasExtra(UPDATE_TYPE)) {
                 Log.w(TAG,"Invalid Update Received");
                 return;
             }
 
-            String deviceAddress = intent.getStringExtra(UPDATE_DEVICE);    // NULL if MQTT Update
+            deviceAddress = intent.getStringExtra(UPDATE_DEVICE);    // NULL if MQTT Update
             TexTronicsUpdate updateType = (TexTronicsUpdate) intent.getSerializableExtra(UPDATE_TYPE);
 
             if(updateType == null) {
@@ -353,6 +358,7 @@ public class MainActivity extends AppCompatActivity
                 case ble_connected:
                     // Device <deviceAddress> Has Been Connected
                     Log.d(TAG,"Connected to " + deviceAddress);
+                    counter++;
                     break;
                 case ble_disconnecting:
                     // Disconnecting from Device <deviceAddress>
@@ -373,6 +379,11 @@ public class MainActivity extends AppCompatActivity
                 default:
                     Log.w(TAG, "Unknown Update Received");
                     break;
+            }
+            if(counter == 2){
+
+                Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_SHORT).show();
+                DeviceConection = 1;
             }
         }
     };

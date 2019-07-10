@@ -531,7 +531,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onTick(long l)
                 {
-                    //START_LOG = true;
+                    START_LOG = true;
                     Log.v(TAG, "Tick: " + countdown);
                     // loadingText.setText("" + countdown);
                     loadingText.setText("Collecting data...");
@@ -543,9 +543,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 @Override
                 public void onFinish()
                 {
-
-
-                    START_LOG = true;
+                    //START_LOG = true;
 
                     // START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
@@ -560,7 +558,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             exe_Timer.start();
         }
 
-        else if(name.equals("Heel_Stomp") || name.equals("Toe_Tap")){
+        else if(name.equals("Heel_Stomp") || name.equals("Toe_Tap")||name.equals("Walk_Steps")){
             final CountDownTimer exe_Timer1 = new CountDownTimer(8000, 1000) {
                 int countdown = 8;
 

@@ -118,6 +118,7 @@ public class TexTronicsManagerService extends Service
     public static final String EXTRA_ROUTINE_ID  = "tex_tronics.wbl.uri.ble.routine_id";
 
     public static final byte PACKET_ID_1 = 0x01;
+
     /**
      * The packet ID for the second packet transmitted when communicating in Flex+IMU mode.
      * This will be the first byte of the packet.
@@ -133,6 +134,7 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
+
     public static final int INTENT_RETURN_POLICY = START_STICKY;
     public static Context context;
     public static String deviceAddress;
@@ -430,10 +432,8 @@ public class TexTronicsManagerService extends Service
         // Action to be performed on the TexTronics Device
         Action action = Action.getAction(intent.getAction());
 
-        // Device Address of the BLE Device corresponding to this Action Packet
-        String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
 
-       // String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
+        // String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
         // Find out the exercise mode (i.e what type of data we are collecting)
         TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
 //        ExerciseMode exerciseMode1 = null;
@@ -448,6 +448,10 @@ public class TexTronicsManagerService extends Service
 
         String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
         String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
+
+
+        // Device Address of the BLE Device corresponding to this Action Packet
+        String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
 
 
         // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
@@ -468,7 +472,11 @@ public class TexTronicsManagerService extends Service
 
                 // Use data to connect to device
                 connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
-                //
+                transmit_flags();
+                create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
+
+                    // publish(deviceAddress);
+                    //
                 }
             break;
             case disconnect:
@@ -476,11 +484,12 @@ public class TexTronicsManagerService extends Service
                 disconnect(deviceAddress);
                 break;
             case publish:
-                //connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
 
-                publish(deviceAddress);
-                transmit_flags();
+                //connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
                 create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
+                publish(deviceAddress);
+
+                //     transmit_flags();
 
 
                 break;
@@ -733,8 +742,9 @@ public class TexTronicsManagerService extends Service
                         UserRepository.getInstance(context).updateData_gait_left(json,current);
                     }
                 }
-                else
+                else {
                     Log.d(TAG, "publish: Publish failed. Device is null");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

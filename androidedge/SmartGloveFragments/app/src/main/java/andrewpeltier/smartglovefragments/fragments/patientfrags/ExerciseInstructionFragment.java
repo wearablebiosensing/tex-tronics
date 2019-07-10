@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.ble.GattDevices;
@@ -64,8 +65,7 @@ public class ExerciseInstructionFragment extends Fragment
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_instruction, container, false);
         startExerciseButton = view.findViewById(R.id.start_exercise_button);
         instrImage = view.findViewById(R.id.stexercise_side_image);
@@ -73,39 +73,43 @@ public class ExerciseInstructionFragment extends Fragment
 
         // Sets up the image according to the exercise name
         exerciseName = MainActivity.exercise_name;
-        if(exerciseName != null)
-        {
+        if (exerciseName != null) {
             setSideViews(exerciseName);
         }
 
-        Log.d(TAG, "MainActivity.exercise_mode  ===== "  + MainActivity.exercise_mode);
+        Log.d(TAG, "MainActivity.exercise_mode  ===== " + MainActivity.exercise_mode);
 
 
         // Connect to the appropriate device(s)
         checkConnection(MainActivity.exercise_mode);
 
+
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 // Use the exercise name to determine what exercise fragment to move to
-                if(exerciseName != null)
-                {
+                if (exerciseName != null) {
                     Log.d(TAG, "onCreateView: Removing in start exercise button");
                     /*
                      * Screen Tap exercise requires a different fragment than the other exercises.
                      */
-                    if(exerciseName.equals("Screen Tap"))
-                    {
-                        ((MainActivity)getActivity()).addFragment(new ScreenTapFragment(), "ScreenTapFragment");
-                    }
-                    else
-                    {
-                        ((MainActivity)getActivity()).addFragment(new DeviceExerciseFragment(), "DeviceExerciseFragment");
+                    if (exerciseName.equals("Screen Tap")) {
+                        ((MainActivity) getActivity()).addFragment(new ScreenTapFragment(), "ScreenTapFragment");
+                    } else {
+                        ((MainActivity) getActivity()).addFragment(new DeviceExerciseFragment(), "DeviceExerciseFragment");
                     }
                 }
             }
         });
+
+//        if (MainActivity.DeviceConection != 1) {
+//            startExerciseButton.setEnabled(false);
+//
+//        }
+//        else if(MainActivity.DeviceConection == 1){
+//            startExerciseButton.setEnabled(true);
+//
+//        }
 
         Log.d(TAG, "onCreateView: " + exerciseName + "  Instructions Started.");
         return view;
