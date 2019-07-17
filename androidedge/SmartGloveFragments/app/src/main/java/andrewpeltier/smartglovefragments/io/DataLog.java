@@ -40,7 +40,10 @@ public class DataLog {
     // Set Default Output File
     String dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
     String timeString = new SimpleDateFormat("kk_mm_ss_SSS", Locale.US).format(date);
+    String header;
+    String header_flexOnly = "Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky";
 
+    String header_imuonly = "Device Address,Exercise,Timestamp,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)";
 
     /* Default Constructor. Does nothing */
     public void DataLog(){
@@ -54,7 +57,11 @@ public class DataLog {
     *  Creates new csv files for each of the exercises.
     * */
 
+<<<<<<< HEAD
     public void DataLog(int id, String exerciseName,String info){
+=======
+    public void DataLog(int id, String exerciseName,int flag){
+>>>>>>> 03baf6dc3d650e65651e267123381c1ee27dac2e
 
         // Get the device type for each exercise.
         String exerciseDeviceType = Exercise.getDeviceName(exerciseName);
@@ -78,10 +85,14 @@ public class DataLog {
         else if (existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR)){
             exerciseDeviceType = "RIGHT_SHOE_";
         }
+
         /* Debug statements... */
+        Log.e("Data log FLAG!!=", String.valueOf(flag));
         Log.e("Data log DEVICE TYPE=", exerciseDeviceType);
         Log.e("Data log EXERCISE NAME=", exerciseName.toString());
         Log.e("Data log ID NUMBER=", String.valueOf(id));
+
+
 
 //        String folder_main = "/storage/emulated/0/Documents";
 //        //Creates new folder.
@@ -97,9 +108,17 @@ public class DataLog {
         File file = new File(parentFile, fileName);
         String insert_string = timeString + "," + info;
 
+        /*  Set the header according to the exercises. */
+        if(flag == 1 || flag ==0 ){
+            header = header_flexOnly;
+        }
+        else if(flag == 2){
+            header = header_imuonly;
+        }
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+<<<<<<< HEAD
             BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
             bufferedWriter.write(header);
             bufferedWriter.newLine();
@@ -110,6 +129,13 @@ public class DataLog {
             bufferedWriter.close();
 
 
+=======
+            outputStreamWriter.write(header);
+            outputStreamWriter.close();
+           // BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+            //bufferedWriter.write("Hello world!");
+            //bufferedWriter.newLine();
+>>>>>>> 03baf6dc3d650e65651e267123381c1ee27dac2e
             Log.d("","Creating new CSV file");
 
         }catch (IOException e){

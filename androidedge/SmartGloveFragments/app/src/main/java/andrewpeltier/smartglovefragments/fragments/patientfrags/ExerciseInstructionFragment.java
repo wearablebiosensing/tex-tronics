@@ -1,5 +1,7 @@
 package andrewpeltier.smartglovefragments.fragments.patientfrags;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,15 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.ble.GattDevices;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
+import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
+import andrewpeltier.smartglovefragments.tex_tronics.devices.SmartGlove;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
+import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
+import andrewpeltier.smartglovefragments.visualize.Choice;
 import andrewpeltier.smartglovefragments.visualize.Exercise;
 import pl.droidsonroids.gif.GifImageView;
 
+import static andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService.*;
 
 
 /** ======================================
@@ -57,8 +65,7 @@ public class ExerciseInstructionFragment extends Fragment
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_instruction, container, false);
         startExerciseButton = view.findViewById(R.id.start_exercise_button);
         instrImage = view.findViewById(R.id.stexercise_side_image);
@@ -66,37 +73,43 @@ public class ExerciseInstructionFragment extends Fragment
 
         // Sets up the image according to the exercise name
         exerciseName = MainActivity.exercise_name;
-        if(exerciseName != null)
-        {
+        if (exerciseName != null) {
             setSideViews(exerciseName);
         }
 
-        // Connect to the appropriate device(s)
-        checkConnection();
+        Log.d(TAG, "MainActivity.exercise_mode  ===== " + MainActivity.exercise_mode);
 
-        // Set up the exercise button click method
+
+        // Connect to the appropriate device(s)
+        checkConnection(MainActivity.exercise_mode);
+
+
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 // Use the exercise name to determine what exercise fragment to move to
-                if(exerciseName != null)
-                {
+                if (exerciseName != null) {
                     Log.d(TAG, "onCreateView: Removing in start exercise button");
                     /*
                      * Screen Tap exercise requires a different fragment than the other exercises.
                      */
-                    if(exerciseName.equals("Screen Tap"))
-                    {
-                        ((MainActivity)getActivity()).addFragment(new ScreenTapFragment(), "ScreenTapFragment");
-                    }
-                    else
-                    {
-                        ((MainActivity)getActivity()).addFragment(new DeviceExerciseFragment(), "DeviceExerciseFragment");
+                    if (exerciseName.equals("Screen Tap")) {
+                        ((MainActivity) getActivity()).addFragment(new ScreenTapFragment(), "ScreenTapFragment");
+                    } else {
+                        ((MainActivity) getActivity()).addFragment(new DeviceExerciseFragment(), "DeviceExerciseFragment");
                     }
                 }
             }
         });
+
+//        if (MainActivity.DeviceConection != 1) {
+//            startExerciseButton.setEnabled(false);
+//
+//        }
+//        else if(MainActivity.DeviceConection == 1){
+//            startExerciseButton.setEnabled(true);
+//
+//        }
 
         Log.d(TAG, "onCreateView: " + exerciseName + "  Instructions Started.");
         return view;
@@ -111,7 +124,7 @@ public class ExerciseInstructionFragment extends Fragment
      */
     private void setSideViews(String name)
     {
-        if (name.equals("Finger Tap"))
+        if (name.equals("Finger_Tap"))
         {
             instrImage.getLayoutParams().width = 660;
             instrImage.getLayoutParams().height = 371;
@@ -119,7 +132,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.FINGER_TAP_GIF);
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Closed Grip"))
+        else if (name.equals("Closed_Grip"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.CLOSED_GRIP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.CLOSED_GRIP_GIF);
@@ -127,7 +140,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Hand Flip"))
+        else if (name.equals("Hand_Flip"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HAND_FLIP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HAND_FLIP_GIF);
@@ -135,7 +148,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Finger to Nose"))
+        else if (name.equals("Finger_to_Nose"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.FINGER_TONOSE_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.SCREEN_TAP_GIF);
@@ -143,7 +156,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Hold Hands Out"))
+        else if (name.equals("Hold_Hands_Out"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HOLD_HANDS_OUT_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HANDS_HOLD_GIF);
@@ -151,7 +164,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Resting Hands on Thighs"))
+        else if (name.equals("Resting_Hands_on_Thighs"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.RESTING_HANDS_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
@@ -159,7 +172,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Heel Stomp"))
+        else if (name.equals("Heel_Stomp"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.HEEL_STOMP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.HEEL_TAP_GIF);
@@ -167,7 +180,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Toe Tap"))
+        else if (name.equals("Toe_Tap"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.TOE_TAP_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.TOE_TAP_GIF);
@@ -175,7 +188,7 @@ public class ExerciseInstructionFragment extends Fragment
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);
         }
-        else if (name.equals("Walk Steps"))
+        else if (name.equals("Walk_Steps"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.GAIT_TEXT);
             instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
@@ -191,7 +204,10 @@ public class ExerciseInstructionFragment extends Fragment
      * connected device should be used for this particular exercise.
      *
      */
-    private void checkConnection()
+
+    public static int flag=3;
+
+    private void checkConnection(String exercise_modes)
     {
         Log.d(TAG, "checkConnection: Checking connection");
         String[] deviceAddressList = MainActivity.getmDeviceAddressList();
@@ -200,11 +216,22 @@ public class ExerciseInstructionFragment extends Fragment
             // Checks to see the types of devices you are already connected to
             Log.d(TAG, "checkConnection: device list exists");
             String existingDevice = deviceAddressList[0];
+            //------------------------------------------------------------
+            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold_Hands_Out")||exerciseName.equals("Resting_Hands_on_Thighs")
+                    || exerciseName.equals("Hand_Flip")
+                   ){
+                flag=3;
+                Log.e(TAG, "flag=" + flag);}
+            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger_to_Nose")|| exerciseName.equals("Heel_Stomp")
+                    || exerciseName.equals("Finger_Tap")|| exerciseName.equals("Toe_Tap")|| exerciseName.equals("Closed_Grip")  ){
+                flag=3;
+                Log.e(TAG, "flag=" + flag);
+            }
+            //------------------------------------------------------------
             if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
                 existingDevice = "Glove";
-                //if(flag==1){mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});}
-                //else if(flag==2){mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});}
-            else
+
+            else if(existingDevice.equals(GattDevices.LEFT_SHOE_ADDR) || existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR))
                 existingDevice = "Shoe";
             // If your device is not required for the following exercise, it changes the device list
             // and reconnects to the appropriate devices

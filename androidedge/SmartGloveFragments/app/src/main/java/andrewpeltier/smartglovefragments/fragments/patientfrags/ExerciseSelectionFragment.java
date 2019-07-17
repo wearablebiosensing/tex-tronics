@@ -174,20 +174,23 @@ public class ExerciseSelectionFragment extends Fragment implements
                         for(int i = 0; i < adapter.getCount(); i++)
                         {
                             chosenExercises[i] = adapter.getItem(i);
-                            //exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                            exerciseModes.add(ExerciseMode.FLEX_IMU.toString());
                         }
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        /*exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
-                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
+                        exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());*/
+                        String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap", "Closed_Grip","Hand_Flip","Heel_Stomp","Toe_Tap","Walk_Steps"};
+
 
                         String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);
                         ((MainActivity)getActivity()).setExercises(chosenExercises, exerciseModeArray);
+                        ((MainActivity)getActivity()).setModes(studyExercises, exerciseModeArray);
                         ((MainActivity)getActivity()).startExercise();
                     }
                 }

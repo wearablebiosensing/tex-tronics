@@ -25,6 +25,8 @@ import andrewpeltier.smartglovefragments.ble.GattServices;
 import andrewpeltier.smartglovefragments.database.UpdateData;
 import andrewpeltier.smartglovefragments.database.UserRepository;
 import andrewpeltier.smartglovefragments.fragments.patientfrags.DeviceExerciseFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.ExerciseInstructionFragment;
+import andrewpeltier.smartglovefragments.fragments.patientfrags.SurveyFragment;
 import andrewpeltier.smartglovefragments.io.IOUtil;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
@@ -38,6 +40,7 @@ import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
 import andrewpeltier.smartglovefragments.visualize.Choice;
+import andrewpeltier.smartglovefragments.visualize.Exercise;
 
 /** ======================================
  *
@@ -77,21 +80,21 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
-    private static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.device";
+    public static final String EXTRA_DEVICE = "tex_tronics.wbl.uri.ble.device";
 
     /**
      * Used to identify the transmit mode.
      *
      * @since 1.0
      */
-    private static final String EXTRA_MODE = "tex_tronics.wbl.uri.ble.mode";
+    public static final String EXTRA_MODE = "tex_tronics.wbl.uri.ble.mode";
 
     /**
      * Used to identify the device type.
      *
      * @since 1.0
      */
-    private static final String EXTRA_TYPE = "tex_tronics.wbl.uri.ble.type";
+    public static final String EXTRA_TYPE = "tex_tronics.wbl.uri.ble.type";
     /**
      * The packet ID for the first packet transmitted when communicating in Flex+IMU mode.
      * This will be the first byte of the packet.
@@ -102,26 +105,27 @@ public class TexTronicsManagerService extends Service
     /**
      * The choice of exercise being done
      */
-    private static final String EXTRA_CHOICE = "tex_tronics.wbl.uri.ble.choice";
+    public static final String EXTRA_CHOICE = "tex_tronics.wbl.uri.ble.choice";
 
     /**
      * The UUID of the current exercise
      */
-    private static final String EXTRA_EX_ID = "tex_tronics.wbl.uri.ble.ex_id";
+    public static final String EXTRA_EX_ID = "tex_tronics.wbl.uri.ble.ex_id";
 
     /**
      * The UUID of the routine
      */
-    private static final String EXTRA_ROUTINE_ID  = "tex_tronics.wbl.uri.ble.routine_id";
+    public static final String EXTRA_ROUTINE_ID  = "tex_tronics.wbl.uri.ble.routine_id";
 
-    private static final byte PACKET_ID_1 = 0x01;
+    public static final byte PACKET_ID_1 = 0x01;
+
     /**
      * The packet ID for the second packet transmitted when communicating in Flex+IMU mode.
      * This will be the first byte of the packet.
      *
      * @since 1.0
      */
-    private static final byte PACKET_ID_2 = 0x02;
+    public static final byte PACKET_ID_2 = 0x02;
 
     /**
      * The value to return in onStartCommand
@@ -130,12 +134,13 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
-    private static final int INTENT_RETURN_POLICY = START_STICKY;
-    private static Context context;
-    private static String deviceAddress;
-    private static Choice choice;
-    private static ExerciseMode exerciseMode;
-    private static DeviceType deviceType;
+
+    public static final int INTENT_RETURN_POLICY = START_STICKY;
+    public static Context context;
+    public static String deviceAddress;
+    public static Choice choice;
+    public static ExerciseMode exerciseMode;
+    public static DeviceType deviceType;
 
 
     /** =====================================================
@@ -158,7 +163,7 @@ public class TexTronicsManagerService extends Service
      *
      * @since 1.0
      */
-    public static void connect(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType, UUID exerciseID, UUID routineID) {
+    public static void connect_devices(Context context, String deviceAddress, Choice choice, ExerciseMode exerciseMode, DeviceType deviceType, UUID exerciseID, UUID routineID) {
         TexTronicsManagerService.context = context;
         TexTronicsManagerService.deviceAddress = deviceAddress;
         TexTronicsManagerService.choice = choice;
@@ -198,19 +203,89 @@ public class TexTronicsManagerService extends Service
         context.startService(intent);
     }
 
-    /** publish()
-     *
-     * This static method is provided for other components to use in order to interact with this
-     * service. The publish method requests this service to publish the input device's data to
-     * our connected MQTT server.
-     *
-     * TODO Convert Context to WeakReference<Context>
-     *
-     * @param context Context of the calling component
-     * @param deviceAddress Device Address of BLE Device to publish.
-     *
-     * @since 1.0
-     */
+
+
+    public void create_datalog(String deviceAddress, String exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID){
+        SmartGlove smartGlove;
+
+        // Only connects if we have a bounded BLE service, which we should if this service has started
+        if (mBleServiceBound) {
+
+            List<Integer> ident = new ArrayList<>();
+            try {
+                ident = UserRepository.getInstance(this.getApplicationContext()).getAllIdentities();
+            } catch (Exception e) {
+                Log.d(TAG, "onClick: Error with identities");
+            }
+
+            String exerciseName;
+            //ExerciseMode exerciseMode1 = device.getExerciseMode().toString() ;
+
+            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
+            switch (deviceType) {
+                case SMART_GLOVE:
+                    //Log.e("Data log EXERCISE===", choice.toString());
+                    if (MainActivity.exercise_name != null) {
+                        exerciseName = MainActivity.exercise_name;
+                        Log.e(" EXERCISE===", exerciseName);
+                        Log.e(" FLAG===" , String.valueOf(ExerciseInstructionFragment.flag));
+//
+//                        String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
+//                        // Find out the exercise mode (i.e what type of data we are collecting)
+//                        TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
+//                        ExerciseMode exerciseMode1 = null;
+//                        if(device != null)
+//                            exerciseMode1 = device.getExerciseMode();
+                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+                        smartGlove = new SmartGlove(ident.size(),exerciseName,3,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
+                        mTexTronicsList.put(deviceAddress, smartGlove);
+                    }
+
+                    break;
+                // Add Different Devices Here
+                case SMART_SOCK:
+
+                    if (MainActivity.exercise_name != null) {
+                        exerciseName = MainActivity.exercise_name;
+                        Log.e("Data log EXERCISE===", exerciseName);
+                        Log.e(" FLAG===" , String.valueOf(ExerciseInstructionFragment.flag));
+
+                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+                        smartGlove = new SmartGlove(ident.size(),exerciseName,3,deviceAddress, MainActivity.exercise_mode, choice, exerciseID, routineID);
+                        mTexTronicsList.put(deviceAddress, smartGlove);
+
+                    }
+                    // Added the Smart Sock code, just copied from above
+                    //smartGlove = new SmartGlove(ident.size(),choice.toString(), ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
+                    //mTexTronicsList.put(deviceAddress, smartGlove);
+                    break;
+                default:
+
+                    break;
+            }
+        }
+
+    }
+
+
+    public void transmit_flags(){
+        // Write to the txChar to notify the device
+        BluetoothGattCharacteristic txChar = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.TX_CHARACTERISTIC);/**---------------------------------------------------------------------------------------------------------*/
+        /**
+         * added to sent 1 or 2 or 3 to the bluetooth device
+         */
+        if(ExerciseInstructionFragment.flag==1)
+        {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});
+            Log.d(TAG, "Data sent via flex");}
+        else if(ExerciseInstructionFragment.flag==2)
+        {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});
+            Log.d(TAG, "Data sent via imu");}
+        else if(ExerciseInstructionFragment.flag==3)
+        {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x03});}
+
+    }
+
+
     public static void publish(Context context, String deviceAddress)
     {
         Log.w(TAG, "publish: Publishing!!!");
@@ -285,6 +360,7 @@ public class TexTronicsManagerService extends Service
      */
     private HashMap<String, TexTronicsDevice> mTexTronicsList;
 
+
     @Override
     public void onCreate()
     {
@@ -356,14 +432,27 @@ public class TexTronicsManagerService extends Service
         // Action to be performed on the TexTronics Device
         Action action = Action.getAction(intent.getAction());
 
-        // Device Address of the BLE Device corresponding to this Action Packet
-        String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
+
+        // String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
+        // Find out the exercise mode (i.e what type of data we are collecting)
+        TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
+//        ExerciseMode exerciseMode1 = null;
+//        if(device != null)
+//            exerciseMode1 = device.getExerciseMode();
 
         // Make sure it is a valid Action
         if(action == null) {
             Log.w(TAG, "Invalid Action Packet Received");
             return INTENT_RETURN_POLICY;
         }
+
+        String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
+        String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
+
+
+        // Device Address of the BLE Device corresponding to this Action Packet
+        String deviceAddress = intent.getStringExtra(EXTRA_DEVICE);
+
 
         // Execute Action Packet (this can be done with multi-threading to be able to Service multiple Action Packets at once)
         switch (action)
@@ -380,19 +469,29 @@ public class TexTronicsManagerService extends Service
                 ExerciseMode exerciseMode = (ExerciseMode) intent.getSerializableExtra(EXTRA_MODE);
                 DeviceType deviceType = (DeviceType) intent.getSerializableExtra(EXTRA_TYPE);
                 Choice choice = (Choice) intent.getSerializableExtra(EXTRA_CHOICE);
-                String exerciseID = (String) intent.getSerializableExtra(EXTRA_EX_ID);
-                String routineID = (String) intent.getSerializableExtra(EXTRA_ROUTINE_ID);
 
                 // Use data to connect to device
                 connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
-            }
+                transmit_flags();
+                create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
+
+                    // publish(deviceAddress);
+                    //
+                }
             break;
             case disconnect:
                 // Attempt to disconnect from a currently connected BLE Device
                 disconnect(deviceAddress);
                 break;
             case publish:
+
+                //connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
+                create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
                 publish(deviceAddress);
+
+                //     transmit_flags();
+
+
                 break;
             case stop:
                 // Disconnect from each device, then stop services
@@ -426,6 +525,8 @@ public class TexTronicsManagerService extends Service
         super.onDestroy();
     }
 
+
+
     /** =====================================================
      *
      *                  Service Methods
@@ -449,30 +550,60 @@ public class TexTronicsManagerService extends Service
      */
     private void connect(String deviceAddress, ExerciseMode exerciseMode, DeviceType deviceType, Choice choice, String exerciseID, String routineID)
     {
+        //SmartGlove smartGlove;
+
         // Only connects if we have a bounded BLE service, which we should if this service has started
         if (mBleServiceBound)
         {
-            SmartGlove smartGlove;
-            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
-            switch (deviceType)
-            {
-                case SMART_GLOVE:
-                    // TODO Assume connection will be successful, if connection fails we must remove it from list.
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
-                    mTexTronicsList.put(deviceAddress, smartGlove);
-                    break;
-                // Add Different Devices Here
-                case SMART_SOCK:
-                    // Added the Smart Sock code, just copied from above
-                    smartGlove = new SmartGlove(deviceAddress, exerciseMode, choice, exerciseID, routineID);
-                    mTexTronicsList.put(deviceAddress, smartGlove);
-                    break;
-                default:
+//
+//            List<Integer> ident = new ArrayList<>();
+//            try {
+//                ident  = UserRepository.getInstance(this.getApplicationContext()).getAllIdentities();
+//            }
+//            catch(Exception e){
+//                Log.d(TAG, "onClick: Error with identities");
+//            }
+//
+//           String exerciseName;
+//
+//            // TODO Modify TexTronicsDevice to have static method to determine DeviceType to Use
+//            switch (deviceType)
+//            {
+//                case SMART_GLOVE:
+//                    Log.e("Data log EXERCISE===", choice.toString());
+//                    if(MainActivity.exercise_name != null) {
+//                        exerciseName = MainActivity.exercise_name;
+//                        Log.e("Data log EXERCISE===", exerciseName);
+//
+//                       // TODO Assume connection will be successful, if connection fails we must remove it from list.
+//                        smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                        mTexTronicsList.put(deviceAddress, smartGlove);
+//
+//                    }
+//
+//                    break;
+//                // Add Different Devices Here
+//                case SMART_SOCK:
+//
+//                    if(MainActivity.exercise_name != null) {
+//                        exerciseName = MainActivity.exercise_name;
+//                        Log.e("Data log EXERCISE===", exerciseName);
+//
+//                        // TODO Assume connection will be successful, if connection fails we must remove it from list.
+//                         smartGlove = new SmartGlove(ident.size(),exerciseName, ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                        mTexTronicsList.put(deviceAddress, smartGlove);
+//
+//                    }
+//                    // Added the Smart Sock code, just copied from above
+//                    //smartGlove = new SmartGlove(ident.size(),choice.toString(), ExerciseInstructionFragment.flag,deviceAddress, exerciseMode, choice, exerciseID, routineID);
+//                    //mTexTronicsList.put(deviceAddress, smartGlove);
+//                   break;
+//                default:
+//
+//                    break;
+//            }
 
-                    break;
-            }
-
-            mBleService.connect(deviceAddress);
+            mBleService.connect(deviceAddress); //add_connected
         }
         else {
             Log.w(TAG,"Cannot Connect - BLE Connection Service is not bound yet!");
@@ -538,81 +669,82 @@ public class TexTronicsManagerService extends Service
 
                     Log.d(TAG, "UpdateData: logging the data");
 
-                    if (exe_nm.equals("Finger Tap") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    if (exe_nm.equals("Finger_Tap") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finTap_left(json,current);
                     }
-                    else if (exe_nm.equals("Closed Grip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Closed_Grip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_opCl_left(json,current);
                     }
-                    else if (exe_nm.equals("Hand Flip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hand_Flip") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_h_flip_left(json,current);
                     }
-                    else if (exe_nm.equals("Finger to Nose") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Finger_to_Nose") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finNose_left(json,current);
                     }
-                    else if (exe_nm.equals("Hold Hands Out") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hold_Hands_Out") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handout_left(json,current);
                     }
-                    else if (exe_nm.equals("Resting Hands on Thighs") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Resting_Hands_on_Thighs") && deviceAddress.equals("LEFT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handrest_left(json,current);
                     }
-                    else if (exe_nm.equals("Finger Tap") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Finger_Tap") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finTap_right(json,current);
                     }
-                    else if (exe_nm.equals("Closed Grip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Closed_Grip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_opCl_right(json,current);
                     }
-                    else if (exe_nm.equals("Hand Flip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hand_Flip") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_h_flip_right(json,current);
                     }
-                    else if (exe_nm.equals("Finger to Nose") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Finger_to_Nose") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_finNose_right(json,current);
                     }
-                    else if (exe_nm.equals("Hold Hands Out") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Hold_Hands_Out") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handout_right(json,current);
                     }
-                    else if (exe_nm.equals("Resting Hands on Thighs") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
+                    else if (exe_nm.equals("Resting_Hands_on_Thighs") && deviceAddress.equals("RIGHT_GLOVE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_handrest_right(json,current);
                     }
-                    else if (exe_nm.equals("Heel Stomp") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Heel_Stomp") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_heelStmp_right(json,current);
                     }
-                    else if (exe_nm.equals("Toe Tap") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Toe_Tap") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_toeTap_right(json,current);
                     }
-                    else if (exe_nm.equals("Walk Steps") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Walk_Steps") && deviceAddress.equals("RIGHT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_gait_right(json,current);
                     }
-                    else if (exe_nm.equals("Heel Stomp") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Heel_Stomp") && deviceAddress.equals("LEFT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_heelStmp_left(json,current);
                     }
-                    else if (exe_nm.equals("Toe Tap") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Toe_Tap") && deviceAddress.equals("LEFT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_toeTap_left(json,current);
                     }
-                    else if (exe_nm.equals("Walk Steps") && deviceAddress.equals("LEFT_SHOE_ADDR"))
+                    else if (exe_nm.equals("Walk_Steps") && deviceAddress.equals("LEFT_SHOE_ADDR"))
                     {
                         UserRepository.getInstance(context).updateData_gait_left(json,current);
                     }
                 }
-                else
+                else {
                     Log.d(TAG, "publish: Publish failed. Device is null");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -686,6 +818,9 @@ public class TexTronicsManagerService extends Service
             // Get the MAC address and action from the intent
             String deviceAddress = intent.getStringExtra(BluetoothLeConnectionService.INTENT_DEVICE);
             String action = intent.getStringExtra(BluetoothLeConnectionService.INTENT_EXTRA);
+
+            Log.d(TAG, "Received BLE Update ACTION====="+ action);
+
             /*
              * The action holds what type of update we are dealing with. For each action, we
              * need to update the TT update receiver.
@@ -751,21 +886,21 @@ public class TexTronicsManagerService extends Service
                         mBleService.enableNotifications(deviceAddress, characteristic);
                     }
 
-                    // Write to the txChar to notify the device
-                    BluetoothGattCharacteristic txChar = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.TX_CHARACTERISTIC);/**---------------------------------------------------------------------------------------------------------*/
-                    /**
-                     * added to sent 1 or 2 or 3 to the bluetooth device
-                     */
-                    if(exerciseMode==ExerciseMode.FLEX_ONLY)
-                    {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});
-                        Log.d(TAG, "Data sent via flex");}
-                    else if(exerciseMode==ExerciseMode.IMU_ONLY)
-                    {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});
-                        Log.d(TAG, "Data sent via imu");}
-                    else if(exerciseMode==ExerciseMode.FLEX_IMU)
-                    {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x03});}
-
-                    /*-----------------------------------------------------------------------------------------------------------------------------------------*/
+//                    // Write to the txChar to notify the device
+//                    BluetoothGattCharacteristic txChar = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.TX_CHARACTERISTIC);/**---------------------------------------------------------------------------------------------------------*/
+//                    /**
+//                     * added to sent 1 or 2 or 3 to the bluetooth device
+//                     */
+//                    if(ExerciseInstructionFragment.flag==1)
+//                    {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x01});
+//                        Log.d(TAG, "Data sent via flex");}
+//                    else if(ExerciseInstructionFragment.flag==2)
+//                    {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x02});
+//                        Log.d(TAG, "Data sent via imu");}
+//                    else if(ExerciseInstructionFragment.flag==3)
+//                    {mBleService.writeCharacteristic(deviceAddress, txChar, new byte[] {0x03});}
+//
+//                    /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
                     break;
                 case BluetoothLeConnectionService.GATT_CHARACTERISTIC_NOTIFY:
@@ -781,52 +916,148 @@ public class TexTronicsManagerService extends Service
 
                         // Find out the exercise mode (i.e what type of data we are collecting)
                         TexTronicsDevice device = mTexTronicsList.get(deviceAddress);
-                        ExerciseMode exerciseMode = null;
+
+
+                        //String exerciseMode = null;
+                        String exerciseMode = null;
                         if(device != null)
-                            exerciseMode = device.getExerciseMode();
+                            //exerciseMode1 = device.getExerciseMode();
+                            exerciseMode = MainActivity.exercise_mode;
 
                         if(exerciseMode != null)
                         {
                             try
                             {
                                 /** alli edit - how the csv files is logged */
+                              /*  if(exerciseMode.equals("Flex + Imu")){
+                                    device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
+                                    device.setIndexFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
+                                    device.setAccX(((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
+                                    device.setAccY(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
+                                    device.setAccZ(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                    device.setGyrX(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
+                                    device.setGyrY(((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF)));
+                                    device.setGyrZ(((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF)));
+
+                                    Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+
+                                    // If in exercise, log this data to CSV file
+                                    if(DeviceExerciseFragment.START_LOG){
+                                        device.logData(mContext);
+                                    } else {
+                                        Log.w(TAG, "Invalid Data Packet");
+                                        return;
+                                    }
+                                }*/
+//                                else if(exerciseMode.equals("Flex Only")){
+//                                    Log.e("MODE:::--" ,exerciseMode);
+//                                    device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
+//                                    device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+//                                    device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+//                                    device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+//                                    device.setPinkyFlex((((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
+//
+//                                    Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+//
+//                                    if(DeviceExerciseFragment.START_LOG)
+//                                        device.logData(mContext);
+//
+//
+//                                    // Second Data Set
+//                                    //device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
+//                                    device.setThumbFlex((((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF))));
+//                                    device.setIndexFlex((((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF))));
+//                                    device.setMiddleFlex((((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF))));
+//                                    device.setRingFlex((((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF))));
+//                                    device.setPinkyFlex((((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF))));
+//                                    Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+//
+//                                    if(DeviceExerciseFragment.START_LOG)
+//                                        device.logData(mContext);
+//                                }
+//                                else if(exerciseMode.equals("Imu Only")){
+//                                    Log.e("MODE:::--" ,exerciseMode);
+//                                    device.setAccX(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));
+//                                    device.setAccY(((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
+//                                    device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
+//                                    device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
+//                                    device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
+//                                    device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+//
+//                                    Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+//
+//                                    if(DeviceExerciseFragment.START_LOG)
+//                                        device.logData(mContext);
+//
+                                //}
+
+                                Log.e("MODE",MainActivity.exercise_mode);
+                                Log.e("MODE:::--" ,device.getExerciseMode().toString());
+
                                 switch (exerciseMode)
                                 {
-                                    //case FLEX_IMU:
+                                    case "Flex + IMU":
                                         // Move data processing into Data Model?
-                                        //if (data[0] == PACKET_ID_1) {
-                                         //   device.clear();
-                                           // device.setTimestamp(((data[1] & 0x00FF) << 24) | ((data[2] & 0x00FF) << 16) | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                            //device.setThumbFlex((((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                            //device.setIndexFlex((((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
-                                            // TODO: Add rest of fingers
-                                        //} else if (data[0] == PACKET_ID_2) {
-                                          //  device.setAccX(((data[1] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
-                                            //device.setAccY(((data[3] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
-                                            //device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
-                                            //device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                            //device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
-                                            //device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
-                                            //device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+//                                        //if (data[0] == PACKET_ID_1) {
+                                            //device.clear();
+                                            //device.setTimestamp(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));// | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                                            //device.setTimestamp(((data[0] & 0x00FF) << 24) | ((data[1] & 0x00FF) << 16) | ((data[2] & 0x00FF) << 8) | (data[3] & 0x00FF));
+                                            device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
+                                            device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                            device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                            device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                            device.setAccX(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                            device.setAccY(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+                                            device.setAccZ(((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
+                                            device.setGyrX(((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
+                                            device.setGyrY(((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
+                                            device.setGyrZ(((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
+
+                                            //device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
+//                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
+//                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
+//                                            device.setAccZ(((data[7] & 0x00FF) << 8)); // | ((data[6] & 0x00FF)));
+//                                            device.setGyrX(((data[8] & 0x00FF) << 8)); // | ((data[8] & 0x00FF)));
+//                                            device.setGyrY(((data[9] & 0x00FF) << 8)); // | ((data[10] & 0x00FF)));
+//                                            device.setGyrZ(((data[10] & 0x00FF) << 8)); // | ((data[12] & 0x00FF)));
+//                                            // TODO: Add rest of fingers
+//                                        //} else if (data[0] == PACKET_ID_2) {
+//                                            device.setThumbFlex((((data[0] & 0x00FF) << 8))); //| ((data[6] & 0x00FF))));
+//                                            device.setIndexFlex((((data[1] & 0x00FF) << 8))); //| ((data[8] & 0x00FF))));
+//                                            device.setMiddleFlex((((data[2] & 0x00FF) << 8))); //| ((data[5] & 0x00FF))));
+//                                            device.setRingFlex((((data[3] & 0x00FF) << 8))); //| ((data[7] & 0x00FF))));
+//                                            device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
+//                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
+//                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
+//                                            device.setAccZ(((data[7] & 0x00FF) << 8)); // | ((data[6] & 0x00FF)));
+//                                            device.setGyrX(((data[8] & 0x00FF) << 8)); // | ((data[8] & 0x00FF)));
+//                                            device.setGyrY(((data[9] & 0x00FF) << 8)); // | ((data[10] & 0x00FF)));
+//                                            device.setGyrZ(((data[10] & 0x00FF) << 8)); // | ((data[12] & 0x00FF)));
+                                            // device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
                                             //device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             //device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
+                                            Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
+
                                             // If in exercise, log this data to CSV file
-                                            //if(DeviceExerciseFragment.START_LOG)
-                                              //  device.logData(mContext);
-                                        //} else {
-                                          //  Log.w(TAG, "Invalid Data Packet");
-                                            //return;
-                                        //}
-                                        //break;
-                                    case FLEX_ONLY:
+                                            if(DeviceExerciseFragment.START_LOG){
+                                                    device.logData(mContext);
+                                            } else {
+                                                Log.w(TAG, "Invalid Data Packet");
+                                                return;
+                                            }
+                                            break;
+                                    case "Flex Only":
                                         // First Data Set
                                         //device.setTimestamp((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
-                                        device.setThumbFlex((((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF))));
-                                        device.setIndexFlex((((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF))));
-                                        device.setMiddleFlex((((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF))));
-                                        device.setRingFlex((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
-                                        device.setPinkyFlex((((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF))));
+
+                                        device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
+                                        device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                        device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                        device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                        device.setPinkyFlex((((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
+
+                                        Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);
@@ -834,11 +1065,12 @@ public class TexTronicsManagerService extends Service
 
                                         // Second Data Set
                                         //device.setTimestamp((((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF))));
-                                        device.setThumbFlex((((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF))));
-                                        device.setIndexFlex((((data[12] & 0x00FF) << 8) | ((data[13] & 0x00FF))));
-                                        device.setMiddleFlex((((data[14] & 0x00FF) << 8) | ((data[15] & 0x00FF))));
-                                        device.setRingFlex((((data[16] & 0x00FF) << 8) | ((data[17] & 0x00FF))));
-                                        device.setPinkyFlex((((data[18] & 0x00FF) << 8) | ((data[19] & 0x00FF))));
+                                        device.setThumbFlex((((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF))));
+                                        device.setIndexFlex((((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF))));
+                                        device.setMiddleFlex((((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF))));
+                                        device.setRingFlex((((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF))));
+                                        device.setPinkyFlex((((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF))));
+                                            Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);
@@ -852,13 +1084,15 @@ public class TexTronicsManagerService extends Service
                                         //if(DeviceExerciseFragment.START_LOG)
                                          //   device.logData(mContext);
 
-                                    case IMU_ONLY:
-                                        device.setAccX(((data[0] & 0x00FF) << 8) | ((data[1] & 0x00FF)));
-                                        device.setAccY(((data[2] & 0x00FF) << 8) | ((data[3] & 0x00FF)));
-                                        device.setAccZ(((data[4] & 0x00FF) << 8) | ((data[5] & 0x00FF)));
-                                        device.setGyrX(((data[6] & 0x00FF) << 8) | ((data[7] & 0x00FF)));
-                                        device.setGyrY(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
-                                        device.setGyrZ(((data[10] & 0x00FF) << 8) | ((data[11] & 0x00FF)));
+                                    case "Imu Only":
+                                        device.setAccX(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));
+                                        device.setAccY(((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
+                                        device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
+                                        device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
+                                        device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
+                                        device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+
+                                        Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 
                                         if(DeviceExerciseFragment.START_LOG)
                                             device.logData(mContext);

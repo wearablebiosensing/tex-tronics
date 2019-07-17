@@ -1,13 +1,11 @@
 package andrewpeltier.smartglovefragments.tex_tronics.data_types;
 
-/**
- * Created by mcons on 2/28/2018.
- */
+import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceType;
 
 public class FlexImuData extends TexTronicsData {
     private long mTimestamp;
-    private int mThumbFlex, mIndexFlex, mMiddleFlex, mRingFlex, mPinkyFlex;
-    private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ, mMagX, mMagY, mMagZ;
+    private int mThumbFlex, mIndexFlex, mMiddleFlex, mRingFlex;// mPinkyFlex;
+    private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ;  //, mMagX, mMagY, mMagZ;
 
     public FlexImuData() {
         super();
@@ -16,35 +14,29 @@ public class FlexImuData extends TexTronicsData {
         mIndexFlex = 0;
         mMiddleFlex = 0;
         mRingFlex = 0;
-        mPinkyFlex = 0;
+        //mPinkyFlex = 0;
         mAccX = 0;
         mAccY = 0;
         mAccZ = 0;
         mGyrX = 0;
         mGyrY = 0;
         mGyrZ = 0;
-        mMagX = 0;
-        mMagY = 0;
-        mMagZ = 0;
     }
 
-    public void set(FlexImuData data) {
-        mTimestamp = data.getTimestamp();
-        mThumbFlex = data.getThumbFlex();
-        mIndexFlex = data.getIndexFlex();
-        mMiddleFlex = data.getMiddleFlex();
-        mRingFlex = data.getRingFlex();
-        mPinkyFlex = data.getPinkyFlex();
-        mAccX = data.getAccX();
-        mAccY = data.getAccY();
-        mAccZ = data.getAccZ();
-        mGyrX = data.getGyrX();
-        mGyrY = data.getGyrY();
-        mGyrZ = data.getGyrZ();
-        mMagX = data.getMagX();
-        mMagY = data.getMagY();
-        mMagZ = data.getMagZ();
-    }
+    public void set(long timestamp, int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ, int thumbFlex, int indexFlex, int middleFlex, int ringFlex) {
+        mTimestamp = timestamp;
+        mAccX = AccX;
+        mAccY = AccY;
+        mAccY = AccZ;
+        mGyrX = GyrX;
+        mGyrY = GyrY;
+        mGyrZ = GyrZ;
+        mThumbFlex = thumbFlex;
+        mIndexFlex = indexFlex;
+        mMiddleFlex = middleFlex;
+        mRingFlex = ringFlex;
+        //mPinkyFlex = pinkyFlex;
+        }
 
     public void clear() {
         mTimestamp = 0;
@@ -52,202 +44,142 @@ public class FlexImuData extends TexTronicsData {
         mIndexFlex = 0;
         mMiddleFlex = 0;
         mRingFlex = 0;
-        mPinkyFlex = 0;
+        //mPinkyFlex = 0;
         mAccX = 0;
         mAccY = 0;
         mAccZ = 0;
         mGyrX = 0;
         mGyrY = 0;
         mGyrZ = 0;
-        mMagX = 0;
-        mMagY = 0;
-        mMagZ = 0;
+//        mMagX = 0;
+//        mMagY = 0;
+//        mMagZ = 0;
     }
 
     @Override
     public String toString() {
-        return mTimestamp + "," + mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex +
-                "," + mRingFlex + "," + mPinkyFlex + "," + mAccX + "," + mAccY + "," + mAccZ +
-                "," + mGyrX + "," + mGyrY + "," + mGyrZ + "," + mMagX + "," + mMagY + "," + mMagZ;
+        return mTimestamp + "," + mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex + "," + mRingFlex +
+                "," + mAccX + "," + mAccY + "," + mAccZ +
+                "," + mGyrX + "," + mGyrY + "," + mGyrZ;
     }
 
+    @Override
     public long getTimestamp() {
         return mTimestamp;
     }
 
+    @Override
     public void setTimestamp(long timestamp) {
         mTimestamp = timestamp;
     }
 
     @Override
-    public int getmAccX() {
-        return 0;
-    }
-
-    @Override
-    public void setmAccX(int AccX) {
-
-    }
-
-    @Override
-    public int getmAccY() {
-        return 0;
-    }
-
-    @Override
-    public void setmAccY(int AccY) {
-
-    }
-
-    @Override
-    public int getmAccZ() {
-        return 0;
-    }
-
-    @Override
-    public void setmAccZ(int AccZ) {
-
-    }
-
-    @Override
-    public int getmGYrX() {
-        return 0;
-    }
-
-    @Override
-    public void setmGyrX(int GyrX) {
-
-    }
-
-    @Override
-    public int getmGYrY() {
-        return 0;
-    }
-
-    @Override
-    public void setmGyrY(int GyrY) {
-
-    }
-
-    @Override
-    public int getmGYrZ() {
-        return 0;
-    }
-
-    @Override
-    public void setmGyrZ(int GyrZ) {
-
-    }
-
-    public int getThumbFlex() {
-        return mThumbFlex;
-    }
-
-    public void setThumbFlex(int thumbFlex) {
-        mThumbFlex = thumbFlex;
-    }
-
-    public int getIndexFlex() {
-        return mIndexFlex;
-    }
-
-    public void setIndexFlex(int indexFlex) {
-        mIndexFlex = indexFlex;
-    }
-
-    public int getMiddleFlex() {
-        return mMiddleFlex;
-    }
-
-    public void setMiddleFlex(int middleFlex) {
-        mMiddleFlex = middleFlex;
-    }
-
-    public int getRingFlex() {
-        return mRingFlex;
-    }
-
-    public void setRingFlex(int ringFlex) {
-        mRingFlex = ringFlex;
-    }
-
-    public int getPinkyFlex() {
-        return mPinkyFlex;
-    }
-
-    public void setPinkyFlex(int pinkyFlex) {
-        mPinkyFlex = pinkyFlex;
-    }
-
     public int getAccX() {
         return mAccX;
     }
 
-    public void setAccX(int accX) {
-        mAccX = accX;
+    @Override
+    public void setAccX(int AccX) {
+        mAccX = AccX;
     }
 
+    @Override
     public int getAccY() {
         return mAccY;
     }
 
-    public void setAccY(int accY) {
-        mAccY = accY;
+    @Override
+    public void setAccY(int AccY) {
+        mAccY = AccY;
     }
 
+    @Override
     public int getAccZ() {
         return mAccZ;
     }
 
-    public void setAccZ(int accZ) {
-        mAccZ = accZ;
+    @Override
+    public void setAccZ(int AccZ) {
+        mAccZ = AccZ;
     }
 
+    @Override
     public int getGyrX() {
         return mGyrX;
     }
 
-    public void setGyrX(int gyrX) {
-        mGyrX = gyrX;
+    @Override
+    public void setGyrX(int GyrX) {
+        mGyrX = GyrX;
     }
 
+    @Override
     public int getGyrY() {
         return mGyrY;
     }
 
-    public void setGyrY(int gyrY) {
-        mGyrY = gyrY;
+    @Override
+    public void setGyrY(int GyrY) {
+        mGyrY = GyrY;
     }
 
+    @Override
     public int getGyrZ() {
         return mGyrZ;
     }
 
-    public void setGyrZ(int gyrZ) {
-        mGyrZ = gyrZ;
+    @Override
+    public void setGyrZ(int GyrZ) {
+        mGyrZ = GyrZ;
     }
 
-    public int getMagX() {
-        return mMagX;
+    @Override
+    public int getThumbFlex() {
+        return mThumbFlex;
     }
 
-    public void setMagX(int magX) {
-        mMagX = magX;
+    @Override
+    public void setThumbFlex(int thumbFlex) {
+        mThumbFlex = thumbFlex;
     }
 
-    public int getMagY() {
-        return mMagY;
+    @Override
+    public int getIndexFlex() {
+        return mIndexFlex;
     }
 
-    public void setMagY(int magY) {
-        mMagY = magY;
+    @Override
+    public void setIndexFlex(int indexFlex) {
+        mIndexFlex = indexFlex;
     }
 
-    public int getMagZ() {
-        return mMagZ;
+    @Override
+    public int getMiddleFlex() {
+        return mMiddleFlex;
     }
 
-    public void setMagZ(int magZ) {
-        mMagZ = magZ;
+    @Override
+    public void setMiddleFlex(int middleFlex) {
+        mMiddleFlex = middleFlex;
+    }
+
+    @Override
+    public int getRingFlex() {
+        return mRingFlex;
+    }
+
+    @Override
+    public void setRingFlex(int RingFlex) {
+        mRingFlex = RingFlex;
+    }
+
+    @Override
+    public int getPinkyFlex() throws IllegalDeviceType {
+        throw new IllegalDeviceType("Illegal Device Type");
+    }
+
+    @Override
+    public void setPinkyFlex(int PinkyFlex) throws IllegalDeviceType {
+        throw new IllegalDeviceType("Illegal Device Type");
     }
 }

@@ -1,0 +1,13 @@
+G04 Gerber job file.*
+%TF.FileFunction,JobInfo*%
+%TF.GenerationSoftware,Autodesk,EAGLE,9.1.1*%
+%TF.CreationDate,2018-08-02T16:49:24Z*%
+%TF.Part,Single*%
+%MOMM*%
+%TJ.B_Owner,Nicholas Constant <kabuki4774@uri.edu>*%
+%TJ.B_ID,kaya-insolev1*%
+%TJ.B_LayerNum,4*%
+%TJ.B_Thickness,0.690000*%
+%TJ.B_Size_X,31.877459*%
+%TJ.B_Size_Y,25.527000*%
+M02*

@@ -1,0 +1,28 @@
+kaya/patient/data
+{
+"Date":" timestamp in format 07-23-2018 11:37:26:886"
+"Session_UUID":"UUID for the session"
+"Exercise_UUID":"UUID for exercise (to allow combination of multiple devices into a single exercise package)"
+"Sensor_ID":" mac addresss "
+"Exercise_ID":"one from [
+                "Finger Tap" 
+                "Closed Grip"
+                "Hand Flip"
+                "Screen Tap" 
+                "Heel Tap"
+                "Toe Tap"
+                "Foot Stomp" 
+                "Walk Steps"
+            ]"
+"Data":"CSV format of Timestamp,Thumb,Index,Middle,Ring,Pinky"
+}
+kaya/patient/done
+{
+	"Session_UUID":"UUID of exercise which is being finished"
+}
+kaya/patient/callback
+{
+	"Message":"Some Message from the service"
+}
+kaya/patient/packaged_exercise
+

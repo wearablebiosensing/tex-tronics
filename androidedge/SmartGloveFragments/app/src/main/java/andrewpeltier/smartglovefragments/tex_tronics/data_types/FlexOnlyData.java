@@ -40,7 +40,7 @@ public class FlexOnlyData extends TexTronicsData {
 
     @Override
     public String toString() {
-        return mTimestamp + "," + mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex +
+        return mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex +
                 "," + mRingFlex + "," + mPinkyFlex;
     }
 
@@ -52,66 +52,6 @@ public class FlexOnlyData extends TexTronicsData {
     @Override
     public void setTimestamp(long timestamp) {
         mTimestamp = timestamp;
-    }
-
-    @Override
-    public int getmAccX() {
-        return 0;
-    }
-
-    @Override
-    public void setmAccX(int AccX) {
-
-    }
-
-    @Override
-    public int getmAccY() {
-        return 0;
-    }
-
-    @Override
-    public void setmAccY(int AccY) {
-
-    }
-
-    @Override
-    public int getmAccZ() {
-        return 0;
-    }
-
-    @Override
-    public void setmAccZ(int AccZ) {
-
-    }
-
-    @Override
-    public int getmGYrX() {
-        return 0;
-    }
-
-    @Override
-    public void setmGyrX(int GyrX) {
-
-    }
-
-    @Override
-    public int getmGYrY() {
-        return 0;
-    }
-
-    @Override
-    public void setmGyrY(int GyrY) {
-
-    }
-
-    @Override
-    public int getmGYrZ() {
-        return 0;
-    }
-
-    @Override
-    public void setmGyrZ(int GyrZ) {
-
     }
 
     @Override
@@ -224,33 +164,33 @@ public class FlexOnlyData extends TexTronicsData {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    @Override
-    public int getMagX() throws IllegalDeviceType {
-        throw new IllegalDeviceType("Illegal Device Type");
-    }
-
-    @Override
-    public void setMagX(int magX) throws IllegalDeviceType {
-        throw new IllegalDeviceType("Illegal Device Type");
-    }
-
-    @Override
-    public int getMagY() throws IllegalDeviceType {
-        throw new IllegalDeviceType("Illegal Device Type");
-    }
-
-    @Override
-    public void setMagY(int magY) throws IllegalDeviceType {
-        throw new IllegalDeviceType("Illegal Device Type");
-    }
-
-    @Override
-    public int getMagZ() throws IllegalDeviceType {
-        throw new IllegalDeviceType("Illegal Device Type");
-    }
-
-    @Override
-    public void setMagZ(int magZ) throws IllegalDeviceType {
-        throw new IllegalDeviceType("Illegal Device Type");
-    }
+//    @Override
+//    public int getMagX() throws IllegalDeviceType {
+//        throw new IllegalDeviceType("Illegal Device Type");
+//    }
+//
+//    @Override
+//    public void setMagX(int magX) throws IllegalDeviceType {
+//        throw new IllegalDeviceType("Illegal Device Type");
+//    }
+//
+//    @Override
+//    public int getMagY() throws IllegalDeviceType {
+//        throw new IllegalDeviceType("Illegal Device Type");
+//    }
+//
+//    @Override
+//    public void setMagY(int magY) throws IllegalDeviceType {
+//        throw new IllegalDeviceType("Illegal Device Type");
+//    }
+//
+//    @Override
+//    public int getMagZ() throws IllegalDeviceType {
+//        throw new IllegalDeviceType("Illegal Device Type");
+//    }
+//
+//    @Override
+//    public void setMagZ(int magZ) throws IllegalDeviceType {
+//        throw new IllegalDeviceType("Illegal Device Type");
+//    }
 }

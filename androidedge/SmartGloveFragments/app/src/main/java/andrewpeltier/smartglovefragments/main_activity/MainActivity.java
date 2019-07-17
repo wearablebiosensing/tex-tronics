@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -33,6 +34,8 @@ import andrewpeltier.smartglovefragments.tex_tronics.enums.DeviceType;
 import andrewpeltier.smartglovefragments.tex_tronics.enums.ExerciseMode;
 import andrewpeltier.smartglovefragments.visualize.Choice;
 import andrewpeltier.smartglovefragments.visualize.StudyChoice;
+
+import static andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService.deviceAddress;
 
 
 /** ======================================
@@ -70,12 +73,17 @@ public class MainActivity extends AppCompatActivity
     private static String[] exerciseChoices;            // List of exercise choices once picked
     private String[] exerciseModes;                     // List of exercise modes
     private ArrayDeque<String> mNames;                  // String name of each exercise in list
+    private ArrayDeque<String> mModes;
     private UUID mRoutineID;                            // ID of the routine, set randomly
     public static String exercise_name;                 // Name of the current exercise
+    public static String exercise_mode;
     public static boolean CONNECTED;                    // Checks for BLE connection
     private FragmentManager fragmentManager;            // Manages the fragments held by the Main Activity
     private FragmentTransaction fragmentTransaction;    // Changes the fragments
     private String mFragmentTag;                        // Name of the fragment currently in use
+    String deviceAddress;
+    int counter;
+    public static int DeviceConection = 0;
 
     /** onCreate()
      *
@@ -135,6 +143,8 @@ public class MainActivity extends AppCompatActivity
         {
             // The name is stored so that we can load the proper exercise and instructions
             exercise_name = mNames.pop();
+            exercise_mode = mModes.pop();
+
             if(exercise_name != null)
                 addFragment(new ExerciseInstructionFragment(), "ExerciseInstructionFragment");
         }
@@ -210,12 +220,26 @@ public class MainActivity extends AppCompatActivity
     {
         exerciseChoices = chosenExercises;
         exerciseModes = exerciseModeArray;
+        //mModes =  new ArrayDeque<>(Arrays.asList(exerciseModes));
         mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
         // A new routine has just been created, so we create a random ID for
         // this new routine
         mRoutineID = UUID.randomUUID();
         Log.d(TAG, "setExercises: Exercises set");
     }
+    public void setModes(String[] chosenExercises, String[] exerciseModeArray){
+
+        //exerciseChoices = chosenExercises;
+        exerciseModes = exerciseModeArray;
+        mModes =  new ArrayDeque<>(Arrays.asList(exerciseModes));
+       // mNames = new ArrayDeque<>(Arrays.asList(exerciseChoices));
+        // A new routine has just been created, so we create a random ID for
+        // this new routine
+        mRoutineID = UUID.randomUUID();
+        Log.d(TAG, "setModes: Exercises MODE set");
+
+    }
+
 
     public static int getExerciseCount()
     {
@@ -252,14 +276,17 @@ public class MainActivity extends AppCompatActivity
     {
         UUID exerciseID = UUID.randomUUID();
         for(int i = 0; i < deviceAddressList.length; i++) {
-            TexTronicsManagerService.connect(this,
+            /*Call creating file tings here......*/
+
+            TexTronicsManagerService.connect_devices(this,
                     deviceAddressList[i],
                     Choice.getChoice(exercise_name),
                     //StudyChoice.getChoice(exercise_name),
-                    ExerciseMode.getExercise(exerciseModes[0]),
+                    ExerciseMode.getExercise(exerciseModes[i]),//exerciseModes[i]
                     DeviceType.getDevicetype(deviceTypeList[i]), exerciseID, mRoutineID);
         }
     }
+
 
     /** disconnect()
      *
@@ -306,13 +333,14 @@ public class MainActivity extends AppCompatActivity
          * @param intent            -Operation to be performed. Here, it contains the type of update
          */
         @Override
+
         public void onReceive(Context context, Intent intent) {
             if(intent == null || !intent.hasExtra(UPDATE_DEVICE) || !intent.hasExtra(UPDATE_TYPE)) {
                 Log.w(TAG,"Invalid Update Received");
                 return;
             }
 
-            String deviceAddress = intent.getStringExtra(UPDATE_DEVICE);    // NULL if MQTT Update
+            deviceAddress = intent.getStringExtra(UPDATE_DEVICE);    // NULL if MQTT Update
             TexTronicsUpdate updateType = (TexTronicsUpdate) intent.getSerializableExtra(UPDATE_TYPE);
 
             if(updateType == null) {
@@ -330,6 +358,7 @@ public class MainActivity extends AppCompatActivity
                 case ble_connected:
                     // Device <deviceAddress> Has Been Connected
                     Log.d(TAG,"Connected to " + deviceAddress);
+                    counter++;
                     break;
                 case ble_disconnecting:
                     // Disconnecting from Device <deviceAddress>
@@ -350,6 +379,11 @@ public class MainActivity extends AppCompatActivity
                 default:
                     Log.w(TAG, "Unknown Update Received");
                     break;
+            }
+            if(counter == 2){
+
+                Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_SHORT).show();
+                DeviceConection = 1;
             }
         }
     };
