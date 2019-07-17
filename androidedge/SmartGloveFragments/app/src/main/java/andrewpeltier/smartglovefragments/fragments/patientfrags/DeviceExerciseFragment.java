@@ -198,6 +198,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             //startTimerMedia();
         }
 
+        String dataExercise ="Device Address, "+"Exercise, " + "Time Stamp, " + "Thumb, "+"Index, " + "Middle, " + "Ring, " + "Pinky";
+
         // Gets the exercise name from the Main Activity
         if(MainActivity.exercise_name != null) {
             exerciseName = MainActivity.exercise_name;
@@ -206,7 +208,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             dataLog = new DataLog();
 
             // Call to the constructor to create files.
-            dataLog.DataLog(ident.size(),exerciseName);
+            dataLog.DataLog(ident.size(),exerciseName,dataExercise);
         }
 
         // Call timer for the exercise

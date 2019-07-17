@@ -2,6 +2,7 @@ package andrewpeltier.smartglovefragments.io;
 
 import android.util.Log;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -30,6 +31,8 @@ import andrewpeltier.smartglovefragments.visualize.Exercise;
  *
  */
 public class DataLog {
+    String header = "DataLog, Device Address, Exercise, TimeStamp, Thumb, Index, Middle, Ring, Pinky";
+
 
     //Get the current date.
     Date date = Calendar.getInstance().getTime();
@@ -51,7 +54,7 @@ public class DataLog {
     *  Creates new csv files for each of the exercises.
     * */
 
-    public void DataLog(int id, String exerciseName){
+    public void DataLog(int id, String exerciseName,String info){
 
         // Get the device type for each exercise.
         String exerciseDeviceType = Exercise.getDeviceName(exerciseName);
@@ -92,10 +95,21 @@ public class DataLog {
 
         File parentFile = new File( "/storage/emulated/0/Documents");    // FIXME
         File file = new File(parentFile, fileName);
+        String insert_string = timeString + "," + info;
 
         try {
             FileOutputStream outputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+            bufferedWriter.write(header);
+            bufferedWriter.newLine();
+
+            bufferedWriter.write(insert_string);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            bufferedWriter.close();
+
+
             Log.d("","Creating new CSV file");
 
         }catch (IOException e){
@@ -103,5 +117,7 @@ public class DataLog {
             Log.d( "", "NOT Creating new CSV");
             e.printStackTrace();
         }
+
+
     }
 }
