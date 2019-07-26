@@ -1000,13 +1000,13 @@ public class TexTronicsManagerService extends Service
                                         // Move data processing into Data Model?
 //                                        //if (data[0] == PACKET_ID_1) {
                                             //device.clear();
-                                            //device.setTimestamp(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));// | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                                            device.setTimestamp(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));// | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
                                             //device.setTimestamp(((data[0] & 0x00FF) << 24) | ((data[1] & 0x00FF) << 16) | ((data[2] & 0x00FF) << 8) | (data[3] & 0x00FF));
-                                            device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
-                                            device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
-                                            device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                            device.setThumbFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                            device.setIndexFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                            //device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
                                             device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                            device.setAccX(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                            device.setAccX(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
                                             device.setAccY(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
                                             device.setAccZ(((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
                                             device.setGyrX(((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF)));

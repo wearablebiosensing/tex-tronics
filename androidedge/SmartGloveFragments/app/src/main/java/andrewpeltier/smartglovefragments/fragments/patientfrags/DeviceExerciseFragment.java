@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.media.MediaPlayer;   //API for media recorder.
 import android.media.MediaRecorder; //API for media recorder.
 import android.os.Bundle;
@@ -23,10 +22,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,16 +33,9 @@ import java.util.UUID;
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
 import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
-import andrewpeltier.smartglovefragments.database.StudyInformation;
 import andrewpeltier.smartglovefragments.database.UserRepository;
-import andrewpeltier.smartglovefragments.io.DataLog;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
-import andrewpeltier.smartglovefragments.io.StudyLog;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
-import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdate;
-import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsUpdateReceiver;
-import andrewpeltier.smartglovefragments.visualize.Exercise;
-import andrewpeltier.smartglovefragments.visualize.GenerateGraph;
 import pl.droidsonroids.gif.GifImageView;
 
 import java.io.File;  //to create folders on device file management.
@@ -124,7 +112,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         score_text = view.findViewById(R.id.score_value);
 
         //Create a DataLog object.
-        DataLog dataLog;
+       // DataLog dataLog;
 
 
         ids = new ArrayList<>();
@@ -210,12 +198,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             //dataLog = new DataLog();
 
             // Call to the constructor to create files.
-<<<<<<< HEAD
-            dataLog.DataLog(ident.size(),exerciseName,dataExercise);
-=======
+     //       dataLog.DataLog(ident.size(),exerciseName,dataExercise);
           //  dataLog.DataLog(ident.size(),exerciseName, ExerciseInstructionFragment.flag);
 
->>>>>>> 03baf6dc3d650e65651e267123381c1ee27dac2e
         }
 
         // Call timer for the exercise

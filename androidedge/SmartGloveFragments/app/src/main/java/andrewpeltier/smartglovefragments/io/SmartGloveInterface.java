@@ -65,11 +65,11 @@ public interface SmartGloveInterface
         int CLOSED_GRIP_GIF = R.drawable.hand_grasps;
         int HANDS_HOLD_GIF = R.drawable.extended_arm;
         int HAND_FLIP_GIF = R.drawable.hand_flip;
-        int SCREEN_TAP_GIF =R.drawable.smartglove_launcher;
+        int SCREEN_TAP_GIF =R.drawable.finger_to_nose;
         int HEEL_TAP_GIF = R.drawable.heel_tap;
         int TOE_TAP_GIF = R.drawable.toe_tap;
         int FOOT_STOMP_GIF = R.drawable.smartglove_launcher;
-        int WALK_STEPS_GIF =R.drawable.smartglove_launcher;
+        int WALK_STEPS_GIF =R.drawable.resting_hands;
     }
 
     /**
@@ -81,10 +81,10 @@ public interface SmartGloveInterface
         int CLOSED_GRIP_GIF = R.drawable.hand_grasps;
         int HANDS_HOLD_GIF = R.drawable.extended_arm;
         int HAND_FLIP_GIF = R.drawable.hand_flip;
-        int SCREEN_TAP_GIF = R.drawable.screen_tap_gif;
+        int SCREEN_TAP_GIF = R.drawable.finger_to_nose;
         int HEEL_TAP_GIF = R.drawable.heel_tap;
         int TOE_TAP_GIF = R.drawable.toe_tap;
         int FOOT_STOMP_GIF = R.drawable.footstomp_gif;
-        int WALK_STEPS_GIF = R.drawable.walksteps_gif;
+        int WALK_STEPS_GIF = R.drawable.resting_hands;
     }
 }

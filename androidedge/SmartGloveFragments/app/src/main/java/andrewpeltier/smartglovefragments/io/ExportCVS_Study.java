@@ -19,7 +19,7 @@ public class ExportCVS_Study {
 
     String TAG = "export study ";
     private String header = "ID, Age, Gender, Hand, Feeling, Duration, Dose, Amount, Comments, Hands Thighs, Hands out," +
-            "Finger Nose, Finger Tap, Open Close, Hand Flip, Heel Stomp, Toe Tap, Gait";
+            "Finger Nose, Finger Tap, Open Close, Hand Flip "; /*, Heel Stomp, Toe Tap, Gait */
     Date date = Calendar.getInstance().getTime();
 
     // Set Default Output File

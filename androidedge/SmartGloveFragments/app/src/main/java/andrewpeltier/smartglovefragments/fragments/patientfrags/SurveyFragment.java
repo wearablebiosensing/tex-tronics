@@ -157,8 +157,7 @@ public class SurveyFragment extends Fragment {
                 catch (Exception e){
                     // add exeption
                     //UnCOMMENT THIS!!!!!!
-
-                  //  empty = true;
+                    //empty = true;
                 }
 
 
@@ -192,7 +191,8 @@ public class SurveyFragment extends Fragment {
                     myStudyLog = new StudyLog();
                     myStudyLog.StudyLog(ident.size(), jsonPaitent);
 
-                    String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap", "Closed_Grip","Hand_Flip","Heel_Stomp","Toe_Tap","Walk_Steps"};
+                    String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap","Finger_Tap", "Closed_Grip", "Closed_Grip"
+                            ,"Hand_Flip"/*,"Heel_Stomp","Toe_Tap","Walk_Steps"*/};
 
 
                     // Takes exercises from list and sends them to Main Activity

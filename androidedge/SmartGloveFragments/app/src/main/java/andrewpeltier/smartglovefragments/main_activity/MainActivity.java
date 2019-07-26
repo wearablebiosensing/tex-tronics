@@ -381,7 +381,6 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
             if(counter == 2){
-
                 Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_SHORT).show();
                 DeviceConection = 1;
             }

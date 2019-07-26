@@ -185,7 +185,7 @@ public class ExerciseSelectionFragment extends Fragment implements
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());*/
-                        String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap", "Closed_Grip","Hand_Flip","Heel_Stomp","Toe_Tap","Walk_Steps"};
+                        String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap","Finger_Tap", "Closed_Grip","Closed_Grip","Hand_Flip"/*,"Heel_Stomp","Toe_Tap","Walk_Steps"*/};
 
 
                         String[] exerciseModeArray = exerciseModes.toArray(new String[exerciseModes.size()]);

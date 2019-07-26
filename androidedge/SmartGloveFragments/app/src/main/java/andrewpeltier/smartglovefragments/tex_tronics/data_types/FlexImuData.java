@@ -4,7 +4,7 @@ import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceTyp
 
 public class FlexImuData extends TexTronicsData {
     private long mTimestamp;
-    private int mThumbFlex, mIndexFlex, mMiddleFlex, mRingFlex;// mPinkyFlex;
+    private int mThumbFlex, mIndexFlex, mRingFlex;// mPinkyFlex;
     private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ;  //, mMagX, mMagY, mMagZ;
 
     public FlexImuData() {
@@ -12,7 +12,7 @@ public class FlexImuData extends TexTronicsData {
         mTimestamp = 0;
         mThumbFlex = 0;
         mIndexFlex = 0;
-        mMiddleFlex = 0;
+        //mMiddleFlex = 0;
         mRingFlex = 0;
         //mPinkyFlex = 0;
         mAccX = 0;
@@ -23,7 +23,7 @@ public class FlexImuData extends TexTronicsData {
         mGyrZ = 0;
     }
 
-    public void set(long timestamp, int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ, int thumbFlex, int indexFlex, int middleFlex, int ringFlex) {
+    public void set(long timestamp, int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ, int thumbFlex, int indexFlex, int ringFlex) {
         mTimestamp = timestamp;
         mAccX = AccX;
         mAccY = AccY;
@@ -33,7 +33,7 @@ public class FlexImuData extends TexTronicsData {
         mGyrZ = GyrZ;
         mThumbFlex = thumbFlex;
         mIndexFlex = indexFlex;
-        mMiddleFlex = middleFlex;
+        //mMiddleFlex = middleFlex;
         mRingFlex = ringFlex;
         //mPinkyFlex = pinkyFlex;
         }
@@ -42,7 +42,7 @@ public class FlexImuData extends TexTronicsData {
         mTimestamp = 0;
         mThumbFlex = 0;
         mIndexFlex = 0;
-        mMiddleFlex = 0;
+        //mMiddleFlex = 0;
         mRingFlex = 0;
         //mPinkyFlex = 0;
         mAccX = 0;
@@ -58,7 +58,7 @@ public class FlexImuData extends TexTronicsData {
 
     @Override
     public String toString() {
-        return mTimestamp + "," + mThumbFlex + "," + mIndexFlex + "," + mMiddleFlex + "," + mRingFlex +
+        return mTimestamp + "," + mThumbFlex + "," + mIndexFlex + "," + mRingFlex +
                 "," + mAccX + "," + mAccY + "," + mAccZ +
                 "," + mGyrX + "," + mGyrY + "," + mGyrZ;
     }
@@ -154,13 +154,13 @@ public class FlexImuData extends TexTronicsData {
     }
 
     @Override
-    public int getMiddleFlex() {
-        return mMiddleFlex;
+    public int getMiddleFlex() throws IllegalDeviceType {
+        throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setMiddleFlex(int middleFlex) {
-        mMiddleFlex = middleFlex;
+    public void setMiddleFlex(int MiddleFlex) throws IllegalDeviceType {
+        throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
