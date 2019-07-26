@@ -45,11 +45,11 @@ static uint8_t packet1[TXRX_BUF_LEN];                           // Container for
 static uint8_t packet2[TXRX_BUF_LEN];                           // Container for data sent in second packet
 static int looper;
 
-sg_dif_t ticks; 
+sg_dif_t ticks;
 sg_time_t prev_ticks;                                                // Timestamp sent along with data
 uint8_t time_since = 0;
 flex_data_t thumb_data, index_data, middle_data, ring_data, pinky_data;  // FlexSensor Values
-imu_data_t acc_x, acc_y, acc_z, gyr_x, gyr_y, gyr_z, mag_x, mag_y, mag_z; // IMU Values
+imu_data_t acc_x, acc_y, acc_z, gyr_x, gyr_y, gyr_z, mag_x, mag_y, mag_z, dummy; // IMU Values
 
 
 // The uuid of service and characteristics
@@ -57,11 +57,18 @@ static const uint8_t uart_service_uuid[]        = {0x6E, 0x40, 0X00, 0X01, 0xB5,
 static const uint8_t tx_characteristic_uuid[]   = {0x6E, 0x40, 0X00, 0X02, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E}; // 6E400002-B5A3-F393-E0A9-E50E24DCCA9E
 static const uint8_t rx_characteristic_uuid[]   = {0x6E, 0x40, 0X00, 0X03, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E}; // 6E400003-B5A3-F393-E0A9-E50E24DCCA9E
 
+
+//static const uint8_t uart_service_uuid[]        = {0x71, 0x3D, 0, 0, 0x50, 0x3E, 0x4C, 0x75, 0xBA, 0x94, 0x31, 0x48, 0xF1, 0x8D, 0x94, 0x1E};
+//static const uint8_t tx_characteristic_uuid[]     = {0x71, 0x3D, 0, 3, 0x50, 0x3E, 0x4C, 0x75, 0xBA, 0x94, 0x31, 0x48, 0xF1, 0x8D, 0x94, 0x1E};
+//static const uint8_t rx_characteristic_uuid[]     = {0x71, 0x3D, 0, 2, 0x50, 0x3E, 0x4C, 0x75, 0xBA, 0x94, 0x31, 0x48, 0xF1, 0x8D, 0x94, 0x1E};
+//static const uint8_t uart_base_uuid_rev[]   = {0x1E, 0x94, 0x8D, 0xF1, 0x48, 0x31, 0x94, 0xBA, 0x75, 0x4C, 0x3E, 0x50, 0, 0, 0x3D, 0x71};
+
+
 uint8_t tx_value[TXRX_BUF_LEN] = {0,};
 uint8_t rx_value[TXRX_BUF_LEN] = {0,};
 
 // Create characteristic and service
-GattCharacteristic  tx_characteristic(tx_characteristic_uuid, tx_value, 1, TXRX_BUF_LEN, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE );
+GattCharacteristic  tx_characteristic(tx_characteristic_uuid, tx_value, 1, TXRX_BUF_LEN, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE | GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE_WITHOUT_RESPONSE );
 GattCharacteristic  rx_characteristic(rx_characteristic_uuid, rx_value, 1, TXRX_BUF_LEN, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_NOTIFY);
 GattCharacteristic *uart_chars[] = {&tx_characteristic, &rx_characteristic};
 GattService         uart_service(uart_service_uuid, uart_chars, sizeof(uart_chars) / sizeof(GattCharacteristic *));
@@ -80,8 +87,9 @@ void gattServerWriteCallBack(const GattWriteCallbackParams *Handler) {
       // Handle Incoming Data
       if(buf[index]==0x01){Exercise_Mode=1;}
       else if(buf[index]==0x02){Exercise_Mode=2;}
-      else if(buf[index]==0x03){Exercise_Mode=3;}
+      else if(buf[index]==0x03){Exercise_Mode=3;} 
     }
+    
   }
 }
 
@@ -89,8 +97,10 @@ void gattServerWriteCallBack(const GattWriteCallbackParams *Handler) {
 void periodic_callback() {
   if (ble.getGapState().connected) {
 
-    prev_ticks.value = (uint16_t)millis() - prev_ticks.value;
-    time_since = byte(prev_ticks.value);
+      ticks.value = (uint16_t)(millis() - prev_ticks.value);
+//    prev_ticks.value = millis() - prev_ticks.value;
+//    time_since = byte(prev_ticks.value);
+//    ticks.value = (uint16_t)prev_ticks.value;
     
 switch(Exercise_Mode){
       
@@ -142,6 +152,7 @@ switch(Exercise_Mode){
 //    mag_y.value = imu.my;
 //    mag_z.value = imu.mz;
 //    
+
 //    // Populate Packet 2
 //    packet2[0] = 0x02;
 //    packet2[1] = acc_x.b[1];
@@ -219,65 +230,88 @@ switch(Exercise_Mode){
     gyr_x.value = imu.gx;
     gyr_y.value = imu.gy;
     gyr_z.value = imu.gz;
+    dummy.value = 912;
     //imu.readMag();
 
-    if (looper <= (DATA_PER_PACKET/4))
-    {
-      //packet1[1 + looper * PACKET_LENGTH] = prev_ticks.b[0];
-      //packet1[2 + looper * PACKET_LENGTH] = prev_ticks.b[0];
-      packet1[0 + looper * PACKET_LENGTH] = acc_x.b[0];
-      packet1[1 + looper * PACKET_LENGTH] = acc_x.b[1];
-      packet1[2 + looper * PACKET_LENGTH] = acc_y.b[0];
-      packet1[3 + looper * PACKET_LENGTH] = acc_y.b[1];
-      packet1[4 + looper * PACKET_LENGTH] = acc_z.b[0];
-      packet1[5 + looper * PACKET_LENGTH] = acc_z.b[1];
-      packet1[6 + looper * PACKET_LENGTH] = gyr_x.b[0];
-      packet1[7 + looper * PACKET_LENGTH] = gyr_x.b[1];
-      packet1[8 + looper * PACKET_LENGTH] = gyr_y.b[0];
-      packet1[9 + looper * PACKET_LENGTH] = gyr_y.b[1];
-      packet1[10 + looper * PACKET_LENGTH] = gyr_z.b[0];
-      packet1[11 + looper * PACKET_LENGTH] = gyr_z.b[1];
-    }
-    else
-    {
-      //packet2[1 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[0];
-      //packet2[2 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[1];
-      packet2[0 + (looper - 1) * PACKET_LENGTH] = acc_x.b[0];
-      packet2[1 + (looper - 1) * PACKET_LENGTH] = acc_x.b[1];
-      packet2[2 + (looper - 1) * PACKET_LENGTH] = acc_y.b[0];
-      packet2[3 + (looper - 1) * PACKET_LENGTH] = acc_y.b[1];
-      packet2[4 + (looper - 1) * PACKET_LENGTH] = acc_z.b[0];
-      packet2[5 + (looper - 1) * PACKET_LENGTH] = acc_z.b[1];
-      packet2[6 + (looper - 1) * PACKET_LENGTH] = gyr_x.b[0];
-      packet2[7 + (looper - 1) * PACKET_LENGTH] = gyr_x.b[1];
-      packet2[8 + (looper - 1) * PACKET_LENGTH] = gyr_y.b[0];
-      packet2[9 + (looper - 1) * PACKET_LENGTH] = gyr_y.b[1];
-      packet2[10 + (looper - 1) * PACKET_LENGTH] = gyr_z.b[0];
-      packet2[11 + (looper - 1) * PACKET_LENGTH] = gyr_z.b[1];
-    }
+      packet1[0] = acc_x.b[0];
+      packet1[1] = acc_x.b[1];
+      packet1[2] = acc_y.b[0];
+      packet1[3] = acc_y.b[1];
+      packet1[4] = acc_z.b[0];
+      packet1[5] = acc_z.b[1];
+      packet1[6] = gyr_x.b[0];
+      packet1[7] = gyr_x.b[1];
+      packet1[8] = gyr_y.b[0];
+      packet1[9] = gyr_y.b[1];
+      packet1[10] = gyr_z.b[0];
+      packet1[11] = gyr_z.b[1];
+      packet1[12] = dummy.b[0];
+      packet1[13] = dummy.b[1];
 
-
-    if (looper == DATA_PER_PACKET-3)
-    {
-      // Transmit every 4 DATA_REFRESH_MS milliseconds
       ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
-      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
-    }
-
-    looper = (looper + 1) % (DATA_PER_PACKET);
+//    if (looper <= (DATA_PER_PACKET/4))
+//    {
+//      //packet1[1 + looper * PACKET_LENGTH] = prev_ticks.b[0];
+//      //packet1[2 + looper * PACKET_LENGTH] = prev_ticks.b[0];
+//      packet1[0 + looper * PACKET_LENGTH] = acc_x.b[0];
+//      packet1[1 + looper * PACKET_LENGTH] = acc_x.b[1];
+//      packet1[2 + looper * PACKET_LENGTH] = acc_y.b[0];
+//      packet1[3 + looper * PACKET_LENGTH] = acc_y.b[1];
+//      packet1[4 + looper * PACKET_LENGTH] = acc_z.b[0];
+//      packet1[5 + looper * PACKET_LENGTH] = acc_z.b[1];
+//      packet1[6 + looper * PACKET_LENGTH] = gyr_x.b[0];
+//      packet1[7 + looper * PACKET_LENGTH] = gyr_x.b[1];
+//      packet1[8 + looper * PACKET_LENGTH] = gyr_y.b[0];
+//      packet1[9 + looper * PACKET_LENGTH] = gyr_y.b[1];
+//      packet1[10 + looper * PACKET_LENGTH] = gyr_z.b[0];
+//      packet1[11 + looper * PACKET_LENGTH] = gyr_z.b[1];
+//      packet1[12 + looper * PACKET_LENGTH] = dummy.b[0];
+//      packet1[13 + looper * PACKET_LENGTH] = dummy.b[1];
+//
+//    }
+//    else
+//    {
+//      //packet2[1 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[0];
+//      //packet2[2 + (looper - 2) * PACKET_LENGTH] = prev_ticks.b[1];
+//      packet2[0 + (looper - 1) * PACKET_LENGTH] = acc_x.b[0];
+//      packet2[1 + (looper - 1) * PACKET_LENGTH] = acc_x.b[1];
+//      packet2[2 + (looper - 1) * PACKET_LENGTH] = acc_y.b[0];
+//      packet2[3 + (looper - 1) * PACKET_LENGTH] = acc_y.b[1];
+//      packet2[4 + (looper - 1) * PACKET_LENGTH] = acc_z.b[0];
+//      packet2[5 + (looper - 1) * PACKET_LENGTH] = acc_z.b[1];
+//      packet2[6 + (looper - 1) * PACKET_LENGTH] = gyr_x.b[0];
+//      packet2[7 + (looper - 1) * PACKET_LENGTH] = gyr_x.b[1];
+//      packet2[8 + (looper - 1) * PACKET_LENGTH] = gyr_y.b[0];
+//      packet2[9 + (looper - 1) * PACKET_LENGTH] = gyr_y.b[1];
+//      packet2[10 + (looper - 1) * PACKET_LENGTH] = gyr_z.b[0];
+//      packet2[11 + (looper - 1) * PACKET_LENGTH] = gyr_z.b[1];
+//      packet2[12 + (looper - 1) * PACKET_LENGTH] = dummy.b[0];
+//      packet2[13 + (looper - 1) * PACKET_LENGTH] = dummy.b[1];
+//      
+//    }
+//
+//
+//    if (looper == DATA_PER_PACKET-3)
+//    {
+//      // Transmit every 4 DATA_REFRESH_MS milliseconds
+//      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
+//      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
+//    }
+//
+//    looper = (looper + 1) % (DATA_PER_PACKET);
     break;
 
     case 3: //"FLEX & IMU Both
-    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
-    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
-    //middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-    //ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  
+//    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
+//    ring_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+//    index_data.value = byte(map(analogRead(A0),0,1023,0,255));  
     //pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
     //Left Read
-//    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
-//    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
-//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-//    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  //issues
+    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
+    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
+    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  //issues
 //    pinky_data.value = byte(map(analogRead(A2),0,1023,0,255));
 
     // Update Data on IMU
@@ -286,65 +320,106 @@ switch(Exercise_Mode){
     acc_x.value = byte(imu.ax);
     acc_y.value = byte(imu.ay);
     acc_z.value = byte(imu.az);
-    //imu.readGyro();
+    imu.readGyro();
+    //Collect data from IMU
+    gyr_x.value = byte(imu.gx);
+    gyr_y.value = byte(imu.gy);
+    gyr_z.value = byte(imu.gz);
     //imu.readMag();
 
-    if (looper <= (DATA_PER_PACKET/4))
-    {
-      //packet1[0 + looper * PACKET_LENGTH] = prev_ticks.b[0];
-      packet1[0 + looper * PACKET_LENGTH] = thumb_data.b[0];
-      packet1[1 + looper * PACKET_LENGTH] = thumb_data.b[1];
-      packet1[2 + looper * PACKET_LENGTH] = index_data.b[0];
-      packet1[3 + looper * PACKET_LENGTH] = index_data.b[1];
-      //packet1[3 + looper * PACKET_LENGTH] = middle_data.b[0];
-      //packet1[4 + looper * PACKET_LENGTH] = ring_data.b[0];
-      //packet1[5 + looper * PACKET_LENGTH] = pinky_data.b[0];
-      packet1[4 + looper * PACKET_LENGTH] = acc_x.b[0];
-      packet1[5 + looper * PACKET_LENGTH] = acc_x.b[1];
-      packet1[6 + looper * PACKET_LENGTH] = acc_y.b[0];
-      packet1[7 + looper * PACKET_LENGTH] = acc_y.b[1];
-      packet1[8 + looper * PACKET_LENGTH] = acc_z.b[0];
-      packet1[9 + looper * PACKET_LENGTH] = acc_z.b[1];
-      packet1[10 + looper * PACKET_LENGTH] = gyr_x.b[0];
-      packet1[11 + looper * PACKET_LENGTH] = gyr_x.b[1];
-      packet1[12 + looper * PACKET_LENGTH] = gyr_y.b[0];
-      packet1[13 + looper * PACKET_LENGTH] = gyr_y.b[1];
-      packet1[14 + looper * PACKET_LENGTH] = gyr_z.b[0];
-      packet1[15 + looper * PACKET_LENGTH] = gyr_z.b[1];
-    }
-    else
-    {
-      //packet1[0 + looper * PACKET_LENGTH] = prev_ticks.b[0];
-      packet2[0 + (looper-1) * PACKET_LENGTH] = thumb_data.b[0];
-      packet2[1 + (looper-1) * PACKET_LENGTH] = thumb_data.b[1];
-      packet2[2 + (looper-1) * PACKET_LENGTH] = index_data.b[0];
-      packet2[3 + (looper-1) * PACKET_LENGTH] = index_data.b[1];
-      //packet1[3 + looper * PACKET_LENGTH] = middle_data.b[0];
-      //packet1[4 + looper * PACKET_LENGTH] = ring_data.b[0];
-      //packet1[5 + looper * PACKET_LENGTH] = pinky_data.b[0];
-      packet2[4 + (looper-1) * PACKET_LENGTH] = acc_x.b[0];
-      packet2[5 + (looper-1) * PACKET_LENGTH] = acc_x.b[1];
-      packet2[6 + (looper-1) * PACKET_LENGTH] = acc_y.b[0];
-      packet2[7 + (looper-1) * PACKET_LENGTH] = acc_y.b[1];
-      packet2[8 + (looper-1) * PACKET_LENGTH] = acc_z.b[0];
-      packet2[9 + (looper-1) * PACKET_LENGTH] = acc_z.b[1];
-      packet2[10 + (looper-1) * PACKET_LENGTH] = gyr_x.b[0];
-      packet2[11 + (looper-1) * PACKET_LENGTH] = gyr_x.b[1];
-      packet2[12 + (looper-1) * PACKET_LENGTH] = gyr_y.b[0];
-      packet2[13 + (looper-1) * PACKET_LENGTH] = gyr_y.b[1];
-      packet2[14 + (looper-1) * PACKET_LENGTH] = gyr_z.b[0];
-      packet2[15 + (looper-1) * PACKET_LENGTH] = gyr_z.b[1];
-    }
 
+      packet1[0] = ticks.b[0];
+      packet1[1] = ticks.b[1];
+      //packet1[1] = ticks.b[1];
+//      packet1[2] = prev_ticks.b[0];
+//      packet1[3] = prev_ticks.b[1];
+      packet1[2] = thumb_data.b[0];
+      packet1[3] = thumb_data.b[1];
+      packet1[4] = index_data.b[0];
+      packet1[5] = index_data.b[1];
+//      packet1[6] = middle_data.b[0];
+//      packet1[7] = middle_data.b[1];
+      packet1[6] = ring_data.b[0];
+      packet1[7] = ring_data.b[1];
+      //packet1[5 + looper * PACKET_LENGTH] = pinky_data.b[0];
+      packet1[8] = acc_x.b[0];
+      packet1[9] = acc_x.b[1];
+      packet1[10] = acc_y.b[0];
+      packet1[11] = acc_y.b[1];
+      packet1[12] = acc_z.b[0];
+      packet1[13] = acc_z.b[1];
+      packet1[14] = gyr_x.b[0];
+      packet1[15] = gyr_x.b[1];
+      packet1[16] = gyr_y.b[0];
+      packet1[17] = gyr_y.b[1];
+      packet1[18] = gyr_z.b[0];
+      packet1[19] = gyr_z.b[1];
+      //packet1[19] = 0x00;
 
-    if (looper == DATA_PER_PACKET-3)
-    {
-      // Transmit every 4 DATA_REFRESH_MS milliseconds
       ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
-      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
-    }
 
-    looper = (looper + 1) % (DATA_PER_PACKET);
+
+//    if (looper <= (DATA_PER_PACKET/4))
+//    {
+//      //packet1[0 + looper * PACKET_LENGTH] = prev_ticks.b[0];
+//      packet1[0 + looper * PACKET_LENGTH] = thumb_data.b[0];
+//      packet1[1 + looper * PACKET_LENGTH] = thumb_data.b[1];
+//      packet1[2 + looper * PACKET_LENGTH] = index_data.b[0];
+//      packet1[3 + looper * PACKET_LENGTH] = index_data.b[1];
+//      packet1[4 + looper * PACKET_LENGTH] = middle_data.b[0];
+//      packet1[5 + looper * PACKET_LENGTH] = middle_data.b[1];
+//      packet1[6 + looper * PACKET_LENGTH] = ring_data.b[0];
+//      packet1[7 + looper * PACKET_LENGTH] = ring_data.b[1];
+//      //packet1[5 + looper * PACKET_LENGTH] = pinky_data.b[0];
+//      packet1[8 + looper * PACKET_LENGTH] = acc_x.b[0];
+//      packet1[9 + looper * PACKET_LENGTH] = acc_x.b[1];
+//      packet1[10 + looper * PACKET_LENGTH] = acc_y.b[0];
+//      packet1[11 + looper * PACKET_LENGTH] = acc_y.b[1];
+//      packet1[12 + looper * PACKET_LENGTH] = acc_z.b[0];
+//      packet1[13 + looper * PACKET_LENGTH] = acc_z.b[1];
+//      packet1[14 + looper * PACKET_LENGTH] = gyr_x.b[0];
+//      packet1[15 + looper * PACKET_LENGTH] = gyr_x.b[1];
+//      packet1[16 + looper * PACKET_LENGTH] = gyr_y.b[0];
+//      packet1[17 + looper * PACKET_LENGTH] = gyr_y.b[1];
+//      packet1[18 + looper * PACKET_LENGTH] = gyr_z.b[0];
+//      packet1[19 + looper * PACKET_LENGTH] = gyr_z.b[1];
+//    }
+//    else
+//    {
+//      //packet1[0 + looper * PACKET_LENGTH] = prev_ticks.b[0];
+//      packet2[0 + (looper-1) * PACKET_LENGTH] = thumb_data.b[0];
+//      packet2[1 + (looper-1) * PACKET_LENGTH] = thumb_data.b[1];
+//      packet2[2 + (looper-1) * PACKET_LENGTH] = index_data.b[0];
+//      packet2[3 + (looper-1) * PACKET_LENGTH] = index_data.b[1];
+//      packet2[4 + (looper-1) * PACKET_LENGTH] = middle_data.b[0];
+//      packet2[5 + (looper-1) * PACKET_LENGTH] = middle_data.b[1];
+//      packet2[6 + (looper-1) * PACKET_LENGTH] = ring_data.b[0];
+//      packet2[7 + (looper-1) * PACKET_LENGTH] = ring_data.b[1];
+//      //packet1[5 + looper * PACKET_LENGTH] = pinky_data.b[0];
+//      packet2[8 + (looper-1) * PACKET_LENGTH] = acc_x.b[0];
+//      packet2[9 + (looper-1) * PACKET_LENGTH] = acc_x.b[1];
+//      packet2[10 + (looper-1) * PACKET_LENGTH] = acc_y.b[0];
+//      packet2[11 + (looper-1) * PACKET_LENGTH] = acc_y.b[1];
+//      packet2[12 + (looper-1) * PACKET_LENGTH] = acc_z.b[0];
+//      packet2[13 + (looper-1) * PACKET_LENGTH] = acc_z.b[1];
+//      packet2[14 + (looper-1) * PACKET_LENGTH] = gyr_x.b[0];
+//      packet2[15 + (looper-1) * PACKET_LENGTH] = gyr_x.b[1];
+//      packet2[16 + (looper-1) * PACKET_LENGTH] = gyr_y.b[0];
+//      packet2[17 + (looper-1) * PACKET_LENGTH] = gyr_y.b[1];
+//      packet2[18 + (looper-1) * PACKET_LENGTH] = gyr_z.b[0];
+//      packet2[19 + (looper-1) * PACKET_LENGTH] = gyr_z.b[1];
+//
+//    }
+//
+//
+//    if (looper == DATA_PER_PACKET-3)
+//    {
+//      // Transmit every 4 DATA_REFRESH_MS milliseconds
+//      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet1, TXRX_BUF_LEN);
+//      ble.updateCharacteristicValue(rx_characteristic.getValueAttribute().getHandle(), packet2, TXRX_BUF_LEN);
+//    }
+//
+//    looper = (looper + 1) % (DATA_PER_PACKET);
     break;
   }  
   }
@@ -414,7 +489,7 @@ void setup() {
   //Serial.println("Success");
   digitalWrite(D13,HIGH);
   looper = 0;                                       // Initialize Looper
-  prev_ticks.value = (uint16_t)millis();
+  prev_ticks.value = millis();
   packet1[0] = 0x01;
   packet2[0] = 0x01;
   ticker_task1.attach_us(periodic_callback, DATA_REFRESH_RATE_MS * 1000); // Initialize Timer (calls periodic_callback)

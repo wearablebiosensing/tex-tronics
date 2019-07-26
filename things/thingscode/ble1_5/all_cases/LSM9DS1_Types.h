@@ -52,7 +52,7 @@ enum gyro_scale
 // mag_scale defines all possible FSR's of the magnetometer:
 enum mag_scale
 {
-	M_SCALE_4GS, 	// 00:  4Gs
+	M_SCALE_4GS, 	// 00:  4Gauss
 	M_SCALE_8GS,	// 01:  8Gs
 	M_SCALE_12GS,	// 10:  12Gs
 	M_SCALE_16GS,	// 11:  16Gs

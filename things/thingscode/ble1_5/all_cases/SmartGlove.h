@@ -8,7 +8,7 @@
 #define FALSE 1==0
 #endif
 
-#define DEVICE_NAME           "flexonly"  // Local Device Name
+#define DEVICE_NAME           "LEFT_GlOVE"  // Local Device Name
 #define TXRX_BUF_LEN          20            // BLE Packet Length
 #define DATA_REFRESH_RATE_MS  8           // Delay between data collection (milliseconds)
 #define DATA_PER_PACKET       4             // Number of data points sent/packet
@@ -16,7 +16,7 @@
 
 typedef union _sg_time {
   uint8_t b[4];
-  long value;
+  unsigned long value;
 } sg_time_t;                                // Container for Timestamp
 
 typedef union _sg_dif {
