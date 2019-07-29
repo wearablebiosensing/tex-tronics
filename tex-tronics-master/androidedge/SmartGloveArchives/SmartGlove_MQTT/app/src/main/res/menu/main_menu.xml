@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item-->
+        <!--android:id="@+id/reconnect"-->
+        <!--android:showAsAction="ifRoom"-->
+        <!--android:title="@string/reconnect" />-->
+    <!--<item android:id="@+id/ble_disconnect"-->
+        <!--android:title="@string/ble_disconnect"-->
+        <!--android:showAsAction="ifRoom"/>-->
+    <item android:id="@+id/change_name"
+        android:title="@string/change_name"
+        android:showAsAction="ifRoom"/>
+</menu>

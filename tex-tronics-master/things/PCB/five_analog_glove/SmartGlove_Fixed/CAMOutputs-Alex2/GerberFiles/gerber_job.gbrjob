@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2019-01-14T21:19:19Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.2.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "SmartGlove_Compact"
+        },
+        "Owner": "alex gray <alex_gray@my.uri.edu>",
+        "Size": {
+            "X": 50,
+            "Y": 34.43
+        }
+    }
+}

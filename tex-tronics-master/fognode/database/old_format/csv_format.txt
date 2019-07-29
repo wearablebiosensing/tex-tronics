@@ -1,0 +1,16 @@
+{
+"Date":" timestamp in format 07-23-2018 11:37:26:886"
+"Sensor_ID":" mac addresss "
+"Exercise_ID":"one from [
+                "Finger Tap" 
+                "Closed Grip"
+                "Hand Flip"
+                "Screen Tap" 
+                "Heel Tap"
+                "Toe Tap"
+                "Foot Stomp" 
+                "Walk Steps"
+            ]"
+"Data":"CSV format of Device Address,Exercise,Timestamp,Thumb,Index,Middle,Ring,Pinky"
+}
+
