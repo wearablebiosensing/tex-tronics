@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayDeque;
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container, new HomeFragment(), "HomeFragment");
         fragmentTransaction.commit();
+        //TextView connectionText = (TextView) findViewById(R.id.connectionText);
+
     }
 
     /**
@@ -324,6 +328,7 @@ public class MainActivity extends AppCompatActivity
 
     private TexTronicsUpdateReceiver mTexTronicsUpdateReceiver = new TexTronicsUpdateReceiver()
     {
+
         /** onReceive()
          *
          * Called automatically once there is a change of state with either the connection to a
@@ -381,8 +386,17 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
             if(counter == 2){
-                Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_SHORT).show();
-                DeviceConection = 1;
+
+                TextView connectionText = (TextView) findViewById(R.id.connectionText);
+
+
+                connectionText.setText("CONNECTED TO BOTH DEVICES.");
+                //connectionText.setVisibility(View.INVISIBLE);
+
+
+                Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_LONG).show();
+               // DeviceConection = 1;
+
             }
         }
     };

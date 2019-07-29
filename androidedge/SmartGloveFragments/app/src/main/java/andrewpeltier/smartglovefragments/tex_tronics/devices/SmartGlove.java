@@ -8,8 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import andrewpeltier.smartglovefragments.ble.GattDevices;
@@ -107,12 +109,12 @@ public class SmartGlove extends TexTronicsDevice
         /* Create 6 different files for 6 different exercises.
          *  How to get the exercise name.?
          * */
-        create_files( id,  exerciseName, flag);
 
 
+        create_files( id,  exerciseName, flag, mDeviceAddress);
 
     }
-    public void create_files(int id, String exerciseName,int flag){
+    public void create_files(int id, String exerciseName,int flag,String deviceAddress){
 
 
         Date date = Calendar.getInstance().getTime();
@@ -130,9 +132,8 @@ public class SmartGlove extends TexTronicsDevice
         String[] deviceAddressList = MainActivity.getmDeviceAddressList();
 
 
-
         //Log.e("Data log DEVICE TYPE CONNECTION=", gattDevices);
-        String existingDevice = null;
+       String existingDevice = null;
         for(int i = 0; i <deviceAddressList.length; i++ ) {
 
             existingDevice = deviceAddressList[i];
@@ -146,15 +147,50 @@ public class SmartGlove extends TexTronicsDevice
             } else if (existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR)) {
                 exerciseDeviceType = "RIGHT_SHOE_";
             }
+
         }
 
+       /* Log.e("mDeviceAddress!=", mDeviceAddress);
+        List<String> device_name = new ArrayList<>();
+        // String device_name = "";
+        if(mDeviceAddress=="D4:72:11:8B:5A:4D"){
+            device_name.set(1,"LEFT_GLOVE_"); //= "LEFT_GLOVE_";
+        }
+        if(mDeviceAddress=="EA:EB:C9:B6:1F:5A"){
+            device_name.set(1,"RIGHT_GLOVE");
+        }
+        else{
+            device_name.set(1,"NoDevice");
+
+        }*/
 
 
         /* Debug statements... */
         Log.e("Data log FLAG!!=", String.valueOf(flag));
-        Log.e("Data log DEVICE TYPE=", exerciseDeviceType);
+        //Log.e("Data log DEVICE TYPE=", device_name.get(0));
         Log.e("Data log EXERCISE NAME=", exerciseName.toString());
         Log.e("Data log ID NUMBER=", String.valueOf(id));
+
+        String fileName = dateString + "/" + String.valueOf(id) + "/" + timeString + "_" + "Glove_" + exerciseName + ".csv";
+
+        File parentFile = new File( "/storage/emulated/0/Documents");    // FIXME
+        File file = new File(parentFile, fileName);
+        setCsvFile(file);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file, true);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            outputStreamWriter.write(mHeader);
+            // outputStreamWriter.write(mData.toString());
+
+            outputStreamWriter.close();
+            Log.d("","Creating new CSV file");
+
+        }catch (IOException e){
+
+            Log.d( "", "NOT Creating new CSV");
+            e.printStackTrace();
+        }
+
 
 
 
@@ -167,12 +203,12 @@ public class SmartGlove extends TexTronicsDevice
 //        }
 
         //  for(int i = 0 ; i <exerciseName.length();i++){
-        String fileName = dateString + "/" + String.valueOf(id) + "/" + timeString + "_" + exerciseDeviceType + exerciseName + ".csv";
+        /*String fileName = dateString + "/" + String.valueOf(id) + "/" + timeString + "_" + device_name + exerciseName + ".csv";
 
         File parentFile = new File( "/storage/emulated/0/Documents");    // FIXME
         File file = new File(parentFile, fileName);
         setCsvFile(file);
-
+/*
 
         /*  Set the header according to the exercises. */
 //        if(flag == 1 || flag ==0 ){
@@ -181,20 +217,20 @@ public class SmartGlove extends TexTronicsDevice
 //        else if(flag == 2){
 //            header = header_imuonly;
 //        }
-        try {
-            FileOutputStream outputStream = new FileOutputStream(file, true);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-            outputStreamWriter.write(mHeader);
-           // outputStreamWriter.write(mData.toString());
-
-            outputStreamWriter.close();
-            Log.d("","Creating new CSV file");
-
-        }catch (IOException e){
-
-            Log.d( "", "NOT Creating new CSV");
-            e.printStackTrace();
-        }
+//        try {
+//            FileOutputStream outputStream = new FileOutputStream(file, true);
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+//            outputStreamWriter.write(mHeader);
+//           // outputStreamWriter.write(mData.toString());
+//
+//            outputStreamWriter.close();
+//            Log.d("","Creating new CSV file");
+//
+//        }catch (IOException e){
+//
+//            Log.d( "", "NOT Creating new CSV");
+//            e.printStackTrace();
+//        }
 
         //}
 

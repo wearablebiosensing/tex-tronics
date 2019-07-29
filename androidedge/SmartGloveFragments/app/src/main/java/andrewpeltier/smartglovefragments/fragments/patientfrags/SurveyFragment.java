@@ -65,7 +65,8 @@ public class SurveyFragment extends Fragment {
         age_text = view.findViewById(R.id.age_text);
         year_text = view.findViewById(R.id.years_text);
         mnth_text = view.findViewById(R.id.months_text);
-        time_text = view.findViewById(R.id.time_text);
+        //time_text = view.findViewById(R.id.time_text);
+
         amount_text = view.findViewById(R.id.amount_text);
         comments_text = view.findViewById(R.id.comments_text);
 
@@ -75,6 +76,7 @@ public class SurveyFragment extends Fragment {
         radioGender = view.findViewById(R.id.gen_group);
         radioHand = view.findViewById(R.id.handed_group);
         radioOn_Off = view.findViewById(R.id.feeling_group);
+
 
         radioGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()  {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -134,6 +136,7 @@ public class SurveyFragment extends Fragment {
             }
         });
 
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,8 +146,8 @@ public class SurveyFragment extends Fragment {
                 age_str = age_text.getText().toString();
                 year_str = year_text.getText().toString();
                 mon_str = mnth_text.getText().toString();
-                time_str = time_text.getText().toString();
-                amount_str = amount_text.getText().toString();
+               // time_str = time_text.getText().toString();
+                //amount_str = amount_text.getText().toString();
                 _comments = comments_text.getText().toString();
 
                 try {
@@ -159,6 +162,15 @@ public class SurveyFragment extends Fragment {
                     //UnCOMMENT THIS!!!!!!
                     //empty = true;
                 }
+                List<Integer> ident = new ArrayList<>();
+                try {
+                    ident  = UserRepository.getInstance(getActivity().getApplicationContext()).getAllIdentities();
+                }
+                catch(Exception e){
+                    Log.d(TAG, "onClick: Error with identities");
+                }
+                //patient id on the form.
+                //time_text.setText(Integer.toString(ident.size()));
 
 
                 if(empty){
@@ -173,35 +185,26 @@ public class SurveyFragment extends Fragment {
                     User user = new User(_age,m_f,r_l,dur_len,_time,o_f, _amount, _comments);
                     UserRepository.getInstance(getActivity().getApplicationContext()).insertUsr(_age,m_f,r_l,dur_len,_time, _amount, o_f,_comments);
 
-                    List<Integer> ident = new ArrayList<>();
-                    try {
-                        ident  = UserRepository.getInstance(getActivity().getApplicationContext()).getAllIdentities();
-                    }
-                    catch(Exception e){
-                        Log.d(TAG, "onClick: Error with identities");
-                    }
-
-                    Log.d(TAG, "onClick: IDENTITY" + Integer.toString(ident.size()));
 
 
                     String jsonPaitent = "Age: " + age_str + "," + " Gender: " + Integer.toString(m_f) + ","+ " Duration: " + Integer.toString(dur_len) + "," + " Handedness: "+
-                            Integer.toString(r_l) + "," + " Dose: " + time_str + "," + " Amount: " + amount_str + "," + " Feel: " + Integer.toString(o_f) + "," + " Comments: " + _comments + "\n";
+                            Integer.toString(r_l) + "," + " Patient ID: " + Integer.toString(ident.size()) + "," + " Amount: " + amount_str + "," + " Feel: " + Integer.toString(o_f) + "," + " Comments: " + _comments + "\n";
 
 
                     myStudyLog = new StudyLog();
                     myStudyLog.StudyLog(ident.size(), jsonPaitent);
 
-                    String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_Tap","Finger_Tap", "Closed_Grip", "Closed_Grip"
-                            ,"Hand_Flip"/*,"Heel_Stomp","Toe_Tap","Walk_Steps"*/};
+                    String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_to_Nose","Finger_Tap","Finger_Tap", "Closed_Grip", "Closed_Grip"
+                            ,"Hand_Flip","Hand_Flip"/*,"Heel_Stomp","Toe_Tap","Walk_Steps"*/};
 
 
                     // Takes exercises from list and sends them to Main Activity
 //                     String[] chosenExercises = new String[adapter.getCount()];
-                    for(int i = 0; i < studyExercises.length; i++)
-                    {
+                    for(int i = 0; i < studyExercises.length; i++) {
                         //chosenExercises[i] = adapter.getItem(i);
                         exerciseModes.add(ExerciseMode.FLEX_IMU.toString());
                     }
+
                     /*exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.IMU_ONLY.toString());
                     exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
@@ -219,8 +222,6 @@ public class SurveyFragment extends Fragment {
                     ((MainActivity)getActivity()).startExercise();
                 }
             }
-
-
 
         });
 

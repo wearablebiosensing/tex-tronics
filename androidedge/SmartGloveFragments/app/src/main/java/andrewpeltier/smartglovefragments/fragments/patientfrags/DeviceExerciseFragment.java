@@ -38,6 +38,7 @@ import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import pl.droidsonroids.gif.GifImageView;
 
+
 import java.io.File;  //to create folders on device file management.
 
 
@@ -73,6 +74,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
     private Button disconnectBtn, nextButton;               // View buttons
     private GifImageView sideImage;                         // Animated GIF specific to exercise
     private TextView loadingText;
+    private TextView timerText;
     private EditText score_text;
     private String score_str;
 
@@ -110,7 +112,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         loadingText = view.findViewById(R.id.loadingText);
         score_text = view.findViewById(R.id.score_value);
-
+        timerText = view.findViewById(R.id.timer);
         //Create a DataLog object.
        // DataLog dataLog;
 
@@ -140,7 +142,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // TODO: Countdown timer:--
         // Starts logging if the devices are connected
         if(MainActivity.CONNECTED){
-            //startTimer();
+            startTimer();
             //startTimerMedia();
         }
 
@@ -222,13 +224,15 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
         // Sets up the "Next" button
         nextButton = view.findViewById(R.id.next_button);
+
         nextButton.setOnClickListener(new View.OnClickListener()
         {
             /** onClick() for "Next" button
              *
              * Once clicked, the "Next" button will publish the data collected from this exercise,
              * meaning all data collected since START_LOG was set to true, to the MQTT server and
-             * local CSV files. The START_LOG is then set to false to prevent further data logging,
+             * local C
+             * SV files. The START_LOG is then set to false to prevent further data logging,
              * and we move to the next exercise.
              *
              * @param view          -DeviceExerciseFragment View
@@ -236,6 +240,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             @Override
             public void onClick(View view)
             {
+
                 score_str = score_text.getText().toString();
                 //score = Float.parseFloat(score_str);
 
@@ -463,7 +468,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             public void onTick(long l)
             {
                 Log.v(TAG, "Tick: " + countdown);
-                loadingText.setText("" + countdown);
+                timerText.setText("" + countdown);
+                loadingText.setVisibility(View.INVISIBLE);
+                loadingText.setText("Collecting data...");
                 countdown--;
             }
 
@@ -472,7 +479,10 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             {
                 START_LOG = true;
 //                graph.setVisibility(View.VISIBLE);
-                loadingText.setText("Collecting data...");
+                loadingText.setVisibility(View.VISIBLE);
+
+                //loadingText.setText("Collecting data...");
+                //loadingText.setText("Loading...");
                 sideImage.setVisibility(View.VISIBLE);
             }
         };
@@ -490,6 +500,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 public void onTick(long l)
                 {
                     START_LOG = true;
+                    loadingText.setVisibility(View.VISIBLE);
+
                     Log.v(TAG, "Tick: " + countdown);
 
                     // loadingText.setText("" + countdown);
@@ -505,12 +517,15 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
                     // START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
+                    loadingText.setVisibility(View.VISIBLE);
+
                     loadingText.setText("Completed");
 
                     sideImage.setVisibility(View.INVISIBLE);
                 }
             };
             exe_Timer.start();
+            startTimer();
         }
         else if (name.equals("Resting_Hands_on_Thighs")){
 
@@ -547,6 +562,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 }
             };
             exe_Timer.start();
+            startTimer();
+
         }
 
         else if(name.equals("Heel_Stomp") || name.equals("Toe_Tap")||name.equals("Walk_Steps")){
@@ -575,6 +592,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                 }
             };
             exe_Timer1.start();
+            startTimer();
+
         }
 
     }
@@ -655,7 +674,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             }
             else if(action.equals(BluetoothLeConnectionService.GATT_STATE_CONNECTED))
             {
-                //startTimer();
+                startTimer();
             }
             else if(action.equals(BluetoothLeConnectionService.GATT_STATE_DISCONNECTED))
             {

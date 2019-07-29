@@ -14,8 +14,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.ble.GattDevices;
+import andrewpeltier.smartglovefragments.database.UserRepository;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
@@ -50,7 +54,7 @@ public class ExerciseInstructionFragment extends Fragment
     private Button startExerciseButton;         // Button that starts the exercise when the user is ready
     private TextView instrText;                 // Instructions to the user on how to complete the exercise
     private GifImageView instrImage;            // Gif image that corresponds to the exercise
-
+    private TextView patient_id;
 
     /** onCreateView()
      *
@@ -70,6 +74,7 @@ public class ExerciseInstructionFragment extends Fragment
         startExerciseButton = view.findViewById(R.id.start_exercise_button);
         instrImage = view.findViewById(R.id.stexercise_side_image);
         instrText = view.findViewById(R.id.instructions_text);
+        patient_id = view.findViewById(R.id.patientid);
 
         // Sets up the image according to the exercise name
         exerciseName = MainActivity.exercise_name;
@@ -82,7 +87,14 @@ public class ExerciseInstructionFragment extends Fragment
 
         // Connect to the appropriate device(s)
         checkConnection(MainActivity.exercise_mode);
-
+        List<Integer> ident = new ArrayList<>();
+        try {
+            ident  = UserRepository.getInstance(getActivity().getApplicationContext()).getAllIdentities();
+        }
+        catch(Exception e){
+            Log.d(TAG, "onClick: Error with identities");
+        }
+        patient_id.setText(Integer.toString(ident.size()));
 
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
