@@ -1,4 +1,4 @@
-# tex-tronics
+# Tex-tronics
 
 please see wiki for details
 
