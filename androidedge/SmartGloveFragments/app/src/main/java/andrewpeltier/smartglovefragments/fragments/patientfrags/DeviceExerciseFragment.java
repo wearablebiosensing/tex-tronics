@@ -142,7 +142,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
         // TODO: Countdown timer:--
         // Starts logging if the devices are connected
         if(MainActivity.CONNECTED){
-            startTimer();
+            //startTimer();
             //startTimerMedia();
         }
 
@@ -469,8 +469,8 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             {
                 Log.v(TAG, "Tick: " + countdown);
                 timerText.setText("" + countdown);
+                //Set loading to invisible.
                 loadingText.setVisibility(View.INVISIBLE);
-                loadingText.setText("Collecting data...");
                 countdown--;
             }
 
@@ -479,8 +479,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             {
                 START_LOG = true;
 //                graph.setVisibility(View.VISIBLE);
+                timerText.setText("Go");
                 loadingText.setVisibility(View.VISIBLE);
-
+                loadingText.setText("Collecting data...");
                 //loadingText.setText("Collecting data...");
                 //loadingText.setText("Loading...");
                 sideImage.setVisibility(View.VISIBLE);
@@ -505,7 +506,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     Log.v(TAG, "Tick: " + countdown);
 
                     // loadingText.setText("" + countdown);
-                    loadingText.setText("Collecting data...");
+                    //loadingText.setText("Collecting data...");
 
                     countdown--;
                 }
@@ -540,7 +541,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     START_LOG = true;
                     Log.v(TAG, "Tick: " + countdown);
                     // loadingText.setText("" + countdown);
-                    loadingText.setText("Collecting data...");
+                   // loadingText.setText("Collecting data...");
                     //Starts recording the media once the Resting Hands on Thighs exercise has been started.
                     start_rec();
                     countdown--;
