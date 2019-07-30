@@ -68,7 +68,7 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:hint="Waiting for Connection....."
         android:textAlignment="center"
-        android:textColor="#B4310A"
+        android:textColor="#2CE231"
         android:textColorHint="#F5E03E"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/start_exercise_button"
@@ -81,12 +81,12 @@
     <TextView
         android:id="@+id/patientid"
         android:layout_width="67dp"
-        android:layout_height="25dp"
+        android:layout_height="22dp"
         android:layout_marginTop="72dp"
         android:layout_marginEnd="68dp"
         android:hint="Patient ID"
         android:textAlignment="textStart"
-        android:textColor="#B6320B"
+        android:textColor="#2CE231"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/stexercise_side_image"
         app:layout_constraintTop_toTopOf="parent" />
@@ -100,10 +100,10 @@
         android:layout_marginEnd="8dp"
         android:text="Patient ID:"
         android:textAllCaps="true"
-        android:textColor="#E04214"
+        android:textColor="#2CE231"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/patientid"
-        app:layout_constraintHorizontal_bias="0.425"
+        app:layout_constraintHorizontal_bias="0.914"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
