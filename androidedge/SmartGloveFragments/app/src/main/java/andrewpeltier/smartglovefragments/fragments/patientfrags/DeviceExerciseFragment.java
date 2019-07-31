@@ -467,6 +467,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             @Override
             public void onTick(long l)
             {
+                START_LOG = true;
                 Log.v(TAG, "Tick: " + countdown);
                 timerText.setText("" + countdown);
                 //Set loading to invisible.
