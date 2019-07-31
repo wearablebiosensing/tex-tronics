@@ -477,7 +477,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             @Override
             public void onFinish()
             {
-                START_LOG = true;
+                //START_LOG = true;
 //                graph.setVisibility(View.VISIBLE);
                 timerText.setText("Go");
                 loadingText.setVisibility(View.VISIBLE);
@@ -519,8 +519,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
                     // START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
                     loadingText.setVisibility(View.VISIBLE);
+                    timerText.setVisibility(View.INVISIBLE);
 
-                    loadingText.setText("Completed");
+                    loadingText.setText("Stop");
 
                     sideImage.setVisibility(View.INVISIBLE);
                 }
@@ -554,7 +555,9 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
 
                     // START_LOG = false;
 //                graph.setVisibility(View.VISIBLE);
-                    loadingText.setText("Completed");
+                    timerText.setVisibility(View.INVISIBLE);
+
+                    loadingText.setText("Stop");
                     sideImage.setVisibility(View.INVISIBLE);
                     //Stops recording the media once the Resting Hands on Thighs exercise has been started.
                     stop_rec();
