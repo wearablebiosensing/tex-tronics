@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Main Colors -->
-    <color name="colorPrimary">#0926C5</color> // #37c90a
-    <color name="colorPrimaryDark">#373ded</color> // #388e3c
+    <color name="colorPrimary">#ede7ee</color>  //#0926C5  // #37c90a
+    <color name="colorPrimaryDark"> #ed6d3e</color> // #373ded // #388e3c
     <color name="colorPrimaryLight">#C8E6C9</color>
     <color name="colorAccent">#03A9F4</color>
-    <color name="White">#ffffff</color>
+    <color name="White">#010101</color>
+    <color name="text">#010101</color>
     <color name="secondaryText">#757575</color>
     <color name="col1">#42D9C8</color>
     <color name="col3">#0B7189</color>
     <color name="col4">#28464B</color>
-
+<color name="Button">#d6d7d7</color>
+    <color name="Notifications"> #f1974b</color>
     <!-- Exercise Selection Colors -->
     <color name="grayIconTint">#727272</color>
 
