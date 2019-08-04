@@ -74,8 +74,8 @@
 
     <TextView
         android:id="@+id/testView"
-        android:layout_width="91dp"
-        android:layout_height="30dp"
+        android:layout_width="98dp"
+        android:layout_height="35dp"
         android:layout_marginStart="170dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -109,8 +109,8 @@
 
     <TextView
         android:id="@+id/timer"
-        android:layout_width="245dp"
-        android:layout_height="127dp"
+        android:layout_width="246dp"
+        android:layout_height="129dp"
         android:layout_marginStart="84dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App Main Colors -->
+    <!-- App Main Colors: Color scheme 1 -->
     <color name="colorPrimary">#ede7ee</color>  //#0926C5  // #37c90a
     <color name="colorPrimaryDark"> #ed6d3e</color> // #373ded // #388e3c
     <color name="colorPrimaryLight">#C8E6C9</color>

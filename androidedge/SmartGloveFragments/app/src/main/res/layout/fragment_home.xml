@@ -58,7 +58,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintHorizontal_bias="0.471"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/smartglovelogo" />

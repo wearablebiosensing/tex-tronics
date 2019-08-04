@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ede7ee "
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
 
@@ -28,12 +28,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="#ede7ee "
+            android:background="@color/colorPrimary"
             android:fontFamily="monospace"
             android:lineSpacingExtra="30sp"
             android:text="Enter patient information"
             android:textAlignment="center"
-            android:textColor="#010101 "
+            android:textColor="@color/White"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -59,7 +59,7 @@
             android:layout_weight="1"
             android:text="Age:    "
             android:textAlignment="viewEnd"
-            android:textColor="@color/text"
+            android:textColor="@color/White"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -98,7 +98,7 @@
             android:layout_weight="1"
             android:text="Gender:"
             android:textAlignment="center"
-            android:textColor="@color/text"
+            android:textColor="@color/White"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -135,9 +135,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Affected side"
+            android:text="Handedness"
             android:textAlignment="center"
-            android:textColor="@color/text"
+            android:textColor="@color/White"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Left"
-                android:textColor="@color/text"
+                android:textColor="@color/White"
                 android:textSize="18sp"
                 android:theme="@style/RadioButtonStyle" />
 
@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Right"
-                android:textColor="@color/text"
+                android:textColor="@color/White"
                 android:textSize="18sp"
                 android:theme="@style/RadioButtonStyle" />
         </RadioGroup>
@@ -185,18 +185,18 @@
 
         <TextView
             android:id="@+id/duration_str"
-            android:layout_width="147dp"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Diagnosis Duration:"
             android:textAlignment="center"
-            android:textColor="@color/text"
+            android:textColor="@color/White"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/months_text"
-            android:layout_width="40dp"
+            android:layout_width="176dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
@@ -210,8 +210,8 @@
 
         <EditText
             android:id="@+id/years_text"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
+            android:layout_width="14dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_weight="1"
@@ -246,7 +246,7 @@
             android:layout_weight="1"
             android:text="How does the paitent feel?"
             android:textAlignment="center"
-            android:textColor="@color/text"
+            android:textColor="@color/White"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -263,7 +263,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="On"
-                android:textColor="@color/text"
+                android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:theme="@style/RadioButtonStyle" />
@@ -274,7 +274,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="Off"
-                android:textColor="@color/text"
+                android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:theme="@style/RadioButtonStyle" />
@@ -285,7 +285,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="Unsure"
-                android:textColor="@color/text"
+                android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:theme="@style/RadioButtonStyle" />
@@ -353,7 +353,6 @@
             android:layout_marginLeft="200dp"
             android:layout_marginRight="200dp"
             android:layout_weight="1"
-            android:background="@color/Button"
             android:text="Next" />
     </LinearLayout>
 
