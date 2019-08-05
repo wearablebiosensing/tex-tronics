@@ -84,8 +84,9 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction fragmentTransaction;    // Changes the fragments
     private String mFragmentTag;                        // Name of the fragment currently in use
     String deviceAddress;
-    int counter;
+    public static int counter;
     public static int DeviceConection = 0;
+
 
     /** onCreate()
      *
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity
 
             if(exercise_name != null)
                 addFragment(new ExerciseInstructionFragment(), "ExerciseInstructionFragment");
+
         }
         // No exercises left, go to the finish screen
         else {
@@ -340,6 +342,7 @@ public class MainActivity extends AppCompatActivity
         @Override
 
         public void onReceive(Context context, Intent intent) {
+
             if(intent == null || !intent.hasExtra(UPDATE_DEVICE) || !intent.hasExtra(UPDATE_TYPE)) {
                 Log.w(TAG,"Invalid Update Received");
                 return;
@@ -385,19 +388,16 @@ public class MainActivity extends AppCompatActivity
                     Log.w(TAG, "Unknown Update Received");
                     break;
             }
+
             if(counter == 2){
-
-                TextView connectionText = (TextView) findViewById(R.id.connectionText);
-
+                TextView connectionText  = findViewById(R.id.connectionText);
 
                 connectionText.setText("CONNECTED TO BOTH DEVICES.");
-                //connectionText.setVisibility(View.INVISIBLE);
-
-
                 Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_LONG).show();
-               // DeviceConection = 1;
 
             }
+
+
         }
     };
 

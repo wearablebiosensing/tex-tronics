@@ -56,6 +56,8 @@ public class ExerciseInstructionFragment extends Fragment
     private GifImageView instrImage;            // Gif image that corresponds to the exercise
     private TextView patient_id;
 
+
+
     /** onCreateView()
      *
      * Called when the view is first created. We use the fragment_exercise_instruction XML file to load the view and its
@@ -81,6 +83,8 @@ public class ExerciseInstructionFragment extends Fragment
         if (exerciseName != null) {
             setSideViews(exerciseName);
         }
+       // Toast.makeText(context, "Main activity COUNTER EIF==" + MainActivity.counter,Toast.LENGTH_LONG).show();
+        Log.d(TAG, "Main activity COUNTER EIF== " +  MainActivity.counter);
 
         Log.d(TAG, "MainActivity.exercise_mode  ===== " + MainActivity.exercise_mode);
 
