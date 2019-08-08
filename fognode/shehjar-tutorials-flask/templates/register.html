@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style> /* set the CSS */</style>
+
+  <body>
+    <h1 >Register here </h1>
+    {% block body %}
+    {% from "includes/_formhelpers.html" import render_field %}
+
+    <form method="POST", action="">
+      <div class = "form-group">
+        <!-- wtf form syntax here .-->
+        {{render_field(form.name , class_="form-control" )}}
+      </div>
+      <div class = "form-group">
+        <!-- wtf form syntax here .-->
+        {{render_field(form.email , class_="form-control" )}}
+      </div>
+      <div class = "form-group">
+        <!-- wtf form syntax here .-->
+        {{render_field(form.password , class_="form-control" )}}
+      </div>
+      <div class = "form-group">
+        <!-- wtf form syntax here .-->
+        {{render_field(form.comfirm , class_="form-control" )}}
+      </div>
+      <button onclick="window.location.href='{{ url_for( 'home' ) }}'" >  Submit </button>
+
+    </form>
+
+    {% endblock %}
+
+  </body>
