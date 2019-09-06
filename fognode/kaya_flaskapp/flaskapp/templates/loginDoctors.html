@@ -1,0 +1,34 @@
+
+{% extends "layout.html" %}
+
+{%block content%}
+        <div>
+      <form method= "POST",action="">
+         {{form.hidden_tag()}}
+        <fieldset class ="form-group">
+            <legend class="boder-bottom mb-4">Login here</legend>
+
+          <div class ="form-group">
+
+             {{form.email.label(class ="form-control-label")}}
+             {{form.email(class ="form-control form-control-lg")}}
+            </div>
+            <div class ="form-group">
+
+             {{form.password.label(class ="form-control-label")}}
+             {{form.password(class ="form-control form-control-lg")}}
+              </div>
+        </fieldset>
+          <div class ="form-group" >
+                {{ form.submit(class ="btn btn-outline-info") }}
+            </div>
+              <div class = "boder-top pt-3">
+                    <small class="text-muted">
+                        Need to register ?
+                        <a class ="ml-2" href="{{url_for('register_doctors')}}"> Sign up </a>
+                       </small>
+                    </div>
+    </form>
+
+    </div>
+{%endblock content%}

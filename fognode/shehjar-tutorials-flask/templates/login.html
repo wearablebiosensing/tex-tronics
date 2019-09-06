@@ -1,4 +1,11 @@
 
+<!--
+###########################
+#  Author @Shehjar Sadhu  #
+#  Date August 8th 2019   #
+###########################
+-->
+
 <!DOCTYPE html>
 <h1>Please log in <h1>
   <form action = " " method = "POST" >
@@ -6,5 +13,5 @@
     <br>
     Password <input type="password" name="password" value={{request.form.password}}/>
     <br>
-    <input type="submit">
+    <button  onclick="window.location.href='{{ url_for( 'profile')}}" type="submit"> submit</button>
   </form>

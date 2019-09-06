@@ -1,15 +1,18 @@
+<!--
+###########################
+#  Author @Shehjar Sadhu  #
+#  Date August 8th 2019   #
+###########################
+-->
+
 <!DOCTYPE html>
 <html>
 <title>
   Profiles
     </title>
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = "style.css")}}">
-
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = "style.css")}"}/>
        <body>
-             <h1> Hello {{ name }}</h1>
-             <h1> Your email is  {{ email }}</h1>
-             <button> Finger tap </button>
-             <button onclick="window.location.href='{{ url_for( 'home' ) }}'"> Log out </button>
-
+             <h1> Hello {{ session.name }}</h1>
+             <button onclick="window.location.href='{{ url_for('home')}}'"> Log out </button>
        </body>
     </html>

@@ -1,3 +1,9 @@
+<!--
+###########################
+#  Author @Shehjar Sadhu  #
+#  Date August 8th 2019   #
+###########################
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,30 +12,28 @@
 
   <body>
     <h1 >Register here </h1>
-    {% block body %}
-    {% from "includes/_formhelpers.html" import render_field %}
-
-    <form method="POST", action="">
-      <div class = "form-group">
-        <!-- wtf form syntax here .-->
-        {{render_field(form.name , class_="form-control" )}}
-      </div>
-      <div class = "form-group">
-        <!-- wtf form syntax here .-->
-        {{render_field(form.email , class_="form-control" )}}
-      </div>
-      <div class = "form-group">
-        <!-- wtf form syntax here .-->
-        {{render_field(form.password , class_="form-control" )}}
-      </div>
-      <div class = "form-group">
-        <!-- wtf form syntax here .-->
-        {{render_field(form.comfirm , class_="form-control" )}}
-      </div>
-      <button onclick="window.location.href='{{ url_for( 'home' ) }}'" >  Submit </button>
-
-    </form>
-
-    {% endblock %}
+    {% block content %}
+    <div>
+      <form method= "POST",action="">
+          <!-- {{form.hidden_tag()}}-->
+        <fieldset>
+          <div>
+         {{form.name.label}}
+          </div>
+          <div>
+              {{form.name.email}}
+            </div>
+            <div>
+                {{form.name.password}}
+              </div>
+              <div>
+                  {{form.name.comfirm}}
+                </div>
+              <button href= "{{url_for('home')}}" >
+                  {{form.name.submit}}
+                </button>
+        </fieldset>
+    </div>
+    {% endblock content %}
 
   </body>

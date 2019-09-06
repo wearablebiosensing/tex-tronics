@@ -1,5 +1,5 @@
 kaya/patient/data
-{
+;{
 "Date":" timestamp in format 07-23-2018 11:37:26:886"
 "Session_UUID":"UUID for the session"
 "Exercise_UUID":"UUID for exercise (to allow combination of multiple devices into a single exercise package)"
