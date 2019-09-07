@@ -25,19 +25,19 @@
               <div class ="form-group">
                   {{form.comfirm.label(class ="form-control-label")}}
                   {{form.comfirm(class ="form-control form-control-lg")}}
-                </div>
-              
+              </div>
         </fieldset>
         <div class ="form-group" >
-            {{ form.submit(class ="btn btn-outline-info") }}
-        </div>
+          {{ form.submit(class ="btn btn-outline-info") }}
+      </div>
+      </form>
+
           <div class = "boder-top pt-3">
                   <small class="text-muted">
                       Already have an account?
                       <a class ="ml-2" href="{{url_for('login_doctors')}}"> Sign in </a>
                      </small>
                   </div>
-    </form>
 
     </div>
 {%endblock content%}
