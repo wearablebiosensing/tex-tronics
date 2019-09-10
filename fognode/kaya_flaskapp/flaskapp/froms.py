@@ -1,8 +1,8 @@
 
 from flask_wtf import FlaskForm
 from wtforms import  StringField, TextAreaField, PasswordField, validators,SubmitField  #for form validation.
-from wtforms.validators import DataRequired, Length, EqualTo, Email
-
+from wtforms.validators import DataRequired, Length, EqualTo, Email,ValidationError
+from flaskapp.models import UserDoctor 
 
 # Register Form class specifies all the fields for the wtf forms.
 class RegisterFormDoctors(FlaskForm):
@@ -16,6 +16,18 @@ class RegisterFormDoctors(FlaskForm):
                     EqualTo('password', 
                     message = "Passwords do not match")] )
     submit = SubmitField("Sign up")
+    
+    #This validates against any names or emails that are already taken.
+    def validate_username(self, name):
+        user = UserDoctor.query.filter_by(name=name.data).first()
+        if user:
+            raise ValidationError('That username is taken. Please choose a different one.')
+
+    def validate_email(self, email):
+        user = UserDoctor.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('That email is taken. Please choose a different one.')
+
 
 class LogInFormDoctors(FlaskForm):
 

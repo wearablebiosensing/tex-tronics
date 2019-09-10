@@ -1,9 +1,10 @@
 
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect,session,request
 from flaskapp.froms import RegisterFormDoctors, LogInFormDoctors
 from flaskapp import app,db,bcrypt
 from flaskapp.models import UserDoctor 
-from flask_login import login_user
+from flask_login import login_user, current_user, logout_user, login_required
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -11,33 +12,51 @@ def home():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
+#Registers the doctors and inserts their information in the database
 @app.route('/registerdoctor',methods = ["GET", "POST"])
 def register_doctors():
+    # If user is authenticated redirect url to home page.
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegisterFormDoctors()
-    
-    #if form valid print a message.
-    if form.is_submitted():
-        # Hash the password 
+    # If form is valid print a message and redirect the users to the log in page
+    if form.validate_on_submit():
+        # Generate the hased the password using bcrypt API .
         pass_hash = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
-            # Create a new user instance.
+        # Create a new user instance.
         user = UserDoctor(name=form.name.data,email=form.email.data, password=pass_hash)
         db.session.add(user)
         db.session.commit()
-        flash(f"Account is created!","success")
+        flash(f"Account is created for {form.name.data}!","success")
         return redirect(url_for("login_doctors"))
+    #Else redirect back to the register page.
     return render_template('registerDoctors.html',form=form)
 
-@app.route('/logindoctor',methods = ["GET", "POST"])
+@app.route('/profile_doctors', methods = ["POST", "GET"])
+def doctor_profile():
+    form = LogInFormDoctors()
+    return render_template('doctors_profile.html',form=form)
+
+@app.route('/logindoctor',methods = ["POST", "GET"])
 def login_doctors():
+    # If user is authenticated redirect url to home page.
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LogInFormDoctors()
     user = UserDoctor.query.filter_by(email=form.email.data).first()
-    if form.is_submitted():
+    # Check is the fields in the form are valid.
+    if form.validate_on_submit():
+        # If they are valid then check if the user exists in the database and check if they entered the correct password.
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash(f"Logged in","success")
-            return redirect(url_for("home"))
+            flash(f"Logged in {form.email.data}","success")
+            return redirect(url_for("doctor_profile"))
+        #Else display error message.
         else:
             flash(f"Not logged in","danger")
-    
     return render_template('loginDoctors.html',form=form)
+
+@app.route('/signout',methods = ["GET", "POST"])
+def signout():
+    logout_user()
+    return redirect(url_for("home"))

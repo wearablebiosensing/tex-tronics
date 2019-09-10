@@ -18,9 +18,15 @@
 
           <a class="navbar-brand" href="{{url_for('home')}}">Home</a>
           <form class="form-inline">
-              <a href="{{url_for('register_doctors')}}" class="navbar-brand" >Register</a>
-              <a href="{{url_for('login_doctors')}}" class="navbar-brand" >Login</a>
-            </form>
+              {% if current_user.is_authenticated %}
+                  Hi {{ current_user.email }}!
+               <a href="{{url_for('signout')}}" class="navbar-brand" >Sign out</a>
+
+              {% else %}
+                <a href="{{url_for('register_doctors')}}" class="navbar-brand" >Register</a>
+                <a href="{{url_for('login_doctors')}}" class="navbar-brand" >Login</a>
+            {% endif %}
+              </form>
         </nav>
 </header>
 

@@ -7,9 +7,9 @@ def load_user(user_id):
     return UserDoctor.query.get(int())
 
 class UserDoctor(db.Model,UserMixin):
-    id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(1000))
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    name = db.Column(db.String(100),nullable=False)
+    email = db.Column(db.String(1000),nullable=False)
     password = db.Column(db.String(600),nullable=False)
 
     def __repr__(self):
