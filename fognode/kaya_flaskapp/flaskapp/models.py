@@ -12,5 +12,8 @@ class UserDoctor(db.Model,UserMixin):
     email = db.Column(db.String(1000),nullable=False)
     password = db.Column(db.String(600),nullable=False)
 
-    def __repr__(self):
-        return f"UserDoctor('{self.name}','{self.email}')"
+class ktube_db(db.Model,UserMixin):
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
+    data = db.Column(db.LargeBinary)
+

@@ -1,6 +1,6 @@
 
 from flask import render_template, url_for, flash, redirect,session,request
-from flaskapp.froms import RegisterFormDoctors, LogInFormDoctors
+from flaskapp.froms import RegisterFormDoctors, LogInFormDoctors, ktube_form
 from flaskapp import app,db,bcrypt
 from flaskapp.models import UserDoctor 
 from flask_login import login_user, current_user, logout_user, login_required
@@ -55,6 +55,15 @@ def login_doctors():
         else:
             flash(f"Not logged in","danger")
     return render_template('loginDoctors.html',form=form)
+
+@app.route('/ktube',methods = ["POST", "GET"])
+def upload_videos():
+    form = ktube_form()
+    file = request.files["inputFile"]
+    newFile = ktube_db(name=file.filename,data = file.read())
+    db.session.add(newFile)
+    db.session.commit()
+    return render_template('ktube.html',form=form)
 
 @app.route('/signout',methods = ["GET", "POST"])
 def signout():

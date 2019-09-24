@@ -2,7 +2,9 @@
 from flask_wtf import FlaskForm
 from wtforms import  StringField, TextAreaField, PasswordField, validators,SubmitField  #for form validation.
 from wtforms.validators import DataRequired, Length, EqualTo, Email,ValidationError
+from flask_wtf.file import FileField
 from flaskapp.models import UserDoctor 
+
 
 # Register Form class specifies all the fields for the wtf forms.
 class RegisterFormDoctors(FlaskForm):
@@ -38,3 +40,7 @@ class LogInFormDoctors(FlaskForm):
                  validators=[ DataRequired(), 
                   ])
     submit = SubmitField("Log in")
+
+class ktube_form(FlaskForm):
+    file = FileField()
+    submit = SubmitField("Upload")
