@@ -2,7 +2,7 @@
 from flask import render_template, url_for, flash, redirect,session,request
 from flaskapp.froms import RegisterFormDoctors, LogInFormDoctors, ktube_form
 from flaskapp import app,db,bcrypt
-from flaskapp.models import UserDoctor 
+from flaskapp.models import UserDoctor,ktube_db
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
@@ -56,15 +56,26 @@ def login_doctors():
             flash(f"Not logged in","danger")
     return render_template('loginDoctors.html',form=form)
 
-@app.route('/ktube',methods = ["POST", "GET"])
-def upload_videos():
-    form = ktube_form()
-    file = request.files["inputFile"]
-    newFile = ktube_db(name=file.filename,data = file.read())
-    db.session.add(newFile)
-    db.session.commit()
-    return render_template('ktube.html',form=form)
+#Check which file is uploaded by getting the file name from html.
+@app.route('/upload',methods = ["POST","GET"])
+def upload():
+    if request.method == "POST":
+        file = request.files['inputFile']
+        newFile = ktube_db(fileName=file.filename,data=file.read())
+        db.session.add(newFile)
+        db.session.commit()
+        return "Saved"+file.filename + "to the db"
+    return render_template('home.html') 
 
+#File uploader page.
+@app.route('/ktube',methods = ["POST","GET"])
+def kaya_tube():
+   form = ktube_form()
+   if request.method == "POST":
+       file = request.files['inputFile']
+       return file.filename
+   return render_template('ktube.html',form=form) 
+   
 @app.route('/signout',methods = ["GET", "POST"])
 def signout():
     logout_user()
