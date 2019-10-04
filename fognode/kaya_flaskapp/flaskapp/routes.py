@@ -15,9 +15,6 @@ def about():
 #Registers the doctors and inserts their information in the database
 @app.route('/registerdoctor',methods = ["GET", "POST"])
 def register_doctors():
-    # If user is authenticated redirect url to home page.
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = RegisterFormDoctors()
     # If form is valid print a message and redirect the users to the log in page
     if form.validate_on_submit():
@@ -39,7 +36,6 @@ def doctor_profile():
 
 @app.route('/logindoctor',methods = ["POST", "GET"])
 def login_doctors():
-    # If user is authenticated redirect url to home page.
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = LogInFormDoctors()
@@ -50,11 +46,16 @@ def login_doctors():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             flash(f"Logged in {form.email.data}","success")
-            return redirect(url_for("doctor_profile"))
+            return redirect(url_for("home"))
         #Else display error message.
         else:
             flash(f"Not logged in","danger")
-    return render_template('loginDoctors.html',form=form)
+    return render_template('loginDoctors.html', title='login',form=form)
+
+@app.route('/signout')
+def signout():
+    logout_user()
+    return redirect(url_for("home"))
 
 #Check which file is uploaded by getting the file name from html.
 @app.route('/upload',methods = ["POST","GET"])
@@ -76,7 +77,3 @@ def kaya_tube():
        return file.filename
    return render_template('ktube.html',form=form) 
    
-@app.route('/signout',methods = ["GET", "POST"])
-def signout():
-    logout_user()
-    return redirect(url_for("home"))

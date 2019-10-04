@@ -19,13 +19,12 @@
           <a class="navbar-brand" href="{{url_for('home')}}">Home</a>
           <form class="form-inline">
               {% if current_user.is_authenticated %}
-                  Hi {{ current_user.email }}!
+               <h3 color = #f9faf7 > {{current_user.email }} </h3>
                <a href="{{url_for('signout')}}" class="navbar-brand" >Sign out</a>
-
               {% else %}
                 <a href="{{url_for('register_doctors')}}" class="navbar-brand" >Register</a>
                 <a href="{{url_for('login_doctors')}}" class="navbar-brand" >Login</a>
-            {% endif %}
+              {% endif %}
               </form>
         </nav>
 </header>
