@@ -19,7 +19,7 @@
                  {% endfor %}
              </div>
          {% else %}
-             {{ form.email(class="form-control form-control-lg") }}
+             {{ form.email(class="button-color form-control form-control-lg") }}
          {% endif %}
      </div>
             <div class ="form-group">
@@ -33,17 +33,17 @@
                  {% endfor %}
              </div>
          {% else %}
-             {{ form.password(class="form-control form-control-lg") }}
+             {{ form.password(class="button-color form-control form-control-lg") }}
          {% endif %}              
         </div>
         </fieldset>
           <div class ="form-group" >
-                {{ form.submit(class ="btn btn-outline-info") }}
+                {{ form.submit(class ="button-color btn btn-outline-info") }}
             </div>
               <div class = "boder-top pt-3">
                     <small class="text-muted">
                         Need to register ?
-                        <a class ="ml-2" href="{{url_for('register_doctors')}}"> Sign up </a>
+                        <a class ="btn-text-color ml-2" href="{{url_for('register_doctors')}}"> Sign up </a>
                        </small>
                     </div>
     </form>

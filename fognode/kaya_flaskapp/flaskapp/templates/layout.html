@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -7,20 +7,67 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <style>
 
-    <title>Kaya flask app</title>
+    .custom-body{
+        background: #e2b147
+    }
+    
+    .custom-navbar{
+        background-color: #bd3b1f
+    }
+
+    .logo {
+      height: 40px;
+      width: 40px;
+  }
+  .text-color{
+    color: #f5e9cd
+  }
+  .text-color-register{
+    color: #cc7e00
+  }
+  .button-color{
+    color: #bd3b1f;
+    border: 1px solid #bd3b1f;
+  }
+  .btn-text-color{
+    color: #bd3b1f;
+  }
+  input[type=text]{
+    color: #f5e9cd
+  }
+  .center-img{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+  }
+
+    </style>
+    <title> Kaya portal </title>
   </head>
-  <body>
+
+  <body class="custom-body">
       <header class="site-header">
-
-      <nav class="navbar navbar-dark bg-dark">
-          <a class="navbar-brand" href="">Kaya</a>
-
-          <a class="navbar-brand" href="{{url_for('home')}}">Home</a>
+      <nav class = "navbar navbar-dark custom-navbar"  >
+          
+          <a class = " navbar-brand" href="{{url_for('home')}}">        
+            <img class = "logo" src="/static/images/home/smartglove_launcher.png" >
+            Kaya</a> 
           <form class="form-inline">
               {% if current_user.is_authenticated %}
-               <h3 color = #f9faf7 > {{current_user.email }} </h3>
-               <a href="{{url_for('signout')}}" class="navbar-brand" >Sign out</a>
+               <a href="{{ url_for('doctor_profile') }}" class="text-color navbar-brand" >Account</a>
+               <a href="{{ url_for('kaya_tube') }}" class="text-color navbar-brand" >Ktube</a>
+               <a href="{{url_for('signout')}}" class="text-color navbar-brand" >Sign out</a>
+
               {% else %}
                 <a href="{{url_for('register_doctors')}}" class="navbar-brand" >Register</a>
                 <a href="{{url_for('login_doctors')}}" class="navbar-brand" >Login</a>
@@ -51,5 +98,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
   </body>
 </html>

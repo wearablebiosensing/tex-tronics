@@ -244,10 +244,10 @@ public class ExerciseInstructionFragment extends Fragment
                 Log.e(TAG, "flag=" + flag);
             }
             //------------------------------------------------------------
-            if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
+            if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) && existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
                 existingDevice = "Glove";
 
-            else if(existingDevice.equals(GattDevices.LEFT_SHOE_ADDR) || existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR))
+            else if(existingDevice.equals(GattDevices.LEFT_SHOE_ADDR) && existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR))
                 existingDevice = "Shoe";
             // If your device is not required for the following exercise, it changes the device list
             // and reconnects to the appropriate devices

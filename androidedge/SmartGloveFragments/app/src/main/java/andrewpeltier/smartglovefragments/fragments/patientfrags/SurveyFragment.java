@@ -195,7 +195,7 @@ public class SurveyFragment extends Fragment {
                     myStudyLog.StudyLog(ident.size(), jsonPaitent);
 
                     String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_to_Nose","Finger_Tap","Finger_Tap", "Closed_Grip", "Closed_Grip"
-                            ,"Hand_Flip","Hand_Flip"/*,"Heel_Stomp","Toe_Tap","Walk_Steps"*/};
+                            ,"Hand_Flip","Hand_Flip","Heel_Stomp","Toe_Tap","Walk_Steps"};
 
 
                     // Takes exercises from list and sends them to Main Activity

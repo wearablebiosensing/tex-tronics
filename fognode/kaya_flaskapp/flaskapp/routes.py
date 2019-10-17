@@ -12,6 +12,7 @@ def home():
 @app.route('/about')
 def about():
     return render_template('about.html')
+    
 #Registers the doctors and inserts their information in the database
 @app.route('/registerdoctor',methods = ["GET", "POST"])
 def register_doctors():
@@ -28,11 +29,6 @@ def register_doctors():
         return redirect(url_for("login_doctors"))
     #Else redirect back to the register page.
     return render_template('registerDoctors.html',form=form)
-
-@app.route('/profile_doctors', methods = ["POST", "GET"])
-def doctor_profile():
-    form = LogInFormDoctors()
-    return render_template('doctors_profile.html',form=form)
 
 @app.route('/logindoctor',methods = ["POST", "GET"])
 def login_doctors():
@@ -52,28 +48,36 @@ def login_doctors():
             flash(f"Not logged in","danger")
     return render_template('loginDoctors.html', title='login',form=form)
 
-@app.route('/signout')
-def signout():
-    logout_user()
-    return redirect(url_for("home"))
+@app.route('/profile_doctors', methods = ["POST", "GET"])
+@login_required
+def doctor_profile():
+    # image_file = url_for("static",filename ='images/'+ current_user.image_file)
+    return render_template('doctors_profile.html',image_file=image_file)
+
 
 #Check which file is uploaded by getting the file name from html.
 @app.route('/upload',methods = ["POST","GET"])
+@login_required
 def upload():
     if request.method == "POST":
         file = request.files['inputFile']
         newFile = ktube_db(fileName=file.filename,data=file.read())
         db.session.add(newFile)
         db.session.commit()
-        return "Saved"+file.filename + "to the db"
+        return "Saved" + file.filename + "to the db"
     return render_template('home.html') 
 
 #File uploader page.
 @app.route('/ktube',methods = ["POST","GET"])
+@login_required
 def kaya_tube():
    form = ktube_form()
    if request.method == "POST":
        file = request.files['inputFile']
        return file.filename
    return render_template('ktube.html',form=form) 
-   
+
+@app.route('/signout')
+def signout():
+    logout_user()
+    return redirect(url_for("home"))

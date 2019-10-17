@@ -18,4 +18,8 @@ class ktube_db(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
     fileName = db.Column(db.String(10000),nullable=False)
     data = db.Column(db.LargeBinary)
+    # Add the name for the person who is logged in.
+    # name = db.Column(db.String(100),nullable=False)
+    # doctor_id = db.Column(db.Integer, db.ForeignKey('UserDoctor.id'),
+    #   nullable=False)
 
