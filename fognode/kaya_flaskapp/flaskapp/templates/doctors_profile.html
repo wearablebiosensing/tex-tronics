@@ -2,14 +2,15 @@
 {% extends "layout.html" %}
 
 {%block content%}
-  <h1 >Profile page {{ current_user.name }}! <h2>
+<div class="content-section">
+  <div class="media">
+    <img class="rounded-circle account-img profile-image" src="{{ image_file }}">
+    <div class="media-body">
+      <h2 class="account-heading text-color-profile">{{ current_user.name }}</h2>
+      <h6 class="account-heading text-color-profile">{{ current_user.email }}</h6>
+    </div>
+  </div>
+  </div>
 
-    <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ image_file }}">
-        <div class="media-body">
-          <h2 class="account-heading"> Username: {{ current_user.name }}</h2>
-          <p class="text-secondary"> Email: {{ current_user.email }}</p>
-        </div>
-      </div>
 {%endblock content%}
+ 

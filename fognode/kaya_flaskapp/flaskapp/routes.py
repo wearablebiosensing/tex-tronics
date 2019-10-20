@@ -51,10 +51,12 @@ def login_doctors():
 @app.route('/profile_doctors', methods = ["POST", "GET"])
 @login_required
 def doctor_profile():
+    image_file = url_for('static',filename = "profile_pics" +"/"+ current_user.profile_image)
+    
     # image_file = url_for("static",filename ='images/'+ current_user.image_file)
     return render_template('doctors_profile.html',image_file=image_file)
 
-
+ 
 #Check which file is uploaded by getting the file name from html.
 @app.route('/upload',methods = ["POST","GET"])
 @login_required
