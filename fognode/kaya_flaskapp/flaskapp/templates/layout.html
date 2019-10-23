@@ -29,17 +29,31 @@
   .text-color-register{
     color: #cc7e00
   }
-  .button-color{
-    color: #bd3b1f;
+  .button-custom{
+    background-color:  #bd3b1f;
     border: 1px solid #bd3b1f;
+    color: #f5e9cd;
+
   }
-  .btn-text-color{
-    color: #bd3b1f;
-  }
-  input[type=text]{
-    color: #f5e9cd
-  }
+
+.button:hover {
+  background-color: #bd3b1f;
+  color: #f5e9cd;
+
+}
+.input-textbox{
+  background-color:#f5e9cd;
+  color: #cc7e00
+}
+.link-text-color{
+  color: #bd3b1f
+}
+.page-text{
+  color: #f5e9cd;
+}
+  
   .center-img{
+
     margin: auto;
     width: 50%;
     padding: -18px;
@@ -58,13 +72,16 @@
     text-decoration-color: black;
     color: black;
   }
-
+  .card-layout-custom{
+    padding: 2%;
+      /* margin-right: 10%; */
+  }
     </style>
+    
     <title> Kaya portal </title>
   </head>
-
   <body class="custom-body">
-      <header class="site-header">
+  <header class="site-header">
       <nav class = "navbar navbar-dark custom-navbar"  >
           
           <a class = " navbar-brand" href="{{url_for('home')}}">        
@@ -72,18 +89,17 @@
             Kaya</a> 
           <form class="form-inline">
               {% if current_user.is_authenticated %}
-               <a href="{{ url_for('doctor_profile') }}" class="text-color navbar-brand" >Account</a>
-               <a href="{{ url_for('kaya_tube') }}" class="text-color navbar-brand" >Ktube</a>
-               <a href="{{url_for('signout')}}" class="text-color navbar-brand" >Sign out</a>
-              <div class=" text-color  navbar-brand "> Hello {{ current_user.name }}  </div>
-
+               <a href="{{ url_for('doctor_profile') }}" class="page-text navbar-brand" >Account</a>
+               <a href="{{ url_for('kaya_tube') }}" class="page-text navbar-brand" >Ktube</a>
+               <a href="{{url_for('signout')}}" class="page-text navbar-brand" >Sign out</a>
+              <div class=" page-text  navbar-brand "> Hello {{ current_user.name }}  </div>
               {% else %}
-                <a href="{{url_for('register_doctors')}}" class="navbar-brand" >Register</a>
-                <a href="{{url_for('login_doctors')}}" class="navbar-brand" >Login</a>
+                <a href="{{url_for('register_doctors')}}" class="page-text navbar-brand" >Register</a>
+                <a href="{{url_for('login_doctors')}}" class="page-text navbar-brand" >Login</a>
               {% endif %}
-              </form>
+          </form>
         </nav>
-</header>
+    </header>
 
 <main role="main" class="container">
     <div class="row">
@@ -92,7 +108,7 @@
           {% if messages %}
             {% for category, message in messages %}
               <div class="alert alert-{{ category }}">
-               <!--{{ message }}--> 
+               {{ message }}
               </div>
             {% endfor %}
           {% endif %}

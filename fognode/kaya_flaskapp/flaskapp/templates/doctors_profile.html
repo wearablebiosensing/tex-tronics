@@ -2,15 +2,35 @@
 {% extends "layout.html" %}
 
 {%block content%}
-<div class="content-section">
-  <div class="media">
-    <img class="rounded-circle account-img profile-image" src="{{ image_file }}">
-    <div class="media-body">
-      <h2 class="account-heading text-color-profile">{{ current_user.name }}</h2>
-      <h6 class="account-heading text-color-profile">{{ current_user.email }}</h6>
+
+<div class="media">
+  <img class="rounded-circle account-img profile-image" src="{{ image_file }}">
+  <div class="media-body">
+    <h5 class="mt-0"> Username: {{ current_user.name }}</h5>
+    Email: {{  current_user.email }}
+  </div>
+</div>
+
+<div class="row float-right">
+  <div class="card-layout-custom col-sm-6 float-left" >
+    <div class="card text-center" style="background-color:#f5e9cd;">
+      <div class="card-body">
+        <h5 class="card-title" >Number of patients to score</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <button type="button" class="button-custom btn"> Start scoring </button>
+      </div>
     </div>
   </div>
+  <div class="card-layout-custom col-sm-6 float-left">
+    <div class="card" style="background-color:#f5e9cd;">
+      <div class="card-body">
+        <h5 class="card-title">Number of patients in the study</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      
+      </div>
+    </div>
   </div>
-
+</div>
+  
 {%endblock content%}
  
