@@ -2,6 +2,7 @@
 {% extends "layout.html" %}
 {%block content%}
   <h1 >Welcome to ktube <h2>
+    <!--
       <form method="POST" class="md-form" action="/upload" enctype = "multipart/form-data">
           <div class="file-field">
             <div class="button-custom  btn float-left">
@@ -13,22 +14,30 @@
           </div>
           <button type="submit" class="button-custom btn">Submit</button>
         </form>
-    <div>
+        -->
+
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                  <div class="embed-responsive embed-responsive-16by9">
+                <div class = "container">
+                <div class="row">
+
+                  <div class="col-sm embed-responsive embed-responsive-16by9">
                       <iframe class="embed-responsive-item" src="/static/exercise_videos/restinghandsonthighs.mp4" allowfullscreen></iframe>
                     </div>
-
-                    <div class="form-group">
+                    <div class="col-sm form-group">
+                        <label for="exampleInputEmail1">Exercise: Resting hands on thighs</label>
                         <label for="exampleInputEmail1">Enter score</label>
                         <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter left score">
                         <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter right score">
-              </div> 
+                    </div>
+                  </div>
+
+                    </div> 
                <!-- <img class="d-block w-100" src="..." alt="First slide">-->
               </div>
               <div class="carousel-item">
+                  <h3>Exercise: Close grip</h3>
                   <div class="embed-responsive embed-responsive-16by9">
                       <br>
                         <iframe class="embed-responsive-item" src="/static/exercise_videos/closegrip.mp4" allowfullscreen></iframe>
@@ -41,40 +50,9 @@
                         </div>
                 <!--<img class="d-block w-100" src="..." alt="Second slide"> -->
               </div>
-              <div class="carousel-item">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <br>
-                      <iframe class="embed-responsive-item" src="/static/exercise_videos/closegrip.mp4" allowfullscreen></iframe>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Enter score</label>
-                        <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter left score">
-                        <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter right score">                      </div>
-              <!--<img class="d-block w-100" src="..." alt="Second slide"> -->
-            </div>
-            <div class="carousel-item">
-              <div class="embed-responsive embed-responsive-16by9">
-                  <br>
-                    <iframe class="embed-responsive-item" src="/static/exercise_videos/closegrip.mp4" allowfullscreen></iframe>
-                  </div>
-                  <div class="form-group">
-                      <label for="exampleInputEmail1">Enter score</label>
-                      <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter left score">
-                      <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter right score">                    </div>
-            <!--<img class="d-block w-100" src="..." alt="Second slide"> -->
-          </div>
-          <div class="carousel-item">
-            <div class="embed-responsive embed-responsive-16by9">
-                <br>
-                  <iframe class="embed-responsive-item" src="/static/exercise_videos/closegrip.mp4" allowfullscreen></iframe>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Enter score</label>
-                    <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter left score">
-                    <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter right score">                  </div>
-          <!--<img class="d-block w-100" src="..." alt="Second slide"> -->
-        </div>
+             
         <div class="carousel-item">
+            <h3>Exercise: Finger tap</h3>
           <div class="embed-responsive embed-responsive-16by9">
               <br>
                 <iframe class="embed-responsive-item" src="/static/exercise_videos/fingertap.mp4" allowfullscreen></iframe>
@@ -86,6 +64,7 @@
         <!--<img class="d-block w-100" src="..." alt="Second slide"> -->
       </div>
       <div class="carousel-item">
+          <h3>Exercise: Finger to nose</h3>
         <div class="embed-responsive embed-responsive-16by9">
             <br>
               <iframe class="embed-responsive-item" src="/static/exercise_videos/fingertonose.mp4" allowfullscreen></iframe>
@@ -97,6 +76,7 @@
       <!--<img class="d-block w-100" src="..." alt="Second slide"> -->
     </div>
     <div class="carousel-item">
+        <h3>Exercise: Hand flip</h3>
       <div class="embed-responsive embed-responsive-16by9">
           <br>
             <iframe class="embed-responsive-item" src="/static/exercise_videos/handflip.mp4" allowfullscreen></iframe>
@@ -107,6 +87,8 @@
               <input type="score" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  placeholder="Enter right score">            </div>
   </div>
   <div class="carousel-item">
+      <h3>Exercise: Heel stomp</h3>
+
     <div class="embed-responsive embed-responsive-16by9">
         <br>
           <iframe class="embed-responsive-item" src="/static/exercise_videos/heelstomp.mp4" allowfullscreen></iframe>
