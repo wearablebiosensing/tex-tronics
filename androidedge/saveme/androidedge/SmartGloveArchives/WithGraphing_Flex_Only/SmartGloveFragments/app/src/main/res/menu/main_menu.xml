@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/patient_feed"
+        android:title="@string/patient_feed"
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/create_pat_pro"
+        android:title="@string/create_pat_pro"
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/create_routine"
+        android:title="@string/create_routine"
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/patient_mode"
+        android:title="@string/patient_mode"
+        android:showAsAction="ifRoom"/>
+</menu>
