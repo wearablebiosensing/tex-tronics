@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] ="Kaya"
 #Set database instances
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site1.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site2.db"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 

@@ -13,8 +13,37 @@ class UserDoctor(db.Model,UserMixin):
     profile_image = db.Column(db.String(100),default = "URILogo_default.png",nullable=False)
     email = db.Column(db.String(1000),nullable=False)
     password = db.Column(db.String(600),nullable=False)
-    #Defines a one to many relationship from dr to patient score table.
+    # Defines a one to many relationship from dr to patient score table.
     score_db = db.relationship('score_db', backref='dorctorwho', lazy=True)
+
+class UserPatient(db.Model):
+        id = db.Column(db.Integer,primary_key=True,nullable=False)
+        name = db.Column(db.String(100),nullable=False)
+        close_grip = db.relationship('close_grip', backref='patientwho', lazy=True)
+        resting_hands_on_thighs =  db.relationship('resting_hands_on_thighs', backref='patientwho', lazy=True)
+        holding_hands_out_straight =  db.relationship('holding_hands_out_straight', backref='patientwho', lazy=True)
+        finger_tap =  db.relationship('finger_tap', backref='patientwho', lazy=True)
+        finger_to_nose =  db.relationship('finger_to_nose', backref='patientwho', lazy=True)
+class close_grip():
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class resting_hands_on_thighs():
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class holding_hands_out_straight():
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class finger_tap():
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class finger_to_nose():
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
 
 class ktube_db(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
@@ -22,14 +51,24 @@ class ktube_db(db.Model,UserMixin):
     data = db.Column(db.LargeBinary)
     # Add the name for the person who is logged in.
     # name = db.Column(db.String(100),nullable=False) nullable=False).
-
 class score_db(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey('user_doctor.id'))
     # Adding all the hand exercises.
-    resting_hands_score = db.Column(db.Integer,nullable=False)
-    holding_hands_out_score = db.Column(db.Integer,nullable=False)
-    hand_flip_score = db.Column(db.Integer,nullable=False)
-    close_grip_score = db.Column(db.Integer,nullable=False)
-    finger_tap_score = db.Column(db.Integer,nullable=False)
-    finger_to_nose  = db.Column(db.Integer,nullable=False)
+    resting_hands_lscore = db.Column(db.Integer)
+    resting_hands_rscore = db.Column(db.Integer)
+    
+    holding_hands_out_lscore = db.Column(db.Integer)
+    holding_hands_out_rscore = db.Column(db.Integer)
+    
+    hand_flip_lscore = db.Column(db.Integer)
+    hand_flip_rscore = db.Column(db.Integer)
+    
+    close_grip_lscore = db.Column(db.Integer)
+    close_grip_rscore = db.Column(db.Integer)
+    
+    finger_tap_lscore = db.Column(db.Integer)
+    finger_tap_rscore = db.Column(db.Integer)
+    
+    finger_to_nose_lscore   = db.Column(db.Integer)
+    finger_to_nose_rscore  = db.Column(db.Integer)
