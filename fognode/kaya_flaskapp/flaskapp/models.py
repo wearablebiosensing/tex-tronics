@@ -24,24 +24,29 @@ class UserPatient(db.Model):
         holding_hands_out_straight =  db.relationship('holding_hands_out_straight', backref='patientwho', lazy=True)
         finger_tap =  db.relationship('finger_tap', backref='patientwho', lazy=True)
         finger_to_nose =  db.relationship('finger_to_nose', backref='patientwho', lazy=True)
-class close_grip():
+class close_grip(db.Model):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
     video_file = db.Column(db.LargeBinary)
     patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
-class resting_hands_on_thighs():
+class resting_hands_on_thighs(db.Model):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
     video_file = db.Column(db.LargeBinary)
     patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
-class holding_hands_out_straight():
+class holding_hands_out_straight(db.Model):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
     video_file = db.Column(db.LargeBinary)
     patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
-class finger_tap():
+class finger_tap(db.Model):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
     video_file = db.Column(db.LargeBinary)
     patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
-class finger_to_nose():
+class finger_to_nose(db.Model):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
     video_file = db.Column(db.LargeBinary)
     patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
 
