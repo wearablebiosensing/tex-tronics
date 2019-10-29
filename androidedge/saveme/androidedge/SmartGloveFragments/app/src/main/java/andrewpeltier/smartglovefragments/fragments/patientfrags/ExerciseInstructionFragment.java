@@ -14,8 +14,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import andrewpeltier.smartglovefragments.R;
 import andrewpeltier.smartglovefragments.ble.GattDevices;
+import andrewpeltier.smartglovefragments.database.UserRepository;
 import andrewpeltier.smartglovefragments.io.SmartGloveInterface;
 import andrewpeltier.smartglovefragments.main_activity.MainActivity;
 import andrewpeltier.smartglovefragments.tex_tronics.TexTronicsManagerService;
@@ -50,6 +54,8 @@ public class ExerciseInstructionFragment extends Fragment
     private Button startExerciseButton;         // Button that starts the exercise when the user is ready
     private TextView instrText;                 // Instructions to the user on how to complete the exercise
     private GifImageView instrImage;            // Gif image that corresponds to the exercise
+    private TextView patient_id;
+
 
 
     /** onCreateView()
@@ -70,6 +76,7 @@ public class ExerciseInstructionFragment extends Fragment
         startExerciseButton = view.findViewById(R.id.start_exercise_button);
         instrImage = view.findViewById(R.id.stexercise_side_image);
         instrText = view.findViewById(R.id.instructions_text);
+        patient_id = view.findViewById(R.id.patientid);
 
         // Sets up the image according to the exercise name
         exerciseName = MainActivity.exercise_name;
@@ -77,12 +84,21 @@ public class ExerciseInstructionFragment extends Fragment
             setSideViews(exerciseName);
         }
 
+        Log.d(TAG, "Main activity COUNTER EIF== " +  MainActivity.counter);
         Log.d(TAG, "MainActivity.exercise_mode  ===== " + MainActivity.exercise_mode);
+
 
 
         // Connect to the appropriate device(s)
         checkConnection(MainActivity.exercise_mode);
-
+        List<Integer> ident = new ArrayList<>();
+        try {
+            ident  = UserRepository.getInstance(getActivity().getApplicationContext()).getAllIdentities();
+        }
+        catch(Exception e){
+            Log.d(TAG, "onClick: Error with identities");
+        }
+        patient_id.setText(Integer.toString(ident.size()));
 
         startExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,36 +229,36 @@ public class ExerciseInstructionFragment extends Fragment
         String[] deviceAddressList = MainActivity.getmDeviceAddressList();
         if(deviceAddressList != null && deviceAddressList.length > 0 && MainActivity.CONNECTED)
         {
-            // Checks to see the types of devices you are already connected to
-            Log.d(TAG, "checkConnection: device list exists");
-            String existingDevice = deviceAddressList[0];
-            //------------------------------------------------------------
-            if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold_Hands_Out")||exerciseName.equals("Resting_Hands_on_Thighs")
-                    || exerciseName.equals("Hand_Flip")
-                   ){
-                flag=3;
-                Log.e(TAG, "flag=" + flag);}
-            else if(/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger_to_Nose")|| exerciseName.equals("Heel_Stomp")
-                    || exerciseName.equals("Finger_Tap")|| exerciseName.equals("Toe_Tap")|| exerciseName.equals("Closed_Grip")  ){
-                flag=3;
-                Log.e(TAG, "flag=" + flag);
-            }
-            //------------------------------------------------------------
-            if(existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
-                existingDevice = "Glove";
+            for(int devindex = 0; devindex<deviceAddressList.length; devindex++) {
+                // Checks to see the types of devices you are already connected to
+                Log.d(TAG, "checkConnection: device list exists");
+                String existingDevice = deviceAddressList[0];
+                //------------------------------------------------------------
+                if (/*exercise_modes.equals("Imu Only")*/exerciseName.equals("Hold_Hands_Out") || exerciseName.equals("Resting_Hands_on_Thighs")
+                        || exerciseName.equals("Hand_Flip")
+                ) {
+                    flag = 3;
+                    Log.e(TAG, "flag=" + flag);
+                } else if (/*exercise_modes.equals("Flex Only")*/exerciseName.equals("Finger_to_Nose") || exerciseName.equals("Heel_Stomp")
+                        || exerciseName.equals("Finger_Tap") || exerciseName.equals("Toe_Tap") || exerciseName.equals("Closed_Grip") || exerciseName.equals("Walk_Steps")) {
+                    flag = 3;
+                    Log.e(TAG, "flag=" + flag);
+                }
+                //------------------------------------------------------------
+                if (existingDevice.equals(GattDevices.LEFT_GLOVE_ADDR) || existingDevice.equals(GattDevices.RIGHT_GLOVE_ADDR))
+                    existingDevice = "Glove";
 
-            else if(existingDevice.equals(GattDevices.LEFT_SHOE_ADDR) || existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR))
-                existingDevice = "Shoe";
-            // If your device is not required for the following exercise, it changes the device list
-            // and reconnects to the appropriate devices
-            String exerciseDeviceType = Exercise.getDeviceName(exerciseName);
-            if(!existingDevice.equals(exerciseDeviceType))
-            {
-                ((MainActivity)getActivity()).disconnect();
-                changeConnection(exerciseDeviceType);
+                else if (existingDevice.equals(GattDevices.LEFT_SHOE_ADDR) || existingDevice.equals(GattDevices.RIGHT_SHOE_ADDR))
+                    existingDevice = "Shoe";
+                // If your device is not required for the following exercise, it changes the device list
+                // and reconnects to the appropriate devices
+                String exerciseDeviceType = Exercise.getDeviceName(exerciseName);
+                if (!existingDevice.equals(exerciseDeviceType)) {
+                    ((MainActivity) getActivity()).disconnect();
+                    changeConnection(exerciseDeviceType);
+                } else
+                    Log.d(TAG, "checkConnection: already connected to appropriate device");
             }
-            else
-                Log.d(TAG, "checkConnection: already connected to appropriate device");
         }
         else
         {

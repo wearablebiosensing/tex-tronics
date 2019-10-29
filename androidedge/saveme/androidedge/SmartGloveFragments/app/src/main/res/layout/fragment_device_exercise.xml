@@ -16,23 +16,29 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="300dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/Button"
         android:text="Retry"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/next_button"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_marginStart="124dp"
         android:layout_marginEnd="300dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/Button"
         android:text="Next Exercise"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.321"
         app:layout_constraintStart_toEndOf="@+id/disconnectBtn" />
 
     <pl.droidsonroids.gif.GifImageView
@@ -56,21 +62,20 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Loading..."
-        android:textColor="@color/White"
+        android:textColor="@color/Notifications"
         android:textSize="50sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.346"
+        app:layout_constraintHorizontal_bias="0.925"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.385" />
+        app:layout_constraintVertical_bias="0.243" />
 
     <TextView
         android:id="@+id/testView"
-        android:layout_width="101dp"
-        android:layout_height="40dp"
+        android:layout_width="98dp"
+        android:layout_height="35dp"
         android:layout_marginStart="170dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -86,13 +91,14 @@
 
     <EditText
         android:id="@+id/score_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="224dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="200dp"
         android:layout_marginBottom="8dp"
         android:ems="8"
+        android:hint="Enter an integer please"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,6 +106,25 @@
         app:layout_constraintStart_toEndOf="@+id/testView"
         app:layout_constraintTop_toBottomOf="@+id/loadingText"
         app:layout_constraintVertical_bias="0.248" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="246dp"
+        android:layout_height="129dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/Notifications"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/testView"
+        app:layout_constraintEnd_toStartOf="@+id/loadingText"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.638" />
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import andrewpeltier.smartglovefragments.ble.BluetoothLeConnectionService;
 import andrewpeltier.smartglovefragments.ble.GattCharacteristics;
+import andrewpeltier.smartglovefragments.ble.GattDevices;
 import andrewpeltier.smartglovefragments.ble.GattServices;
 import andrewpeltier.smartglovefragments.database.UpdateData;
 import andrewpeltier.smartglovefragments.database.UserRepository;
@@ -472,7 +473,7 @@ public class TexTronicsManagerService extends Service
 
                 // Use data to connect to device
                 connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
-                transmit_flags();
+                //transmit_flags();
                 create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
 
                     // publish(deviceAddress);
@@ -881,10 +882,20 @@ public class TexTronicsManagerService extends Service
                     break;
                 case BluetoothLeConnectionService.GATT_DISCOVERED_SERVICES:
                     // Enable notifications on our RX characteristic which sends our data packets
-                    BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.RX_CHARACTERISTIC);
-                    if (characteristic != null) {
-                        mBleService.enableNotifications(deviceAddress, characteristic);
+
+                    if(deviceAddress.equals(GattDevices.LEFT_GLOVE_ADDR)){
+                        BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE2, GattCharacteristics.RX_CHARACTERISTIC2);
+                        if (characteristic != null) {
+                            mBleService.enableNotifications(deviceAddress, characteristic);
+                        }
                     }
+                    if(deviceAddress.equals(GattDevices.RIGHT_GLOVE_ADDR)||deviceAddress.equals(GattDevices.LEFT_SHOE_ADDR)||deviceAddress.equals(GattDevices.RIGHT_SHOE_ADDR)) {
+                        BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.RX_CHARACTERISTIC);
+                        if (characteristic != null) {
+                            mBleService.enableNotifications(deviceAddress, characteristic);
+                        }
+                    }
+
 
 //                    // Write to the txChar to notify the device
 //                    BluetoothGattCharacteristic txChar = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.TX_CHARACTERISTIC);/**---------------------------------------------------------------------------------------------------------*/
@@ -908,7 +919,7 @@ public class TexTronicsManagerService extends Service
                      * is equal to the sampling rate of our connected device.
                      */
                     UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
-                    if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC))
+                    if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC)||characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC2))
                     {
                         // Get the data packet
                         Log.d(TAG, "Data Received");
@@ -999,43 +1010,19 @@ public class TexTronicsManagerService extends Service
                                     case "Flex + IMU":
                                         // Move data processing into Data Model?
 //                                        //if (data[0] == PACKET_ID_1) {
-                                            //device.clear();
-                                            //device.setTimestamp(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));// | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
-                                            //device.setTimestamp(((data[0] & 0x00FF) << 24) | ((data[1] & 0x00FF) << 16) | ((data[2] & 0x00FF) << 8) | (data[3] & 0x00FF));
-                                            device.setThumbFlex((((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
-                                            device.setIndexFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
-                                            device.setMiddleFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+
+                                            device.setTimestamp(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));// | ((data[3] & 0x00FF) << 8) | (data[4] & 0x00FF));
+                                            device.setThumbFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                            device.setIndexFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
                                             device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                            device.setAccX(((data[8] & 0x00FF) << 8) | ((data[9] & 0x00FF)));
+                                            device.setAccX(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
                                             device.setAccY(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
                                             device.setAccZ(((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
                                             device.setGyrX(((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
                                             device.setGyrY(((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
                                             device.setGyrZ(((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
 
-                                            //device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
-//                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
-//                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
-//                                            device.setAccZ(((data[7] & 0x00FF) << 8)); // | ((data[6] & 0x00FF)));
-//                                            device.setGyrX(((data[8] & 0x00FF) << 8)); // | ((data[8] & 0x00FF)));
-//                                            device.setGyrY(((data[9] & 0x00FF) << 8)); // | ((data[10] & 0x00FF)));
-//                                            device.setGyrZ(((data[10] & 0x00FF) << 8)); // | ((data[12] & 0x00FF)));
-//                                            // TODO: Add rest of fingers
-//                                        //} else if (data[0] == PACKET_ID_2) {
-//                                            device.setThumbFlex((((data[0] & 0x00FF) << 8))); //| ((data[6] & 0x00FF))));
-//                                            device.setIndexFlex((((data[1] & 0x00FF) << 8))); //| ((data[8] & 0x00FF))));
-//                                            device.setMiddleFlex((((data[2] & 0x00FF) << 8))); //| ((data[5] & 0x00FF))));
-//                                            device.setRingFlex((((data[3] & 0x00FF) << 8))); //| ((data[7] & 0x00FF))));
-//                                            device.setPinkyFlex((((data[4] & 0x00FF) << 8))); //| ((data[9] & 0x00FF))));
-//                                            device.setAccX(((data[5] & 0x00FF) << 8)); // | ((data[2] & 0x00FF)));
-//                                            device.setAccY(((data[6] & 0x00FF) << 8)); // | ((data[4] & 0x00FF)));
-//                                            device.setAccZ(((data[7] & 0x00FF) << 8)); // | ((data[6] & 0x00FF)));
-//                                            device.setGyrX(((data[8] & 0x00FF) << 8)); // | ((data[8] & 0x00FF)));
-//                                            device.setGyrY(((data[9] & 0x00FF) << 8)); // | ((data[10] & 0x00FF)));
-//                                            device.setGyrZ(((data[10] & 0x00FF) << 8)); // | ((data[12] & 0x00FF)));
-                                            // device.setMagX(((data[13] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
-                                            //device.setMagY(((data[15] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
-                                            //device.setMagZ(((data[17] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
+
 
                                             Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 

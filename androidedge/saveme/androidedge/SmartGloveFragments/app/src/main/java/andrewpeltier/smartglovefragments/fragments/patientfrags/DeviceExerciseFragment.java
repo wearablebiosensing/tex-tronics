@@ -585,11 +585,11 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             };
             exe_Timer1.start();
         }
-      /* TO DO -----  UNLIMITED TIME ADD THIS  ----------------------------
+      // TO DO -----  UNLIMITED TIME ADD THIS  ----------------------------
         else if(name.equals("Walk_Steps")){
 
-            final CountDownTimer exe_Timer1 = new CountDownTimer(8000, 1000) {
-                int countdown = 8;
+            final CountDownTimer exe_Timer1 = new CountDownTimer(8000000, 1000) {
+                int countdown = 8000;
 
                 @Override
                 public void onTick(long l)
@@ -614,7 +614,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             };
             exe_Timer1.start();
 
-        }  */
+        }
 
     }
 
@@ -653,7 +653,7 @@ public class DeviceExerciseFragment extends Fragment implements SmartGloveInterf
             {
                 // Get the characteristic from the intent, then check to see if it is the correct characteristic
                 UUID characterUUID = UUID.fromString(intent.getStringExtra(BluetoothLeConnectionService.INTENT_CHARACTERISTIC));
-                if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC))
+                if(characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC)||characterUUID.equals(GattCharacteristics.RX_CHARACTERISTIC2))
                 {
                     /* Check to see which exercise we are on and
                     * then break up the data into different exercises.

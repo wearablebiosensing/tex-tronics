@@ -76,7 +76,7 @@ GattService         uart_service(uart_service_uuid, uart_chars, sizeof(uart_char
 void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
   ble.startAdvertising();
 }
-int Exercise_Mode;
+int Exercise_Mode =3;
 void gattServerWriteCallBack(const GattWriteCallbackParams *Handler) {
   uint8_t buf[TXRX_BUF_LEN];
   uint16_t bytesRead, index;
@@ -302,16 +302,16 @@ switch(Exercise_Mode){
     break;
 
     case 3: //"FLEX & IMU Both
-//    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
-//    ring_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
-//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-//    index_data.value = byte(map(analogRead(A0),0,1023,0,255));  
+    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
+    ring_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+    index_data.value = byte(map(analogRead(A0),0,1023,0,255));  
     //pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
     //Left Read
-    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
-    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
-    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  //issues
+//    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
+//    index_data.value = byte(map(analogRead(A4),0,1023,0,255)); 
+//    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
+//    ring_data.value = byte(map(analogRead(A0),0,1023,0,255));  //issues
 //    pinky_data.value = byte(map(analogRead(A2),0,1023,0,255));
 
     // Update Data on IMU

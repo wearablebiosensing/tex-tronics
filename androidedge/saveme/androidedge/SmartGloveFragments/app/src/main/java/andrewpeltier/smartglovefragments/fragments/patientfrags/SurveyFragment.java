@@ -65,7 +65,7 @@ public class SurveyFragment extends Fragment {
         age_text = view.findViewById(R.id.age_text);
         year_text = view.findViewById(R.id.years_text);
         mnth_text = view.findViewById(R.id.months_text);
-        time_text = view.findViewById(R.id.time_text);
+        //time_text = view.findViewById(R.id.time_text);
         amount_text = view.findViewById(R.id.amount_text);
         comments_text = view.findViewById(R.id.comments_text);
 
@@ -143,8 +143,8 @@ public class SurveyFragment extends Fragment {
                 age_str = age_text.getText().toString();
                 year_str = year_text.getText().toString();
                 mon_str = mnth_text.getText().toString();
-                time_str = time_text.getText().toString();
-                amount_str = amount_text.getText().toString();
+                //time_str = time_text.getText().toString();
+                //amount_str = amount_text.getText().toString();
                 _comments = comments_text.getText().toString();
 
                 try {

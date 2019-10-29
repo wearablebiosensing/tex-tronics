@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayDeque;
@@ -82,8 +84,9 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction fragmentTransaction;    // Changes the fragments
     private String mFragmentTag;                        // Name of the fragment currently in use
     String deviceAddress;
-    int counter;
+    public static int counter;
     public static int DeviceConection = 0;
+
 
     /** onCreate()
      *
@@ -106,6 +109,8 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container, new HomeFragment(), "HomeFragment");
         fragmentTransaction.commit();
+
+
     }
 
     /**
@@ -147,6 +152,7 @@ public class MainActivity extends AppCompatActivity
 
             if(exercise_name != null)
                 addFragment(new ExerciseInstructionFragment(), "ExerciseInstructionFragment");
+
         }
         // No exercises left, go to the finish screen
         else {
@@ -324,6 +330,7 @@ public class MainActivity extends AppCompatActivity
 
     private TexTronicsUpdateReceiver mTexTronicsUpdateReceiver = new TexTronicsUpdateReceiver()
     {
+
         /** onReceive()
          *
          * Called automatically once there is a change of state with either the connection to a
@@ -335,6 +342,7 @@ public class MainActivity extends AppCompatActivity
         @Override
 
         public void onReceive(Context context, Intent intent) {
+
             if(intent == null || !intent.hasExtra(UPDATE_DEVICE) || !intent.hasExtra(UPDATE_TYPE)) {
                 Log.w(TAG,"Invalid Update Received");
                 return;
@@ -380,11 +388,16 @@ public class MainActivity extends AppCompatActivity
                     Log.w(TAG, "Unknown Update Received");
                     break;
             }
-            if(counter == 2){
 
-                Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_SHORT).show();
-                DeviceConection = 1;
+            if(counter == 2){
+                TextView connectionText  = findViewById(R.id.connectionText);
+
+                connectionText.setText("CONNECTED TO BOTH DEVICES.");
+                Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_LONG).show();
+                //DeviceConection = 1;
+
             }
+
         }
     };
 
