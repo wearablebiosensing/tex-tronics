@@ -1,0 +1,27 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- for black color with darker gray initial one -->
+    <style name="RadioButtonStyle" parent="Theme.AppCompat.Light">
+        <!-- color of radio button -->
+        <item name="colorAccent">@android:color/black</item>
+        <!-- default color of radio button -->
+        <item name="android:textColorPrimary">@android:color/darker_gray</item>
+    </style>
+
+    <!-- for white color with white intial one -->
+    <style name="RadioButtonStyle1" parent="Theme.AppCompat.Light">
+        <!-- color of radio button -->
+        <item name="colorAccent">@android:color/black</item>
+        <!-- default color of radio button -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
+</resources>
