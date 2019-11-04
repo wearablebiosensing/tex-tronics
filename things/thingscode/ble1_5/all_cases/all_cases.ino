@@ -302,10 +302,44 @@ switch(Exercise_Mode){
     break;
 
     case 3: //"FLEX & IMU Both
-    thumb_data.value = byte(map(analogRead(A2),0,1023,0,255));
-    ring_data.value = byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
-    middle_data.value = byte(map(analogRead(A3),0,1023,0,255)); 
-    index_data.value = byte(map(analogRead(A0),0,1023,0,255));  
+
+
+    /*
+     * Left Glove
+     */
+//     thumb_data.value = analogRead(A5);//byte(map(analogRead(A2),0,1023,0,255));
+//     ring_data.value = analogRead(A4);//byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+//     middle_data.value = analogRead(A3);//byte(map(analogRead(A3),0,1023,0,255)); 
+//     index_data.value = analogRead(A2);//byte(map(analogRead(A0),0,1023,0,255));
+
+    /*
+     * Right Glove
+     */
+//     thumb_data.value = analogRead(A4);//byte(map(analogRead(A2),0,1023,0,255));
+//     ring_data.value = analogRead(A5);//byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+//     middle_data.value = analogRead(A3);//byte(map(analogRead(A3),0,1023,0,255)); 
+//     index_data.value = analogRead(A2);//byte(map(analogRead(A0),0,1023,0,255));
+
+    /*
+     * Left Shoe
+     */
+     thumb_data.value = analogRead(A2);//byte(map(analogRead(A2),0,1023,0,255));
+     ring_data.value = analogRead(A4);//byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+     middle_data.value = analogRead(A3);//byte(map(analogRead(A3),0,1023,0,255)); 
+     index_data.value = analogRead(A5);//byte(map(analogRead(A0),0,1023,0,255));
+
+    /*
+     * Right Shoe
+     */
+//     thumb_data.value = analogRead(A4);//byte(map(analogRead(A2),0,1023,0,255));
+//     ring_data.value = analogRead(A5);//byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+//     middle_data.value = analogRead(A2);//byte(map(analogRead(A3),0,1023,0,255)); 
+//     index_data.value = analogRead(A3);//byte(map(analogRead(A0),0,1023,0,255));
+    
+//    thumb_data.value = analogRead(A2);//byte(map(analogRead(A2),0,1023,0,255));
+//    ring_data.value = analogRead(A4);//byte(map(analogRead(A4),0,1023,0,255)); //issues swapped with Ring for graphing purposes
+//    middle_data.value = analogRead(A3);//byte(map(analogRead(A3),0,1023,0,255)); 
+//    index_data.value = analogRead(A0);//byte(map(analogRead(A0),0,1023,0,255));  
     //pinky_data.value = byte(map(analogRead(A5),0,1023,0,255));
     //Left Read
 //    thumb_data.value = byte(map(analogRead(A5),0,1023,0,255));
@@ -317,14 +351,14 @@ switch(Exercise_Mode){
     // Update Data on IMU
     imu.readAccel();
     // Collect Data from IMU
-    acc_x.value = byte(imu.ax);
-    acc_y.value = byte(imu.ay);
-    acc_z.value = byte(imu.az);
+    acc_x.value = imu.ax;//byte(imu.ax);
+    acc_y.value = imu.ay;//byte(imu.ay);
+    acc_z.value = imu.az;//byte(imu.az);
     imu.readGyro();
     //Collect data from IMU
-    gyr_x.value = byte(imu.gx);
-    gyr_y.value = byte(imu.gy);
-    gyr_z.value = byte(imu.gz);
+    gyr_x.value = imu.gx;//byte(imu.gx);
+    gyr_y.value = imu.gy;//byte(imu.gy);
+    gyr_z.value = imu.gz;//byte(imu.gz);
     //imu.readMag();
 
 
