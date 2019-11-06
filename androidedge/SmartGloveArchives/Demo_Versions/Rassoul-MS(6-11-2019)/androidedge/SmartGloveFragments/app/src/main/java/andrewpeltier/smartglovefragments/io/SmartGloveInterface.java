@@ -67,7 +67,7 @@ public interface SmartGloveInterface
         int HANDS_HOLD_GIF = R.drawable.holding_hands_out_new;
         int HAND_FLIP_GIF = R.drawable.hand_flip_new;
         int SCREEN_TAP_GIF =R.drawable.finger_to_nose_new;
-        int HEEL_TAP_GIF = R.drawable.heel_stomp_new;
+        int HEEL_TAP_GIF = R.drawable.heel_stomp_ne;
         int TOE_TAP_GIF = R.drawable.toe_tap_new;
         int FOOT_STOMP_GIF = R.drawable.heel_stomp_new;
         int WALK_STEPS_GIF =R.drawable.walk_steps_new;
