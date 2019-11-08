@@ -5,7 +5,7 @@ import andrewpeltier.smartglovefragments.tex_tronics.exceptions.IllegalDeviceTyp
 public class FlexImuData extends TexTronicsData {
     private long mTimestamp;
     private int mThumbFlex, mIndexFlex, mMiddleFlex, mRingFlex;// mPinkyFlex;
-    private int mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ;  //, mMagX, mMagY, mMagZ;
+    private short mAccX, mAccY, mAccZ, mGyrX, mGyrY, mGyrZ;  //, mMagX, mMagY, mMagZ;
 
     public FlexImuData() {
         super();
@@ -23,7 +23,7 @@ public class FlexImuData extends TexTronicsData {
         mGyrZ = 0;
     }
 
-    public void set(long timestamp, int AccX, int AccY, int AccZ, int GyrX, int GyrY, int GyrZ, int thumbFlex, int indexFlex, int middleFlex, int ringFlex) {
+    public void set(long timestamp, short AccX, short AccY, short AccZ, short GyrX, short GyrY, short GyrZ, int thumbFlex, int indexFlex, int middleFlex, int ringFlex) {
         mTimestamp = timestamp;
         mAccX = AccX;
         mAccY = AccY;
@@ -74,62 +74,62 @@ public class FlexImuData extends TexTronicsData {
     }
 
     @Override
-    public int getAccX() {
+    public short getAccX() {
         return mAccX;
     }
 
     @Override
-    public void setAccX(int AccX) {
+    public void setAccX(short AccX) {
         mAccX = AccX;
     }
 
     @Override
-    public int getAccY() {
+    public short getAccY() {
         return mAccY;
     }
 
     @Override
-    public void setAccY(int AccY) {
+    public void setAccY(short AccY) {
         mAccY = AccY;
     }
 
     @Override
-    public int getAccZ() {
+    public short getAccZ() {
         return mAccZ;
     }
 
     @Override
-    public void setAccZ(int AccZ) {
+    public void setAccZ(short AccZ) {
         mAccZ = AccZ;
     }
 
     @Override
-    public int getGyrX() {
+    public short getGyrX() {
         return mGyrX;
     }
 
     @Override
-    public void setGyrX(int GyrX) {
+    public void setGyrX(short GyrX) {
         mGyrX = GyrX;
     }
 
     @Override
-    public int getGyrY() {
+    public short getGyrY() {
         return mGyrY;
     }
 
     @Override
-    public void setGyrY(int GyrY) {
+    public void setGyrY(short GyrY) {
         mGyrY = GyrY;
     }
 
     @Override
-    public int getGyrZ() {
+    public short getGyrZ() {
         return mGyrZ;
     }
 
     @Override
-    public void setGyrZ(int GyrZ) {
+    public void setGyrZ(short GyrZ) {
         mGyrZ = GyrZ;
     }
 

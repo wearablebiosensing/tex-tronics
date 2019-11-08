@@ -1015,12 +1015,12 @@ public class TexTronicsManagerService extends Service
                                             device.setThumbFlex((((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
                                             device.setIndexFlex((((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
                                             device.setRingFlex((((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
-                                            device.setAccX(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                            device.setAccY(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
-                                            device.setAccZ(((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF)));
-                                            device.setGyrX(((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF)));
-                                            device.setGyrY(((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF)));
-                                            device.setGyrZ(((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF)));
+                                            device.setAccX((short)(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
+                                            device.setAccY((short)(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF))));
+                                            device.setAccZ((short)(((data[13] & 0x00FF) << 8) | ((data[12] & 0x00FF))));
+                                            device.setGyrX((short)(((data[15] & 0x00FF) << 8) | ((data[14] & 0x00FF))));
+                                            device.setGyrY((short)(((data[17] & 0x00FF) << 8) | ((data[16] & 0x00FF))));
+                                            device.setGyrZ((short)(((data[19] & 0x00FF) << 8) | ((data[18] & 0x00FF))));
 
 
 
@@ -1072,12 +1072,12 @@ public class TexTronicsManagerService extends Service
                                          //   device.logData(mContext);
 
                                     case "Imu Only":
-                                        device.setAccX(((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF)));
-                                        device.setAccY(((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF)));
-                                        device.setAccZ(((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF)));
-                                        device.setGyrX(((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF)));
-                                        device.setGyrY(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF)));
-                                        device.setGyrZ(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF)));
+                                        device.setAccX((short) (((data[1] & 0x00FF) << 8) | ((data[0] & 0x00FF))));
+                                        device.setAccY(( short)(((data[3] & 0x00FF) << 8) | ((data[2] & 0x00FF))));
+                                        device.setAccZ((short)(((data[5] & 0x00FF) << 8) | ((data[4] & 0x00FF))));
+                                        device.setGyrX(( short)(((data[7] & 0x00FF) << 8) | ((data[6] & 0x00FF))));
+                                        device.setGyrY(( short)(((data[9] & 0x00FF) << 8) | ((data[8] & 0x00FF))));
+                                        device.setGyrZ(( short)(((data[11] & 0x00FF) << 8) | ((data[10] & 0x00FF))));
 
                                         Log.d("START_LOG:::--" ,String.valueOf(DeviceExerciseFragment.START_LOG));
 

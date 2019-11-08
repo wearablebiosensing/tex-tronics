@@ -285,7 +285,7 @@ public class SmartGlove extends TexTronicsDevice
     }
 
     @Override
-    public void setAccX(int accX) {
+    public void setAccX(short accX) {
         try {
             mData.setAccX(accX);
         } catch (IllegalDeviceType e) {
@@ -294,7 +294,7 @@ public class SmartGlove extends TexTronicsDevice
     }
 
     @Override
-    public void setAccY(int accY) {
+    public void setAccY(short accY) {
         try {
             mData.setAccY(accY);
         } catch (IllegalDeviceType e) {
@@ -303,7 +303,7 @@ public class SmartGlove extends TexTronicsDevice
     }
 
     @Override
-    public void setAccZ(int accZ) {
+    public void setAccZ(short accZ) {
         try {
             mData.setAccZ(accZ);
         } catch (IllegalDeviceType e) {
@@ -312,7 +312,7 @@ public class SmartGlove extends TexTronicsDevice
     }
 
     @Override
-    public void setGyrX(int gyrX) {
+    public void setGyrX(short gyrX) {
         try {
             mData.setGyrX(gyrX);
         } catch (IllegalDeviceType e) {
@@ -321,7 +321,7 @@ public class SmartGlove extends TexTronicsDevice
     }
 
     @Override
-    public void setGyrY(int gyrY) {
+    public void setGyrY(short gyrY) {
         try {
             mData.setGyrY(gyrY);
         } catch (IllegalDeviceType e) {
@@ -330,7 +330,7 @@ public class SmartGlove extends TexTronicsDevice
     }
 
     @Override
-    public void setGyrZ(int gyrZ) {
+    public void setGyrZ(short gyrZ) {
         try {
             mData.setGyrZ(gyrZ);
         } catch (IllegalDeviceType e) {
