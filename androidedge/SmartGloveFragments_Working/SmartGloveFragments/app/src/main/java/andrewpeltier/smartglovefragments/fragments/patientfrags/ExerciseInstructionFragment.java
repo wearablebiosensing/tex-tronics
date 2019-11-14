@@ -183,7 +183,7 @@ public class ExerciseInstructionFragment extends Fragment
         else if (name.equals("Resting_Hands_on_Thighs"))
         {
             instrText.setText(SmartGloveInterface.StudyInstructionsText.RESTING_HANDS_TEXT);
-            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.WALK_STEPS_GIF);
+            instrImage.setBackgroundResource(SmartGloveInterface.StudyInstructionsImage.RESTING_HANDS_GIF);
             instrImage.getLayoutParams().width = 660;
             instrImage.getLayoutParams().height = 371;
             instrImage.setVisibility(View.VISIBLE);

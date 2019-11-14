@@ -163,75 +163,75 @@ public abstract class TexTronicsDevice
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getAccX() throws IllegalDeviceType {
+    public short getAccX() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setAccX(int accX) throws IllegalDeviceType {
+    public void setAccX(short accX) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getAccy() throws IllegalDeviceType {
+    public short getAccy() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setAccY(int accY) throws IllegalDeviceType {
+    public void setAccY(short accY) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getAccZ() throws IllegalDeviceType {
+    public short getAccZ() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setAccZ(int accZ) throws IllegalDeviceType {
+    public void setAccZ(short accZ) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getGyrX() throws IllegalDeviceType {
+    public short getGyrX() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setGyrX(int gyrX) throws IllegalDeviceType {
+    public void setGyrX(short gyrX) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getGyrY() throws IllegalDeviceType {
+    public short getGyrY() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setGyrY(int gyrY) throws IllegalDeviceType {
+    public void setGyrY(short gyrY) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getGyrZ() throws IllegalDeviceType {
+    public short getGyrZ() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setGyrZ(int gyrZ) throws IllegalDeviceType {
+    public void setGyrZ(short gyrZ) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getMagX() throws IllegalDeviceType {
+    public short getMagX() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setMagX(int magX) throws IllegalDeviceType {
+    public void setMagX(short magX) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getMagY() throws IllegalDeviceType {
+    public short getMagY() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setMagY(int magY) throws IllegalDeviceType {
+    public void setMagY(short magY) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public int getMagZ() throws IllegalDeviceType {
+    public short getMagZ() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
-    public void setMagZ(int magZ) throws IllegalDeviceType {
+    public void setMagZ(short magZ) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 }

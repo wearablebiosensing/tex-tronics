@@ -1,0 +1,92 @@
+<resources>
+    <!--General Strings-->
+    <string name="app_name">Smart Glove</string>
+    <string name="app_name_doctor">Smart Glove (Doctor)</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">BLE Device Scan</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="finish_return">Return</string>
+    <string name="begin">Begin</string>
+    <string name="button_continue">Continue</string>
+    <string name="button_set_routine">Set Routine</string>
+
+    <!-- Unknown Attributes -->
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <!-- Action Bar Titles -->
+    <string name="ab_connection_select">Select Your Devices</string>
+    <string name="ab_exercise_select">Select Your Exercises</string>
+
+    <!-- Menu items -->
+    <string name="patient_feed">Patient Feed</string>
+    <string name="create_pat_pro">Create Patient Profile</string>
+    <string name="create_routine">Create Routine</string>
+    <string name="patient_mode">Patient Mode</string>
+
+    <string-array name="height_array">
+        <item></item>
+        <item>4\'0\"</item>
+        <item>4\'1\"</item>
+        <item>4\'2\"</item>
+        <item>4\'3\"</item>
+        <item>4\'4\"</item>
+        <item>4\'5\"</item>
+        <item>4\'6\"</item>
+        <item>4\'7\"</item>
+        <item>4\'8\"</item>
+        <item>4\'9\"</item>
+        <item>4\'10\"</item>
+        <item>4\'11\"</item>
+        <item>5\'0\"</item>
+        <item>5\'1\"</item>
+        <item>5\'2\"</item>
+        <item>5\'3\"</item>
+        <item>5\'4\"</item>
+        <item>5\'5\"</item>
+        <item>5\'6\"</item>
+        <item>5\'7\"</item>
+        <item>5\'8\"</item>
+        <item>5\'9\"</item>
+        <item>5\'10\"</item>
+        <item>5\'11\"</item>
+        <item>6\'0\"</item>
+        <item>6\'1\"</item>
+        <item>6\'2\"</item>
+        <item>6\'3\"</item>
+        <item>6\'4\"</item>
+        <item>6'5"</item>
+        <item>6\'6\"</item>
+        <item>6\'7\"</item>
+        <item>6\'8\"</item>
+        <item>6\'9\"</item>
+        <item>6\'10\"</item>
+        <item>6\'11\"</item>
+        <item>7\'0\"</item>
+        <item>7\'1\"</item>
+        <item>7\'2\"</item>
+        <item>7\'3\"</item>
+        <item>7\'4\"</item>
+        <item>7\'5\"</item>
+        <item>7\'6\"</item>
+        <item>7\'7\"</item>
+        <item>7'8"</item>
+        <item>7\'9\"</item>
+        <item>7\'10\"</item>
+        <item>7\'11\"</item>
+        <item>8\'0\"</item>
+    </string-array>
+    <string-array name="disorders_array">
+        <item></item>
+        <item>Parkinson\'s Disease</item>
+        <item>Huntington\'s Disease</item>
+        <item>ALS</item>
+    </string-array>
+</resources>

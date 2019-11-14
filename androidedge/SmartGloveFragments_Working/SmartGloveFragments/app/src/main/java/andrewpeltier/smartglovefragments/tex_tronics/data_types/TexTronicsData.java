@@ -36,29 +36,29 @@ public abstract class TexTronicsData {
 
     public abstract void setPinkyFlex(int pinkyFlex) throws IllegalDeviceType;
 
-    public abstract int getAccX() throws IllegalDeviceType;
+    public abstract short getAccX() throws IllegalDeviceType;
 
-    public abstract void setAccX(int accX) throws IllegalDeviceType;
+    public abstract void setAccX(short accX) throws IllegalDeviceType;
 
-    public abstract int getAccY() throws IllegalDeviceType;
+    public abstract short getAccY() throws IllegalDeviceType;
 
-    public abstract void setAccY(int accY) throws IllegalDeviceType;
+    public abstract void setAccY(short accY) throws IllegalDeviceType;
 
-    public abstract int getAccZ() throws IllegalDeviceType;
+    public abstract short getAccZ() throws IllegalDeviceType;
 
-    public abstract void setAccZ(int accZ) throws IllegalDeviceType;
+    public abstract void setAccZ(short accZ) throws IllegalDeviceType;
 
-    public abstract int getGyrX() throws IllegalDeviceType;
+    public abstract short getGyrX() throws IllegalDeviceType;
 
-    public abstract void setGyrX(int gyrX) throws IllegalDeviceType;
+    public abstract void setGyrX(short gyrX) throws IllegalDeviceType;
 
-    public abstract int getGyrY() throws IllegalDeviceType;
+    public abstract short getGyrY() throws IllegalDeviceType;
 
-    public abstract void setGyrY(int gyrY) throws IllegalDeviceType;
+    public abstract void setGyrY(short gyrY) throws IllegalDeviceType;
 
-    public abstract int getGyrZ() throws IllegalDeviceType;
+    public abstract short getGyrZ() throws IllegalDeviceType;
 
-    public abstract void setGyrZ(int gyrZ) throws IllegalDeviceType;
+    public abstract void setGyrZ(short gyrZ) throws IllegalDeviceType;
 
 //    public abstract int getMagX() throws IllegalDeviceType;
 //

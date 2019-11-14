@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction fragmentTransaction;    // Changes the fragments
     private String mFragmentTag;                        // Name of the fragment currently in use
     String deviceAddress;
-    public static int counter;
+    public static int counter =0;
     public static int DeviceConection = 0;
 
 
@@ -371,10 +371,13 @@ public class MainActivity extends AppCompatActivity
                 case ble_disconnecting:
                     // Disconnecting from Device <deviceAddress>
                     Log.d(TAG,"Disconnecting from " + deviceAddress);
+                    counter= 0;
+
                     break;
                 case ble_disconnected:
                     // Device <deviceAddress> Has Been Disconnected
                     Log.d(TAG,"Disconnected from " + deviceAddress);
+                    counter= 0;
                     break;
                 case mqtt_connected:
                     // Connected to MQTT Server
@@ -394,7 +397,6 @@ public class MainActivity extends AppCompatActivity
 
                 connectionText.setText("CONNECTED TO BOTH DEVICES.");
                 Toast.makeText(context,"CONNECTED TO BOTH DEVICES!",Toast.LENGTH_LONG).show();
-                //DeviceConection = 1;
 
             }
 

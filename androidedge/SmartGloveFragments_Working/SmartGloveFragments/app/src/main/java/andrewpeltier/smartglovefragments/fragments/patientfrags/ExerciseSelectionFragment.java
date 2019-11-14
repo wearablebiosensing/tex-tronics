@@ -60,7 +60,7 @@ public class ExerciseSelectionFragment extends Fragment implements
         DiscreteScrollView.OnItemChangedListener<ExerciseAdapter.ViewHolder>,
         View.OnClickListener
 {
-    private static final String TAG = "ExerciseSelectionFragment";
+    private static final String TAG = "ExerciseSelectionFragme";
     private List<String> exerciseModes;                                 // List of modes to send to Main Activity
     private List<Exercise> possibleExercises;                           // List of all exercises inside of carousel
     private Exercise current;                                           // Exercise currently looking at in carousel
@@ -185,7 +185,7 @@ public class ExerciseSelectionFragment extends Fragment implements
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());
                         exerciseModes.add(ExerciseMode.FLEX_ONLY.toString());*/
-                        String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_to_Nose","Finger_Tap","Finger_Tap", "Closed_Grip","Closed_Grip","Hand_Flip","Hand_Flip"};
+                        String[] studyExercises = {"Resting_Hands_on_Thighs","Hold_Hands_Out","Finger_to_Nose","Finger_to_Nose","Finger_Tap" ,"Finger_Tap","Closed_Grip","Closed_Grip","Hand_Flip","Hand_Flip","Hand_Flip"/*,"Toe_Tap","Heel_Stomp","Walk_Steps"* /};
 
 
 

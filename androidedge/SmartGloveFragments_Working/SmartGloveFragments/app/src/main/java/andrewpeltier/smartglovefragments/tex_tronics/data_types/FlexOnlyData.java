@@ -105,62 +105,62 @@ public class FlexOnlyData extends TexTronicsData {
     }
 
     @Override
-    public int getAccX() throws IllegalDeviceType {
+    public short getAccX() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setAccX(int accX) throws IllegalDeviceType {
+    public void setAccX(short accX) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public int getAccY() throws IllegalDeviceType {
+    public short getAccY() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setAccY(int accY) throws IllegalDeviceType {
+    public void setAccY(short accY) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public int getAccZ() throws IllegalDeviceType {
+    public short getAccZ() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setAccZ(int accZ) throws IllegalDeviceType {
+    public void setAccZ(short accZ) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public int getGyrX() throws IllegalDeviceType {
+    public short getGyrX() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setGyrX(int gyrX) throws IllegalDeviceType {
+    public void setGyrX(short gyrX) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public int getGyrY() throws IllegalDeviceType {
+    public short getGyrY() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setGyrY(int gyrY) throws IllegalDeviceType {
+    public void setGyrY(short gyrY) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public int getGyrZ() throws IllegalDeviceType {
+    public short getGyrZ() throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 
     @Override
-    public void setGyrZ(int gyrZ) throws IllegalDeviceType {
+    public void setGyrZ(short gyrZ) throws IllegalDeviceType {
         throw new IllegalDeviceType("Illegal Device Type");
     }
 

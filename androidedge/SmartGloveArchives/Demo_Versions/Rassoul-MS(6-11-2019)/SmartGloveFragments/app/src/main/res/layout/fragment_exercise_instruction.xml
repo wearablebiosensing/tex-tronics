@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ede7ee "
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/start_exercise_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="516dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/Button"
+        android:text="Start"
+        android:textColor="@color/text"
+        android:textColorHighlight="#4CAF50"
+        android:textColorLink="#24D62B"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructions_text"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/stexercise_side_image"
+        android:layout_width="80dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/fingertap_gif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.065" />
+
+    <TextView
+        android:id="@+id/instructions_text"
+        android:layout_width="473dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Error"
+        android:textAlignment="center"
+        android:textColor="@color/text"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stexercise_side_image"
+        app:layout_constraintVertical_bias="0.114" />
+
+    <TextView
+        android:id="@+id/connectionText"
+        android:layout_width="332dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textAlignment="center"
+        android:textColor="@color/Notifications"
+        android:textColorHint="@color/Notifications"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/start_exercise_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructions_text"
+        app:layout_constraintVertical_bias="0.14" />
+
+    <TextView
+        android:id="@+id/patientid"
+        android:layout_width="92dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Patient ID"
+        android:textAlignment="textStart"
+        android:textColor="@color/text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/stexercise_side_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pid"
+        android:layout_width="131dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Patient ID:"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/patientid"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Main Colors: Color scheme 1 -->
+    <color name="colorPrimary">#ede7ee</color>  //#0926C5  // #37c90a
+    <color name="colorPrimaryDark"> #ed6d3e</color> // #373ded // #388e3c
+    <color name="colorPrimaryLight">#C8E6C9</color>
+    <color name="colorAccent">#03A9F4</color>
+    <color name="White">#010101</color>
+    <color name="text">#010101</color>
+    <color name="secondaryText">#757575</color>
+    <color name="col1">#42D9C8</color>
+    <color name="col3">#0B7189</color>
+    <color name="col4">#28464B</color>
+    <color name="Button">#d6d7d7</color>
+    <color name="Notifications"> #f1974b</color>
+    <!-- Exercise Selection Colors -->
+    <color name="grayIconTint">#727272</color>
+
+    <!-- Finger Tap -->
+    <color name="gradientFingerTap_c1">#C75146</color>
+    <color name="gradientFingerTap_c2">#FF9B71</color>
+    <color name="gradientFingerTap_c3">#FFFD82</color>
+
+    <array name="gradientFingerTap">
+        <item>@color/gradientFingerTap_c1</item>
+        <item>@color/gradientFingerTap_c2</item>
+        <item>@color/gradientFingerTap_c3</item>
+    </array>
+
+    <!-- Closed Grip -->
+    <color name="gradientClosedGrip_c1">#A64253</color>
+    <color name="gradientClosedGrip_c2">#FE938C</color>
+    <color name="gradientClosedGrip_c3">#FCEADE</color>
+
+    <array name="gradientClosedGrip">
+        <item>@color/gradientClosedGrip_c1</item>
+        <item>@color/gradientClosedGrip_c2</item>
+        <item>@color/gradientClosedGrip_c3</item>
+    </array>
+
+    <!-- Hand Flip -->
+    <color name="gradientHandFlip_c1">#5d2e46</color>
+    <color name="gradientHandFlip_c2">#b16fb3</color>
+    <color name="gradientHandFlip_c3">#e9a2eb</color>
+
+    <array name="gradientHandFlip">
+        <item>@color/gradientHandFlip_c1</item>
+        <item>@color/gradientHandFlip_c2</item>
+        <item>@color/gradientHandFlip_c3</item>
+    </array>
+
+    <!-- Screen Tap -->
+    <color name="gradientScreenTap_c1">#4C2A85</color>
+    <color name="gradientScreenTap_c2">#6D4FBE</color>
+    <color name="gradientScreenTap_c3">#E0CBA8</color>
+
+    <array name="gradientScreenTap">
+        <item>@color/gradientScreenTap_c1</item>
+        <item>@color/gradientScreenTap_c2</item>
+        <item>@color/gradientScreenTap_c3</item>
+    </array>
+
+    <!-- Heel Tap -->
+    <color name="gradientHeelTap_c1">#31556b</color>
+    <color name="gradientHeelTap_c2">#336699</color>
+    <color name="gradientHeelTap_c3">#62BFF5</color>
+
+    <array name="gradientHeelTap">
+        <item>@color/gradientHeelTap_c1</item>
+        <item>@color/gradientHeelTap_c2</item>
+        <item>@color/gradientHeelTap_c3</item>
+    </array>
+
+    <!-- Toe Tap -->
+    <color name="gradientToeTap_c1">#285943</color>
+    <color name="gradientToeTap_c2">#55828B</color>
+    <color name="gradientToeTap_c3">#4ADBC8</color>
+
+    <array name="gradientToeTap">
+        <item>@color/gradientToeTap_c1</item>
+        <item>@color/gradientToeTap_c2</item>
+        <item>@color/gradientToeTap_c3</item>
+    </array>
+
+    <!-- Foot Stomp -->
+    <color name="gradientFootStomp_c1">#45ad8a</color>
+    <color name="gradientFootStomp_c2">#78cfa4</color>
+    <color name="gradientFootStomp_c3">#f3e5d2</color>
+
+    <array name="gradientFootStomp">
+        <item>@color/gradientFootStomp_c1</item>
+        <item>@color/gradientFootStomp_c2</item>
+        <item>@color/gradientFootStomp_c3</item>
+    </array>
+
+    <!-- Walk Steps -->
+    <color name="gradientWalkSteps_c1">#3453d1</color>
+    <color name="gradientWalkSteps_c2">#6d69ff</color>
+    <color name="gradientWalkSteps_c3">#BBBDF6</color>
+
+    <array name="gradientWalkSteps">
+        <item>@color/gradientWalkSteps_c1</item>
+        <item>@color/gradientWalkSteps_c2</item>
+        <item>@color/gradientWalkSteps_c3</item>
+    </array>
+
+    <!-- News Feed Colors -->
+    <color name="feed_bg">#d3d6db</color>
+    <color name="feed_item_bg">#ffffff</color>
+    <color name="feed_item_border">#c2c3c8</color>
+    <color name="link">#0a80d1</color>
+    <color name="timestamp">#a0a3a7</color>
+</resources>
