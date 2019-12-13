@@ -76,7 +76,8 @@ public class MqttConnectionService extends Service
     /**
      * Hardcoded IP Address of our raspberry pie, which hosts the MQTT server
      */
-    private final String SERVER_URI = "tcp://131.128.51.213:1883"; //tcp://131.128.51.42:1883
+    /*MQTT tcp://131.128.53.90:1883*/
+    private final String SERVER_URI = "tcp://131.128.53.90:1883"; //tcp://131.128.51.42:1883
     /**
      * Location to publish data to the MQTT server
      */
