@@ -81,7 +81,7 @@ public class SmartGlove extends TexTronicsDevice
         switch (exerciseMode) {
             case "Flex + IMU":
                 mData = new FlexImuData();
-                mHeader = "Device Address,Exercise,Timestamp,Thumb,Index,Ring,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)\n";
+                mHeader = "Device Address,Exercise,Timestamp,Thumb,Ring,Middle,Index,Acc(x),Acc(y),Acc(z),Gyr(x),Gyr(y),Gyr(z)\n";
                 break;
             case "Flex Only":
                 mData = new FlexOnlyData();

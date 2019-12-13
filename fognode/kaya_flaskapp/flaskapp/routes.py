@@ -1,3 +1,8 @@
+#####################################
+# Author: Shehjar Sadhu.            #
+# Project: Kaya web scoring portal. #
+# Date: December 2019.              #
+#####################################
 
 from flask import render_template, url_for, flash, redirect,session,request
 from flaskapp.froms import RegisterFormDoctors, LogInFormDoctors, ktube_form
@@ -13,7 +18,7 @@ def home():
 def about():
     return render_template('about.html')
     
-#Registers the doctors and inserts their information in the database
+# Registers the doctors and inserts their information in the database
 @app.route('/registerdoctor',methods = ["GET", "POST"])
 def register_doctors():
     form = RegisterFormDoctors()
@@ -51,23 +56,24 @@ def login_doctors():
 @app.route('/profile_doctors', methods = ["POST", "GET"])
 @login_required
 def doctor_profile():
-    image_file = url_for('static',filename = "profile_pics" +"/"+ current_user.profile_image)
-    
+     image_file = url_for('static',filename = "profile_pics" +"/"+ current_user.profile_image)
     # image_file = url_for("static",filename ='images/'+ current_user.image_file)
-    return render_template('doctors_profile.html',image_file=image_file)
+     return render_template('doctors_profile.html',image_file=image_file)
 
- 
-#Check which file is uploaded by getting the file name from html.
-@app.route('/upload',methods = ["POST","GET"])
-@login_required
-def upload():
-    if request.method == "POST":
-        file = request.files['inputFile']
-        newFile = ktube_db(fileName=file.filename,data=file.read())
-        db.session.add(newFile)
-        db.session.commit()
-        return "Saved" + file.filename + "to the db"
-    return render_template('home.html') 
+######################################################################## 
+# Check which file is uploaded by getting the file name from html.     #
+# Was for initial testing not in use now.                              #                
+########################################################################
+# @app.route('/upload',methods = ["POST","GET"])
+# @login_required
+# def upload():
+#     if request.method == "POST":
+#         file = request.files['inputFile']
+#         newFile = ktube_db(fileName=file.filename,data=file.read())
+#         db.session.add(newFile)
+#         db.session.commit()
+#         return "Saved" + file.filename + "to the db"
+#     return render_template('home.html') 
 
 #File uploader page.
 @app.route('/ktube',methods = ["POST","GET"])

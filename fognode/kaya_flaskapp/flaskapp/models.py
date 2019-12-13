@@ -1,4 +1,10 @@
 
+#####################################
+# Author: Shehjar Sadhu.            #
+# Project: Kaya web scoring portal. #
+# Date: December 2019.              #
+#####################################
+
 from flaskapp import db,login_manager
 from flask_login import UserMixin
 
@@ -49,16 +55,41 @@ class finger_to_nose(db.Model):
     fileName = db.Column(db.String(10000),nullable=False)
     video_file = db.Column(db.LargeBinary)
     patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
-
+class hand_flip(db.Model):
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class heel_stomp(db.Model):
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class toe_tap(db.Model):
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+class walk_steps(db.Model):
+    id = db.Column(db.Integer,primary_key=True,nullable=False)
+    fileName = db.Column(db.String(10000),nullable=False)
+    video_file = db.Column(db.LargeBinary)
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
+    
+# ##########################
+# # Not in use for testing #
+# ##########################
 class ktube_db(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True,nullable=False)
     fileName = db.Column(db.String(10000),nullable=False)
     data = db.Column(db.LargeBinary)
     # Add the name for the person who is logged in.
     # name = db.Column(db.String(100),nullable=False) nullable=False).
+
 class score_db(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey('user_doctor.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('user_patient.id'))
     # Adding all the hand exercises.
     resting_hands_lscore = db.Column(db.Integer)
     resting_hands_rscore = db.Column(db.Integer)
@@ -77,3 +108,18 @@ class score_db(db.Model):
     
     finger_to_nose_lscore   = db.Column(db.Integer)
     finger_to_nose_rscore  = db.Column(db.Integer)
+
+    finger_to_nose_lscore   = db.Column(db.Integer)
+    finger_to_nose_rscore  = db.Column(db.Integer)
+
+    finger_to_nose_lscore   = db.Column(db.Integer)
+    finger_to_nose_rscore  = db.Column(db.Integer)
+
+    heel_stomp_lscore   = db.Column(db.Integer)
+    heel_stomp_rscore  = db.Column(db.Integer)
+
+    toe_tap_lscore   = db.Column(db.Integer)
+    toe_tap_rscore  = db.Column(db.Integer)
+
+    walk_steps_lscore   = db.Column(db.Integer)
+    walk_steps_rscore  = db.Column(db.Integer)

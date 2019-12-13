@@ -1,3 +1,10 @@
+
+#####################################
+# Author: Shehjar Sadhu.            #
+# Project: Kaya web scoring portal. #
+# Date: December 2019.              #
+#####################################
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -8,7 +15,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] ="Kaya"
 #Set database instances
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site8.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site9.db"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 

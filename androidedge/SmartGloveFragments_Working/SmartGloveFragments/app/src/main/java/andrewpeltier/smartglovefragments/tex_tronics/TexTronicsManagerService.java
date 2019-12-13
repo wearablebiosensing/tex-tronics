@@ -475,8 +475,7 @@ public class TexTronicsManagerService extends Service
                 connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
                 //transmit_flags();
                 create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
-
-                    // publish(deviceAddress);
+                publish(deviceAddress);
                     //
                 }
             break;
@@ -485,10 +484,10 @@ public class TexTronicsManagerService extends Service
                 disconnect(deviceAddress);
                 break;
             case publish:
+                publish(deviceAddress);
 
                 //connect(deviceAddress, exerciseMode, deviceType, choice, exerciseID, routineID);
                 create_datalog(deviceAddress, MainActivity.exercise_mode, deviceType, choice, exerciseID, routineID);
-                publish(deviceAddress);
 
                 //     transmit_flags();
 
@@ -883,18 +882,18 @@ public class TexTronicsManagerService extends Service
                 case BluetoothLeConnectionService.GATT_DISCOVERED_SERVICES:
                     // Enable notifications on our RX characteristic which sends our data packets
 
-                    if(deviceAddress.equals(GattDevices.LEFT_GLOVE_ADDR)){
-                        BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE2, GattCharacteristics.RX_CHARACTERISTIC2);
-                        if (characteristic != null) {
-                            mBleService.enableNotifications(deviceAddress, characteristic);
-                        }
-                    }
-                    if(deviceAddress.equals(GattDevices.RIGHT_GLOVE_ADDR)||deviceAddress.equals(GattDevices.LEFT_SHOE_ADDR)||deviceAddress.equals(GattDevices.RIGHT_SHOE_ADDR)) {
+//                    if(deviceAddress.equals(GattDevices.LEFT_GLOVE_ADDR)){
+//                        BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE2, GattCharacteristics.RX_CHARACTERISTIC2);
+//                        if (characteristic != null) {
+//                            mBleService.enableNotifications(deviceAddress, characteristic);
+//                        }
+//                    }
+//                    if(deviceAddress.equals(GattDevices.RIGHT_GLOVE_ADDR)||deviceAddress.equals(GattDevices.LEFT_SHOE_ADDR)||deviceAddress.equals(GattDevices.RIGHT_SHOE_ADDR)) {
                         BluetoothGattCharacteristic characteristic = mBleService.getCharacteristic(deviceAddress, GattServices.UART_SERVICE, GattCharacteristics.RX_CHARACTERISTIC);
                         if (characteristic != null) {
                             mBleService.enableNotifications(deviceAddress, characteristic);
                         }
-                    }
+//                    }
 
 
 //                    // Write to the txChar to notify the device

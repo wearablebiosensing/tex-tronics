@@ -1,4 +1,10 @@
 
+#####################################
+# Author: Shehjar Sadhu.            #
+# Project: Kaya web scoring portal. #
+# Date: December 2019.              #
+#####################################
+
 from flask_wtf import FlaskForm
 from wtforms import  StringField, TextAreaField, PasswordField, validators,SubmitField  #for form validation.
 from wtforms.validators import DataRequired, Length, EqualTo, Email,ValidationError
