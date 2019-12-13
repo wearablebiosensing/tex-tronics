@@ -66,6 +66,7 @@ import andrewpeltier.smartglovefragments.visualize.Exercise;
  * @author Matthew Constant
  * @version 1.0, 02/28/2018
  */
+/* NEW PUSH*/
 
 public class TexTronicsManagerService extends Service
 {
